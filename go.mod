@@ -4,7 +4,10 @@ go 1.21
 
 toolchain go1.21.4
 
-require github.com/wailsapp/wails/v2 v2.7.1
+require (
+	github.com/golang/mock v1.6.0
+	github.com/wailsapp/wails/v2 v2.7.1
+)
 
 require (
 	github.com/bep/debounce v1.2.1 // indirect

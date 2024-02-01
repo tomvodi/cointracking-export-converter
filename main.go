@@ -1,6 +1,8 @@
 package main
 
 import (
+	"cointracking-export-converter/internal/app"
+	"cointracking-export-converter/internal/cointracking"
 	"embed"
 
 	"github.com/wailsapp/wails/v2"
@@ -12,8 +14,10 @@ import (
 var assets embed.FS
 
 func main() {
-	// Create an instance of the app structure
-	app := NewApp()
+	appCtx := app.NewAppContext()
+
+	appInstance := app.NewApp(appCtx)
+	ct := cointracking.New(appCtx)
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -24,9 +28,10 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
+		OnStartup:        appInstance.Startup,
 		Bind: []interface{}{
-			app,
+			appInstance,
+			ct,
 		},
 	})
 
