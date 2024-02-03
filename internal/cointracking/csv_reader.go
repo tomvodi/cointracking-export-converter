@@ -37,6 +37,6 @@ func (c *csvReader) ReadFile(filepath string, loc *time.Location) ([]*common.Coi
 	return txs, nil
 }
 
-func NewCsvReader() interfaces.CointractingCsvReader {
+func NewCsvReader() interfaces.CointrackingCsvReader {
 	return &csvReader{}
 }

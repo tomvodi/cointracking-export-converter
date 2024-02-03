@@ -5,7 +5,8 @@ package cointracking_tx_type
 type CtTxType uint
 
 const (
-	Trade CtTxType = iota
+	NoTxTypeCtTxType CtTxType = iota
+	Trade
 	MarginTrade
 	DerivativesFuturesTrade
 	Deposit

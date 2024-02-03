@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _CtTxTypeName = "TradeMarginTradeDerivativesFuturesTradeDepositIncomeGiftTipRewardBonusMiningAirdropAirdropNonTaxableStakingMasternodeMintingMiningCommercialDividendsIncomeLendingIncomeInterestIncomeDerivativesFuturesProfitMarginProfitOtherIncomeIncomeNonTaxableRemoveLiquidityReceiveLpTokenLpRewardsWithdrawalSpendDonationGiftStolenLostBorrowingFeeSettlementFeeMarginLossMarginFeeDerivativesFuturesLossOtherFeeOtherExpenseProvideLiquidityReturnLpTokenExpenseNonTaxableSwapNonTaxableReceiveLoanReceiveCollateralSendCollateralRepayLoanLiquidation"
+const _CtTxTypeName = "NoTxTypeCtTxTypeTradeMarginTradeDerivativesFuturesTradeDepositIncomeGiftTipRewardBonusMiningAirdropAirdropNonTaxableStakingMasternodeMintingMiningCommercialDividendsIncomeLendingIncomeInterestIncomeDerivativesFuturesProfitMarginProfitOtherIncomeIncomeNonTaxableRemoveLiquidityReceiveLpTokenLpRewardsWithdrawalSpendDonationGiftStolenLostBorrowingFeeSettlementFeeMarginLossMarginFeeDerivativesFuturesLossOtherFeeOtherExpenseProvideLiquidityReturnLpTokenExpenseNonTaxableSwapNonTaxableReceiveLoanReceiveCollateralSendCollateralRepayLoanLiquidation"
 
-var _CtTxTypeIndex = [...]uint16{0, 5, 16, 39, 46, 52, 59, 70, 76, 83, 100, 107, 117, 124, 140, 155, 168, 182, 206, 218, 229, 245, 260, 274, 283, 293, 298, 306, 310, 316, 320, 332, 345, 355, 364, 386, 394, 406, 422, 435, 452, 466, 477, 494, 508, 517, 528}
+var _CtTxTypeIndex = [...]uint16{0, 16, 21, 32, 55, 62, 68, 75, 86, 92, 99, 116, 123, 133, 140, 156, 171, 184, 198, 222, 234, 245, 261, 276, 290, 299, 309, 314, 322, 326, 332, 336, 348, 361, 371, 380, 402, 410, 422, 438, 451, 468, 482, 493, 510, 524, 533, 544}
 
-const _CtTxTypeLowerName = "trademargintradederivativesfuturestradedepositincomegifttiprewardbonusminingairdropairdropnontaxablestakingmasternodemintingminingcommercialdividendsincomelendingincomeinterestincomederivativesfuturesprofitmarginprofitotherincomeincomenontaxableremoveliquidityreceivelptokenlprewardswithdrawalspenddonationgiftstolenlostborrowingfeesettlementfeemarginlossmarginfeederivativesfutureslossotherfeeotherexpenseprovideliquidityreturnlptokenexpensenontaxableswapnontaxablereceiveloanreceivecollateralsendcollateralrepayloanliquidation"
+const _CtTxTypeLowerName = "notxtypecttxtypetrademargintradederivativesfuturestradedepositincomegifttiprewardbonusminingairdropairdropnontaxablestakingmasternodemintingminingcommercialdividendsincomelendingincomeinterestincomederivativesfuturesprofitmarginprofitotherincomeincomenontaxableremoveliquidityreceivelptokenlprewardswithdrawalspenddonationgiftstolenlostborrowingfeesettlementfeemarginlossmarginfeederivativesfutureslossotherfeeotherexpenseprovideliquidityreturnlptokenexpensenontaxableswapnontaxablereceiveloanreceivecollateralsendcollateralrepayloanliquidation"
 
 func (i CtTxType) String() string {
 	if i >= CtTxType(len(_CtTxTypeIndex)-1) {
@@ -25,198 +25,202 @@ func (i CtTxType) String() string {
 // Re-run the stringer command to generate them again.
 func _CtTxTypeNoOp() {
 	var x [1]struct{}
-	_ = x[Trade-(0)]
-	_ = x[MarginTrade-(1)]
-	_ = x[DerivativesFuturesTrade-(2)]
-	_ = x[Deposit-(3)]
-	_ = x[Income-(4)]
-	_ = x[GiftTip-(5)]
-	_ = x[RewardBonus-(6)]
-	_ = x[Mining-(7)]
-	_ = x[Airdrop-(8)]
-	_ = x[AirdropNonTaxable-(9)]
-	_ = x[Staking-(10)]
-	_ = x[Masternode-(11)]
-	_ = x[Minting-(12)]
-	_ = x[MiningCommercial-(13)]
-	_ = x[DividendsIncome-(14)]
-	_ = x[LendingIncome-(15)]
-	_ = x[InterestIncome-(16)]
-	_ = x[DerivativesFuturesProfit-(17)]
-	_ = x[MarginProfit-(18)]
-	_ = x[OtherIncome-(19)]
-	_ = x[IncomeNonTaxable-(20)]
-	_ = x[RemoveLiquidity-(21)]
-	_ = x[ReceiveLpToken-(22)]
-	_ = x[LpRewards-(23)]
-	_ = x[Withdrawal-(24)]
-	_ = x[Spend-(25)]
-	_ = x[Donation-(26)]
-	_ = x[Gift-(27)]
-	_ = x[Stolen-(28)]
-	_ = x[Lost-(29)]
-	_ = x[BorrowingFee-(30)]
-	_ = x[SettlementFee-(31)]
-	_ = x[MarginLoss-(32)]
-	_ = x[MarginFee-(33)]
-	_ = x[DerivativesFuturesLoss-(34)]
-	_ = x[OtherFee-(35)]
-	_ = x[OtherExpense-(36)]
-	_ = x[ProvideLiquidity-(37)]
-	_ = x[ReturnLpToken-(38)]
-	_ = x[ExpenseNonTaxable-(39)]
-	_ = x[SwapNonTaxable-(40)]
-	_ = x[ReceiveLoan-(41)]
-	_ = x[ReceiveCollateral-(42)]
-	_ = x[SendCollateral-(43)]
-	_ = x[RepayLoan-(44)]
-	_ = x[Liquidation-(45)]
+	_ = x[NoTxTypeCtTxType-(0)]
+	_ = x[Trade-(1)]
+	_ = x[MarginTrade-(2)]
+	_ = x[DerivativesFuturesTrade-(3)]
+	_ = x[Deposit-(4)]
+	_ = x[Income-(5)]
+	_ = x[GiftTip-(6)]
+	_ = x[RewardBonus-(7)]
+	_ = x[Mining-(8)]
+	_ = x[Airdrop-(9)]
+	_ = x[AirdropNonTaxable-(10)]
+	_ = x[Staking-(11)]
+	_ = x[Masternode-(12)]
+	_ = x[Minting-(13)]
+	_ = x[MiningCommercial-(14)]
+	_ = x[DividendsIncome-(15)]
+	_ = x[LendingIncome-(16)]
+	_ = x[InterestIncome-(17)]
+	_ = x[DerivativesFuturesProfit-(18)]
+	_ = x[MarginProfit-(19)]
+	_ = x[OtherIncome-(20)]
+	_ = x[IncomeNonTaxable-(21)]
+	_ = x[RemoveLiquidity-(22)]
+	_ = x[ReceiveLpToken-(23)]
+	_ = x[LpRewards-(24)]
+	_ = x[Withdrawal-(25)]
+	_ = x[Spend-(26)]
+	_ = x[Donation-(27)]
+	_ = x[Gift-(28)]
+	_ = x[Stolen-(29)]
+	_ = x[Lost-(30)]
+	_ = x[BorrowingFee-(31)]
+	_ = x[SettlementFee-(32)]
+	_ = x[MarginLoss-(33)]
+	_ = x[MarginFee-(34)]
+	_ = x[DerivativesFuturesLoss-(35)]
+	_ = x[OtherFee-(36)]
+	_ = x[OtherExpense-(37)]
+	_ = x[ProvideLiquidity-(38)]
+	_ = x[ReturnLpToken-(39)]
+	_ = x[ExpenseNonTaxable-(40)]
+	_ = x[SwapNonTaxable-(41)]
+	_ = x[ReceiveLoan-(42)]
+	_ = x[ReceiveCollateral-(43)]
+	_ = x[SendCollateral-(44)]
+	_ = x[RepayLoan-(45)]
+	_ = x[Liquidation-(46)]
 }
 
-var _CtTxTypeValues = []CtTxType{Trade, MarginTrade, DerivativesFuturesTrade, Deposit, Income, GiftTip, RewardBonus, Mining, Airdrop, AirdropNonTaxable, Staking, Masternode, Minting, MiningCommercial, DividendsIncome, LendingIncome, InterestIncome, DerivativesFuturesProfit, MarginProfit, OtherIncome, IncomeNonTaxable, RemoveLiquidity, ReceiveLpToken, LpRewards, Withdrawal, Spend, Donation, Gift, Stolen, Lost, BorrowingFee, SettlementFee, MarginLoss, MarginFee, DerivativesFuturesLoss, OtherFee, OtherExpense, ProvideLiquidity, ReturnLpToken, ExpenseNonTaxable, SwapNonTaxable, ReceiveLoan, ReceiveCollateral, SendCollateral, RepayLoan, Liquidation}
+var _CtTxTypeValues = []CtTxType{NoTxTypeCtTxType, Trade, MarginTrade, DerivativesFuturesTrade, Deposit, Income, GiftTip, RewardBonus, Mining, Airdrop, AirdropNonTaxable, Staking, Masternode, Minting, MiningCommercial, DividendsIncome, LendingIncome, InterestIncome, DerivativesFuturesProfit, MarginProfit, OtherIncome, IncomeNonTaxable, RemoveLiquidity, ReceiveLpToken, LpRewards, Withdrawal, Spend, Donation, Gift, Stolen, Lost, BorrowingFee, SettlementFee, MarginLoss, MarginFee, DerivativesFuturesLoss, OtherFee, OtherExpense, ProvideLiquidity, ReturnLpToken, ExpenseNonTaxable, SwapNonTaxable, ReceiveLoan, ReceiveCollateral, SendCollateral, RepayLoan, Liquidation}
 
 var _CtTxTypeNameToValueMap = map[string]CtTxType{
-	_CtTxTypeName[0:5]:          Trade,
-	_CtTxTypeLowerName[0:5]:     Trade,
-	_CtTxTypeName[5:16]:         MarginTrade,
-	_CtTxTypeLowerName[5:16]:    MarginTrade,
-	_CtTxTypeName[16:39]:        DerivativesFuturesTrade,
-	_CtTxTypeLowerName[16:39]:   DerivativesFuturesTrade,
-	_CtTxTypeName[39:46]:        Deposit,
-	_CtTxTypeLowerName[39:46]:   Deposit,
-	_CtTxTypeName[46:52]:        Income,
-	_CtTxTypeLowerName[46:52]:   Income,
-	_CtTxTypeName[52:59]:        GiftTip,
-	_CtTxTypeLowerName[52:59]:   GiftTip,
-	_CtTxTypeName[59:70]:        RewardBonus,
-	_CtTxTypeLowerName[59:70]:   RewardBonus,
-	_CtTxTypeName[70:76]:        Mining,
-	_CtTxTypeLowerName[70:76]:   Mining,
-	_CtTxTypeName[76:83]:        Airdrop,
-	_CtTxTypeLowerName[76:83]:   Airdrop,
-	_CtTxTypeName[83:100]:       AirdropNonTaxable,
-	_CtTxTypeLowerName[83:100]:  AirdropNonTaxable,
-	_CtTxTypeName[100:107]:      Staking,
-	_CtTxTypeLowerName[100:107]: Staking,
-	_CtTxTypeName[107:117]:      Masternode,
-	_CtTxTypeLowerName[107:117]: Masternode,
-	_CtTxTypeName[117:124]:      Minting,
-	_CtTxTypeLowerName[117:124]: Minting,
-	_CtTxTypeName[124:140]:      MiningCommercial,
-	_CtTxTypeLowerName[124:140]: MiningCommercial,
-	_CtTxTypeName[140:155]:      DividendsIncome,
-	_CtTxTypeLowerName[140:155]: DividendsIncome,
-	_CtTxTypeName[155:168]:      LendingIncome,
-	_CtTxTypeLowerName[155:168]: LendingIncome,
-	_CtTxTypeName[168:182]:      InterestIncome,
-	_CtTxTypeLowerName[168:182]: InterestIncome,
-	_CtTxTypeName[182:206]:      DerivativesFuturesProfit,
-	_CtTxTypeLowerName[182:206]: DerivativesFuturesProfit,
-	_CtTxTypeName[206:218]:      MarginProfit,
-	_CtTxTypeLowerName[206:218]: MarginProfit,
-	_CtTxTypeName[218:229]:      OtherIncome,
-	_CtTxTypeLowerName[218:229]: OtherIncome,
-	_CtTxTypeName[229:245]:      IncomeNonTaxable,
-	_CtTxTypeLowerName[229:245]: IncomeNonTaxable,
-	_CtTxTypeName[245:260]:      RemoveLiquidity,
-	_CtTxTypeLowerName[245:260]: RemoveLiquidity,
-	_CtTxTypeName[260:274]:      ReceiveLpToken,
-	_CtTxTypeLowerName[260:274]: ReceiveLpToken,
-	_CtTxTypeName[274:283]:      LpRewards,
-	_CtTxTypeLowerName[274:283]: LpRewards,
-	_CtTxTypeName[283:293]:      Withdrawal,
-	_CtTxTypeLowerName[283:293]: Withdrawal,
-	_CtTxTypeName[293:298]:      Spend,
-	_CtTxTypeLowerName[293:298]: Spend,
-	_CtTxTypeName[298:306]:      Donation,
-	_CtTxTypeLowerName[298:306]: Donation,
-	_CtTxTypeName[306:310]:      Gift,
-	_CtTxTypeLowerName[306:310]: Gift,
-	_CtTxTypeName[310:316]:      Stolen,
-	_CtTxTypeLowerName[310:316]: Stolen,
-	_CtTxTypeName[316:320]:      Lost,
-	_CtTxTypeLowerName[316:320]: Lost,
-	_CtTxTypeName[320:332]:      BorrowingFee,
-	_CtTxTypeLowerName[320:332]: BorrowingFee,
-	_CtTxTypeName[332:345]:      SettlementFee,
-	_CtTxTypeLowerName[332:345]: SettlementFee,
-	_CtTxTypeName[345:355]:      MarginLoss,
-	_CtTxTypeLowerName[345:355]: MarginLoss,
-	_CtTxTypeName[355:364]:      MarginFee,
-	_CtTxTypeLowerName[355:364]: MarginFee,
-	_CtTxTypeName[364:386]:      DerivativesFuturesLoss,
-	_CtTxTypeLowerName[364:386]: DerivativesFuturesLoss,
-	_CtTxTypeName[386:394]:      OtherFee,
-	_CtTxTypeLowerName[386:394]: OtherFee,
-	_CtTxTypeName[394:406]:      OtherExpense,
-	_CtTxTypeLowerName[394:406]: OtherExpense,
-	_CtTxTypeName[406:422]:      ProvideLiquidity,
-	_CtTxTypeLowerName[406:422]: ProvideLiquidity,
-	_CtTxTypeName[422:435]:      ReturnLpToken,
-	_CtTxTypeLowerName[422:435]: ReturnLpToken,
-	_CtTxTypeName[435:452]:      ExpenseNonTaxable,
-	_CtTxTypeLowerName[435:452]: ExpenseNonTaxable,
-	_CtTxTypeName[452:466]:      SwapNonTaxable,
-	_CtTxTypeLowerName[452:466]: SwapNonTaxable,
-	_CtTxTypeName[466:477]:      ReceiveLoan,
-	_CtTxTypeLowerName[466:477]: ReceiveLoan,
-	_CtTxTypeName[477:494]:      ReceiveCollateral,
-	_CtTxTypeLowerName[477:494]: ReceiveCollateral,
-	_CtTxTypeName[494:508]:      SendCollateral,
-	_CtTxTypeLowerName[494:508]: SendCollateral,
-	_CtTxTypeName[508:517]:      RepayLoan,
-	_CtTxTypeLowerName[508:517]: RepayLoan,
-	_CtTxTypeName[517:528]:      Liquidation,
-	_CtTxTypeLowerName[517:528]: Liquidation,
+	_CtTxTypeName[0:16]:         NoTxTypeCtTxType,
+	_CtTxTypeLowerName[0:16]:    NoTxTypeCtTxType,
+	_CtTxTypeName[16:21]:        Trade,
+	_CtTxTypeLowerName[16:21]:   Trade,
+	_CtTxTypeName[21:32]:        MarginTrade,
+	_CtTxTypeLowerName[21:32]:   MarginTrade,
+	_CtTxTypeName[32:55]:        DerivativesFuturesTrade,
+	_CtTxTypeLowerName[32:55]:   DerivativesFuturesTrade,
+	_CtTxTypeName[55:62]:        Deposit,
+	_CtTxTypeLowerName[55:62]:   Deposit,
+	_CtTxTypeName[62:68]:        Income,
+	_CtTxTypeLowerName[62:68]:   Income,
+	_CtTxTypeName[68:75]:        GiftTip,
+	_CtTxTypeLowerName[68:75]:   GiftTip,
+	_CtTxTypeName[75:86]:        RewardBonus,
+	_CtTxTypeLowerName[75:86]:   RewardBonus,
+	_CtTxTypeName[86:92]:        Mining,
+	_CtTxTypeLowerName[86:92]:   Mining,
+	_CtTxTypeName[92:99]:        Airdrop,
+	_CtTxTypeLowerName[92:99]:   Airdrop,
+	_CtTxTypeName[99:116]:       AirdropNonTaxable,
+	_CtTxTypeLowerName[99:116]:  AirdropNonTaxable,
+	_CtTxTypeName[116:123]:      Staking,
+	_CtTxTypeLowerName[116:123]: Staking,
+	_CtTxTypeName[123:133]:      Masternode,
+	_CtTxTypeLowerName[123:133]: Masternode,
+	_CtTxTypeName[133:140]:      Minting,
+	_CtTxTypeLowerName[133:140]: Minting,
+	_CtTxTypeName[140:156]:      MiningCommercial,
+	_CtTxTypeLowerName[140:156]: MiningCommercial,
+	_CtTxTypeName[156:171]:      DividendsIncome,
+	_CtTxTypeLowerName[156:171]: DividendsIncome,
+	_CtTxTypeName[171:184]:      LendingIncome,
+	_CtTxTypeLowerName[171:184]: LendingIncome,
+	_CtTxTypeName[184:198]:      InterestIncome,
+	_CtTxTypeLowerName[184:198]: InterestIncome,
+	_CtTxTypeName[198:222]:      DerivativesFuturesProfit,
+	_CtTxTypeLowerName[198:222]: DerivativesFuturesProfit,
+	_CtTxTypeName[222:234]:      MarginProfit,
+	_CtTxTypeLowerName[222:234]: MarginProfit,
+	_CtTxTypeName[234:245]:      OtherIncome,
+	_CtTxTypeLowerName[234:245]: OtherIncome,
+	_CtTxTypeName[245:261]:      IncomeNonTaxable,
+	_CtTxTypeLowerName[245:261]: IncomeNonTaxable,
+	_CtTxTypeName[261:276]:      RemoveLiquidity,
+	_CtTxTypeLowerName[261:276]: RemoveLiquidity,
+	_CtTxTypeName[276:290]:      ReceiveLpToken,
+	_CtTxTypeLowerName[276:290]: ReceiveLpToken,
+	_CtTxTypeName[290:299]:      LpRewards,
+	_CtTxTypeLowerName[290:299]: LpRewards,
+	_CtTxTypeName[299:309]:      Withdrawal,
+	_CtTxTypeLowerName[299:309]: Withdrawal,
+	_CtTxTypeName[309:314]:      Spend,
+	_CtTxTypeLowerName[309:314]: Spend,
+	_CtTxTypeName[314:322]:      Donation,
+	_CtTxTypeLowerName[314:322]: Donation,
+	_CtTxTypeName[322:326]:      Gift,
+	_CtTxTypeLowerName[322:326]: Gift,
+	_CtTxTypeName[326:332]:      Stolen,
+	_CtTxTypeLowerName[326:332]: Stolen,
+	_CtTxTypeName[332:336]:      Lost,
+	_CtTxTypeLowerName[332:336]: Lost,
+	_CtTxTypeName[336:348]:      BorrowingFee,
+	_CtTxTypeLowerName[336:348]: BorrowingFee,
+	_CtTxTypeName[348:361]:      SettlementFee,
+	_CtTxTypeLowerName[348:361]: SettlementFee,
+	_CtTxTypeName[361:371]:      MarginLoss,
+	_CtTxTypeLowerName[361:371]: MarginLoss,
+	_CtTxTypeName[371:380]:      MarginFee,
+	_CtTxTypeLowerName[371:380]: MarginFee,
+	_CtTxTypeName[380:402]:      DerivativesFuturesLoss,
+	_CtTxTypeLowerName[380:402]: DerivativesFuturesLoss,
+	_CtTxTypeName[402:410]:      OtherFee,
+	_CtTxTypeLowerName[402:410]: OtherFee,
+	_CtTxTypeName[410:422]:      OtherExpense,
+	_CtTxTypeLowerName[410:422]: OtherExpense,
+	_CtTxTypeName[422:438]:      ProvideLiquidity,
+	_CtTxTypeLowerName[422:438]: ProvideLiquidity,
+	_CtTxTypeName[438:451]:      ReturnLpToken,
+	_CtTxTypeLowerName[438:451]: ReturnLpToken,
+	_CtTxTypeName[451:468]:      ExpenseNonTaxable,
+	_CtTxTypeLowerName[451:468]: ExpenseNonTaxable,
+	_CtTxTypeName[468:482]:      SwapNonTaxable,
+	_CtTxTypeLowerName[468:482]: SwapNonTaxable,
+	_CtTxTypeName[482:493]:      ReceiveLoan,
+	_CtTxTypeLowerName[482:493]: ReceiveLoan,
+	_CtTxTypeName[493:510]:      ReceiveCollateral,
+	_CtTxTypeLowerName[493:510]: ReceiveCollateral,
+	_CtTxTypeName[510:524]:      SendCollateral,
+	_CtTxTypeLowerName[510:524]: SendCollateral,
+	_CtTxTypeName[524:533]:      RepayLoan,
+	_CtTxTypeLowerName[524:533]: RepayLoan,
+	_CtTxTypeName[533:544]:      Liquidation,
+	_CtTxTypeLowerName[533:544]: Liquidation,
 }
 
 var _CtTxTypeNames = []string{
-	_CtTxTypeName[0:5],
-	_CtTxTypeName[5:16],
-	_CtTxTypeName[16:39],
-	_CtTxTypeName[39:46],
-	_CtTxTypeName[46:52],
-	_CtTxTypeName[52:59],
-	_CtTxTypeName[59:70],
-	_CtTxTypeName[70:76],
-	_CtTxTypeName[76:83],
-	_CtTxTypeName[83:100],
-	_CtTxTypeName[100:107],
-	_CtTxTypeName[107:117],
-	_CtTxTypeName[117:124],
-	_CtTxTypeName[124:140],
-	_CtTxTypeName[140:155],
-	_CtTxTypeName[155:168],
-	_CtTxTypeName[168:182],
-	_CtTxTypeName[182:206],
-	_CtTxTypeName[206:218],
-	_CtTxTypeName[218:229],
-	_CtTxTypeName[229:245],
-	_CtTxTypeName[245:260],
-	_CtTxTypeName[260:274],
-	_CtTxTypeName[274:283],
-	_CtTxTypeName[283:293],
-	_CtTxTypeName[293:298],
-	_CtTxTypeName[298:306],
-	_CtTxTypeName[306:310],
-	_CtTxTypeName[310:316],
-	_CtTxTypeName[316:320],
-	_CtTxTypeName[320:332],
-	_CtTxTypeName[332:345],
-	_CtTxTypeName[345:355],
-	_CtTxTypeName[355:364],
-	_CtTxTypeName[364:386],
-	_CtTxTypeName[386:394],
-	_CtTxTypeName[394:406],
-	_CtTxTypeName[406:422],
-	_CtTxTypeName[422:435],
-	_CtTxTypeName[435:452],
-	_CtTxTypeName[452:466],
-	_CtTxTypeName[466:477],
-	_CtTxTypeName[477:494],
-	_CtTxTypeName[494:508],
-	_CtTxTypeName[508:517],
-	_CtTxTypeName[517:528],
+	_CtTxTypeName[0:16],
+	_CtTxTypeName[16:21],
+	_CtTxTypeName[21:32],
+	_CtTxTypeName[32:55],
+	_CtTxTypeName[55:62],
+	_CtTxTypeName[62:68],
+	_CtTxTypeName[68:75],
+	_CtTxTypeName[75:86],
+	_CtTxTypeName[86:92],
+	_CtTxTypeName[92:99],
+	_CtTxTypeName[99:116],
+	_CtTxTypeName[116:123],
+	_CtTxTypeName[123:133],
+	_CtTxTypeName[133:140],
+	_CtTxTypeName[140:156],
+	_CtTxTypeName[156:171],
+	_CtTxTypeName[171:184],
+	_CtTxTypeName[184:198],
+	_CtTxTypeName[198:222],
+	_CtTxTypeName[222:234],
+	_CtTxTypeName[234:245],
+	_CtTxTypeName[245:261],
+	_CtTxTypeName[261:276],
+	_CtTxTypeName[276:290],
+	_CtTxTypeName[290:299],
+	_CtTxTypeName[299:309],
+	_CtTxTypeName[309:314],
+	_CtTxTypeName[314:322],
+	_CtTxTypeName[322:326],
+	_CtTxTypeName[326:332],
+	_CtTxTypeName[332:336],
+	_CtTxTypeName[336:348],
+	_CtTxTypeName[348:361],
+	_CtTxTypeName[361:371],
+	_CtTxTypeName[371:380],
+	_CtTxTypeName[380:402],
+	_CtTxTypeName[402:410],
+	_CtTxTypeName[410:422],
+	_CtTxTypeName[422:438],
+	_CtTxTypeName[438:451],
+	_CtTxTypeName[451:468],
+	_CtTxTypeName[468:482],
+	_CtTxTypeName[482:493],
+	_CtTxTypeName[493:510],
+	_CtTxTypeName[510:524],
+	_CtTxTypeName[524:533],
+	_CtTxTypeName[533:544],
 }
 
 // CtTxTypeString retrieves an enum value from the enum constants string name.

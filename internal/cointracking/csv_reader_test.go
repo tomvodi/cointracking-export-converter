@@ -2,6 +2,7 @@ package cointracking
 
 import (
 	"cointracking-export-converter/internal/common"
+	"cointracking-export-converter/internal/common/cointracking_tx_type"
 	"reflect"
 	"testing"
 	"time"
@@ -19,7 +20,7 @@ func Test_csvReader_ReadFile(t *testing.T) {
 		prepare func(args *args)
 	}{
 		{
-			name: "test simple",
+			name: "test simple english",
 			prepare: func(args *args) {
 				args.filepath = "./testfiles/file1_en_one_line.csv"
 				args.wantErr = false
@@ -27,7 +28,7 @@ func Test_csvReader_ReadFile(t *testing.T) {
 
 				args.want = []*common.CointrackingTx{
 					{
-						Type:         "Withdrawal",
+						Type:         &common.TxType{TxType: cointracking_tx_type.Withdrawal},
 						BuyValue:     1111.983574,
 						BuyCurrency:  "BTC",
 						SellValue:    300.13506100,
@@ -37,7 +38,33 @@ func Test_csvReader_ReadFile(t *testing.T) {
 						Exchange:     "ETH Wallet",
 						Group:        "testadress",
 						Comment:      "this is a comment",
-						DateTime: common.TxTimestamp{
+						DateTime: &common.TxTimestamp{
+							Time: time.Date(2024, 01, 21, 21, 56, 23, 0, args.loc),
+						},
+					},
+				}
+			},
+		},
+		{
+			name: "test simple deutsch",
+			prepare: func(args *args) {
+				args.filepath = "./testfiles/file1_de_one_line.csv"
+				args.wantErr = false
+				args.loc, _ = time.LoadLocation("Europe/Amsterdam")
+
+				args.want = []*common.CointrackingTx{
+					{
+						Type:         &common.TxType{TxType: cointracking_tx_type.Withdrawal},
+						BuyValue:     1111.983574,
+						BuyCurrency:  "BTC",
+						SellValue:    300.13506100,
+						SellCurrency: "USDT",
+						FeeValue:     1.456,
+						FeeCurrency:  "USDC",
+						Exchange:     "ETH Wallet",
+						Group:        "testadress",
+						Comment:      "this is a comment",
+						DateTime: &common.TxTimestamp{
 							Time: time.Date(2024, 01, 21, 21, 56, 23, 0, args.loc),
 						},
 					},
