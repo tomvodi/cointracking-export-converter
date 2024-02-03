@@ -17,7 +17,8 @@ func main() {
 	appCtx := app.NewAppContext()
 
 	appInstance := app.NewApp(appCtx)
-	ct := cointracking.New(appCtx)
+	csvReader := cointracking.NewCsvReader()
+	ct := cointracking.New(appCtx, csvReader)
 
 	// Create application with options
 	err := wails.Run(&options.App{

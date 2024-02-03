@@ -11,7 +11,7 @@ import (
 type csvReader struct {
 }
 
-func (c *csvReader) ReadFile(filepath string, loc *time.Location) ([]*common.CointrackingTx, error) {
+func (c *csvReader) ReadFile(filepath string, loc *time.Location) (*common.ExportFileInfo, error) {
 	exportFile, err := os.OpenFile(filepath, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,35 @@ func (c *csvReader) ReadFile(filepath string, loc *time.Location) ([]*common.Coi
 		txs[i].DateTime.Time = txs[i].DateTime.Time.In(loc)
 	}
 
-	return txs, nil
+	fileInfo := common.ExportFileInfo{
+		FilePath:     filepath,
+		TxCount:      len(txs),
+		Exchanges:    distinctExchangesFromTransactions(txs),
+		Transactions: txs,
+	}
+
+	return &fileInfo, nil
+}
+
+func distinctExchangesFromTransactions(txs []*common.CointrackingTx) []string {
+	var exchanges []string
+	for _, tx := range txs {
+		if tx.Exchange == "" {
+			continue
+		}
+
+		exchangeAlreadyAdded := false
+		for _, exchange := range exchanges {
+			if exchange == tx.Exchange {
+				exchangeAlreadyAdded = true
+				break
+			}
+		}
+		if !exchangeAlreadyAdded {
+			exchanges = append(exchanges, tx.Exchange)
+		}
+	}
+	return exchanges
 }
 
 func NewCsvReader() interfaces.CointrackingCsvReader {

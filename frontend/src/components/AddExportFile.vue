@@ -6,7 +6,8 @@ import TimezoneSelector from "./TimezoneSelector.vue";
 const selectedFile = ref<string>('')
 
 const selectFile = async () => {
-  OpenExportFile().then((value: string) => {
+  // TODO: get timezone from TimezoneSelector
+  OpenExportFile("Europe/Berlin").then((value: string) => {
     console.log("file was selected: " + value)
     selectedFile.value = value
   }).catch((reason: any) => {
