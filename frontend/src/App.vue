@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import AddExportFile from "./components/AddExportFile.vue";</script>
+import AddExportFile from "./components/AddExportFile.vue";
+import ExportFilesList from "./components/ExportFilesList.vue";</script>
 
 <template>
   <v-app>
@@ -10,6 +11,7 @@ import AddExportFile from "./components/AddExportFile.vue";</script>
     <v-main>
       <v-container class="mb-6 my-3">
         <AddExportFile/>
+        <ExportFilesList/>
       </v-container>
     </v-main>
   </v-app>
