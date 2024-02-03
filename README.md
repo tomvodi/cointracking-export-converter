@@ -17,3 +17,7 @@ to this in your browser, and you can call your Go code from devtools.
 ## Building
 
 To build a redistributable, production mode package, use `wails build`.
+
+### Notice
+
+- TX IDs are generated from export and don't match with CoinTracking Tx IDs as they are not exported
