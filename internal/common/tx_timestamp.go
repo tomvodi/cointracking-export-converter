@@ -39,6 +39,10 @@ func (ts *TxTimestamp) UnmarshalCSV(csv string) error {
 		parsed = tempTime
 	}
 
+	if parsed.IsZero() {
+		return fmt.Errorf("timestamp %s could not be parsed", csv)
+	}
+	
 	ts.Time = parsed
 
 	return nil
