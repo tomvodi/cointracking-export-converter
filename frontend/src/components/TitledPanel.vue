@@ -7,7 +7,7 @@ const props = defineProps({
 <template>
   <v-sheet class="pa-5" border>
     <v-row>
-      <p class="text-h5 mt-2 ml-5 pb-7">{{ props.title }}</p>
+      <p class="text-h5 mt-2 ml-3 pb-7">{{ props.title }}</p>
       <v-spacer></v-spacer>
       <slot name="append"></slot>
     </v-row>

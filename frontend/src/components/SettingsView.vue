@@ -2,12 +2,32 @@
 
 import {useRouter} from "vue-router";
 import TitledPanel from "./TitledPanel.vue";
+import {onMounted, ref} from "vue";
+import {BlockpitTxTypes, TxTypeMappings} from "../../wailsjs/go/cointracking/ct";
+import {common} from "../../wailsjs/go/models";
 
 const router = useRouter()
+
+const txMappings = ref<Array<common.Ct2BpTxMapping>>()
+let blockpitTxTypes = ref(Array<common.TxDisplayName>())
 
 const navigateBack = () => {
   router.back()
 }
+
+onMounted(() => {
+  TxTypeMappings().then((mappings) => {
+    txMappings.value = mappings
+  }).catch((reason) => {
+    console.log(`failed getting tx type mappings between cointracking and blockpit: ${reason}`)
+  })
+
+  BlockpitTxTypes().then((displayNames) => {
+    blockpitTxTypes.value = displayNames
+  }).catch((reason) => {
+    console.log(`failed getting blockpit tx types: ${reason}`)
+  })
+})
 
 </script>
 
@@ -20,6 +40,37 @@ const navigateBack = () => {
           icon="mdi-close-circle-outline"
       ></v-btn>
     </template>
+    <p class="text-h7 font-weight-bold mt-5">Tx Type Mapping</p>
+    <p class="text-subtitle-2">A mapping between CoinTracking and Blockpit transaction types</p>
+
+    <v-table class="mt-4">
+      <thead>
+      <tr>
+        <th class="text-left font-weight-bold">
+          CoinTracking Transaction
+        </th>
+        <th class="text-left font-weight-bold">
+          Blockpit Transaction
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- TODO: mapping change to backend -->
+      <tr
+          v-for="mapping in txMappings"
+          :key="mapping.cointracking.value">
+        <td>{{ mapping.cointracking.title }}</td>
+        <td>
+          <v-select
+              density="compact"
+              v-model="mapping.blockpit.value"
+              :items="blockpitTxTypes"
+              hide-details="auto"
+          ></v-select>
+        </td>
+      </tr>
+      </tbody>
+    </v-table>
   </TitledPanel>
 </template>
 

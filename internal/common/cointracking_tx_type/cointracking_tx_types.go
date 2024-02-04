@@ -1,11 +1,11 @@
 package cointracking_tx_type
 
-//go:generate go run github.com/dmarkham/enumer -json -yaml -type=CtTxType
+//go:generate go run github.com/dmarkham/enumer -json -yaml -transform=snake -type=CtTxType
 
 type CtTxType uint
 
 const (
-	NoTxTypeCtTxType CtTxType = iota
+	NoCtTxType CtTxType = iota
 	Trade
 	MarginTrade
 	DerivativesFuturesTrade
