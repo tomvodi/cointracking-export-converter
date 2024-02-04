@@ -28,6 +28,9 @@ func (c *ct) OpenExportFile(timezone string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if filename == "" {
+		return "", nil
+	}
 
 	loc, err := time.LoadLocation(timezone)
 	if err != nil {
