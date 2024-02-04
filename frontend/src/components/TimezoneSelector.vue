@@ -1,5 +1,19 @@
 <script setup lang="ts">
 
+const props = defineProps({
+  selectedTimezone: String
+})
+
+const rawSelected = ref(props.selectedTimezone)
+
+const emit = defineEmits<{
+  timezoneChanged: [zone: string]
+}>()
+
+const onTimezoneSelected = (newTimezone: string) => {
+  emit('timezoneChanged', newTimezone)
+}
+
 import {ref} from "vue";
 import InfoButton from "./InfoButton.vue";
 
@@ -100,7 +114,12 @@ const timezoneData = ref([
 </script>
 
 <template>
-  <v-select :items="timezoneData" label="Transaction Timezone">
+  <v-select
+      :items="timezoneData"
+      v-model="rawSelected"
+      label="Transaction Timezone"
+      @update:model-value="onTimezoneSelected"
+  >
     <template #append>
       <InfoButton>
         <div class="text-subtitle-2 font-weight-bold pb-1">Transaction Timezone</div>
