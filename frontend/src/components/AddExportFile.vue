@@ -3,6 +3,7 @@ import {computed} from 'vue'
 import {OpenExportFile} from "../../wailsjs/go/cointracking/ct";
 import TimezoneSelector from "./TimezoneSelector.vue";
 import {useSettingsStore} from "../stores/SettingsStore";
+import TitledPanel from "./TitledPanel.vue";
 
 const store = useSettingsStore()
 
@@ -23,21 +24,17 @@ const setTimezone = async (newTz: string) => {
 </script>
 
 <template>
-  <v-sheet class="pa-5" border>
-    <v-row>
-      <v-col dense>
-        <p class="text-h5 mb-3 text-left">Add a CoinTracking export file</p>
-        <TimezoneSelector
-            :selected-timezone="store.timezone"
-            @timezoneChanged="setTimezone"></TimezoneSelector>
-        <v-btn
-            :disabled="timezoneEmpty"
-            @click="selectFile"
-        >Select File
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-sheet>
+  <TitledPanel title="Add a CoinTracking export file">
+    <TimezoneSelector
+        :selected-timezone="store.timezone"
+        @timezoneChanged="setTimezone"></TimezoneSelector>
+    <v-btn
+        :disabled="timezoneEmpty"
+        @click="selectFile"
+    >Select File
+    </v-btn>
+  </TitledPanel>
+  
 </template>
 
 <style scoped>
