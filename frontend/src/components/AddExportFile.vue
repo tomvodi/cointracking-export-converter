@@ -23,26 +23,21 @@ const setTimezone = async (newTz: string) => {
 </script>
 
 <template>
-  <v-row>
-    <v-col>
-      <v-sheet class="pa-2" border>
-        <p class="text-h4 pb-2 text-left">Add a CoinTracking export file</p>
+  <v-sheet class="pa-5" border>
+    <v-row>
+      <v-col dense>
+        <p class="text-h5 mb-3 text-left">Add a CoinTracking export file</p>
         <TimezoneSelector
             :selected-timezone="store.timezone"
             @timezoneChanged="setTimezone"></TimezoneSelector>
-        <v-row align="start">
-          <v-col class="text-left">
-            <v-btn
-                :disabled="timezoneEmpty"
-                @click="selectFile"
-            >Add CoinTracking Export File
-            </v-btn>
-          </v-col>
-          <v-spacer></v-spacer>
-        </v-row>
-      </v-sheet>
-    </v-col>
-  </v-row>
+        <v-btn
+            :disabled="timezoneEmpty"
+            @click="selectFile"
+        >Select File
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-sheet>
 </template>
 
 <style scoped>

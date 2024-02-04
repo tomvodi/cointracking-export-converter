@@ -4,7 +4,7 @@ import {EventsOn} from "../../wailsjs/runtime";
 import {onMounted, ref} from "vue";
 
 interface ExportFile {
-  filePath: string
+  fileName: string
   txCount: number
   exchanges: Array<string>
 }
@@ -14,7 +14,6 @@ const exportedFiles = ref<Array<ExportFile>>([])
 
 onMounted(() => {
   EventsOn("ExportFilesChanged", (files: Array<ExportFile>) => {
-    console.log("ExportFilesChanged")
     exportedFiles.value = files
   })
 })
@@ -22,14 +21,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-list lines="two">
-    <v-list-subheader inset>CoinTracking export files</v-list-subheader>
-    <v-list-item
-        v-for="exportFile in exportedFiles"
-        :title="exportFile.filePath"
-        :subtitle="`${exportFile.txCount} transactions on ${exportFile.exchanges.length} exchanges`"
-    />
-  </v-list>
+  <div class="px-5" v-if="exportedFiles.length > 0">
+    <p class="text-h6">CoinTracking export files</p>
+    <v-list lines="two">
+      <v-list-item
+          v-for="exportFile in exportedFiles"
+          :title="exportFile.fileName"
+          :subtitle="`${exportFile.txCount} transactions on ${exportFile.exchanges.length} exchanges`"
+      >
+        <template v-slot:prepend>
+          <v-icon icon="mdi-file-delimited-outline"></v-icon>
+        </template>
+      </v-list-item>
+    </v-list>
+  </div>
 </template>
 
 <style scoped>

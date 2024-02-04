@@ -5,14 +5,15 @@ import (
 	"cointracking-export-converter/internal/interfaces"
 	"github.com/gocarina/gocsv"
 	"os"
+	"path/filepath"
 	"time"
 )
 
 type csvReader struct {
 }
 
-func (c *csvReader) ReadFile(filepath string, loc *time.Location) (*common.ExportFileInfo, error) {
-	exportFile, err := os.OpenFile(filepath, os.O_RDONLY, os.ModePerm)
+func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*common.ExportFileInfo, error) {
+	exportFile, err := os.OpenFile(absoluteFilePath, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		return nil, err
 	}
@@ -34,8 +35,11 @@ func (c *csvReader) ReadFile(filepath string, loc *time.Location) (*common.Expor
 		txs[i].DateTime.Time = txs[i].DateTime.Time.In(loc)
 	}
 
+	filename := filepath.Base(absoluteFilePath)
+
 	fileInfo := common.ExportFileInfo{
-		FilePath:     filepath,
+		FilePath:     absoluteFilePath,
+		FileName:     filename,
 		TxCount:      len(txs),
 		Exchanges:    distinctExchangesFromTransactions(txs),
 		Transactions: txs,
