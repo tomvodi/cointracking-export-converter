@@ -9,8 +9,9 @@ import (
 
 // App struct
 type App struct {
-	appCtx   interfaces.AppContext
-	logLevel logger.LogLevel
+	appCtx      interfaces.AppContext
+	logLevel    logger.LogLevel
+	timezoneLoc string
 }
 
 // NewApp creates a new App application struct
@@ -26,4 +27,13 @@ func NewApp(appCtx interfaces.AppContext, logLevel logger.LogLevel) *App {
 func (a *App) Startup(ctx context.Context) {
 	a.appCtx.SetContext(ctx)
 	runtime.LogSetLogLevel(ctx, a.logLevel)
+}
+
+func (a *App) GetTimezoneLocation() (string, error) {
+	return a.timezoneLoc, nil
+}
+
+func (a *App) SetTimezoneLocation(loc string) error {
+	a.timezoneLoc = loc
+	return nil
 }

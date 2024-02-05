@@ -5,8 +5,12 @@ import TitledPanel from "./TitledPanel.vue";
 import {onMounted, ref} from "vue";
 import {BlockpitTxTypes, SetCointracking2BlockpitMapping, TxTypeMappings} from "../../wailsjs/go/cointracking/ct";
 import {common} from "../../wailsjs/go/models";
+import TimezoneSelector from "./TimezoneSelector.vue";
+import {useSettingsStore} from "../stores/SettingsStore";
+import {SetTimezoneLocation} from "../../wailsjs/go/app/App";
 
 const router = useRouter()
+const store = useSettingsStore()
 
 const txMappings = ref<Array<common.Ct2BpTxMapping>>()
 let blockpitTxTypes = ref(Array<common.TxDisplayName>())
@@ -40,6 +44,13 @@ const blockpitTxTypeChanged = (idx: number) => {
   )
 }
 
+const setTimezone = async (newTz: string) => {
+  store.timezone = newTz
+  SetTimezoneLocation(newTz).catch(() => {
+    console.log("failed setting timezone to backend")
+  })
+}
+
 </script>
 
 <template>
@@ -51,9 +62,15 @@ const blockpitTxTypeChanged = (idx: number) => {
           icon="mdi-close-circle-outline"
       ></v-btn>
     </template>
+
+    <p class="text-h7 font-weight-bold mt-5">General</p>
+    <TimezoneSelector
+        :selected-timezone="store.timezone"
+        @timezoneChanged="setTimezone"></TimezoneSelector>
+
+
     <p class="text-h7 font-weight-bold mt-5">Tx Type Mapping</p>
     <p class="text-subtitle-2">A mapping between CoinTracking and Blockpit transaction types</p>
-
     <v-table class="mt-4">
       <thead>
       <tr>
