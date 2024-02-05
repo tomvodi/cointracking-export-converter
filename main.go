@@ -4,6 +4,8 @@ import (
 	"cointracking-export-converter/internal/app"
 	"cointracking-export-converter/internal/cointracking"
 	"embed"
+	"fmt"
+	"log"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -18,7 +20,12 @@ func main() {
 
 	appInstance := app.NewApp(appCtx)
 	csvReader := cointracking.NewCsvReader()
-	ct := cointracking.New(appCtx, csvReader)
+	txManager := cointracking.NewTxTypeManagerInitializer()
+	if err := txManager.Init(); err != nil {
+		log.Fatal(fmt.Sprintf("failed initializing TX manager: %s", err.Error()))
+	}
+
+	ct := cointracking.New(appCtx, csvReader, txManager)
 
 	// Create application with options
 	err := wails.Run(&options.App{

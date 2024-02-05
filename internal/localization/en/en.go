@@ -1,4 +1,4 @@
-package localization
+package en
 
 import (
 	bp "cointracking-export-converter/internal/common/blockpit_tx_type"
