@@ -37,6 +37,9 @@ func (c *ct) SetCointracking2BlockpitMapping(
 	if err != nil {
 		return fmt.Errorf("blockpit tx type %s is no valid type", bpTxType)
 	}
+
+	runtime.LogTracef(c.appCtx.Context(), "set cointracking tx mapping for '%s' to Blockpit Tx type '%s'",
+		ctTxType, bpTxType)
 	return c.txTypeManager.SetMapping(ctType, bpType)
 }
 

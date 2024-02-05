@@ -5,6 +5,7 @@ import (
 	"cointracking-export-converter/internal/cointracking"
 	"embed"
 	"fmt"
+	"github.com/wailsapp/wails/v2/pkg/logger"
 	"log"
 
 	"github.com/wailsapp/wails/v2"
@@ -18,7 +19,7 @@ var assets embed.FS
 func main() {
 	appCtx := app.NewAppContext()
 
-	appInstance := app.NewApp(appCtx)
+	appInstance := app.NewApp(appCtx, logger.INFO)
 	csvReader := cointracking.NewCsvReader()
 	txManager := cointracking.NewTxTypeManagerInitializer()
 	if err := txManager.Init(); err != nil {
