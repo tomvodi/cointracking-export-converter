@@ -34,7 +34,7 @@ const setTimezone = async (newTz: string) => {
     >Select File
     </v-btn>
   </TitledPanel>
-  
+
 </template>
 
 <style scoped>

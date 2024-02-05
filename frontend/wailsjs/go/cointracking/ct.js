@@ -10,6 +10,10 @@ export function OpenExportFile(arg1) {
   return window['go']['cointracking']['ct']['OpenExportFile'](arg1);
 }
 
+export function SetCointracking2BlockpitMapping(arg1, arg2) {
+  return window['go']['cointracking']['ct']['SetCointracking2BlockpitMapping'](arg1, arg2);
+}
+
 export function TxTypeMappings() {
   return window['go']['cointracking']['ct']['TxTypeMappings']();
 }

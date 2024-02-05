@@ -3,7 +3,7 @@
 import {useRouter} from "vue-router";
 import TitledPanel from "./TitledPanel.vue";
 import {onMounted, ref} from "vue";
-import {BlockpitTxTypes, TxTypeMappings} from "../../wailsjs/go/cointracking/ct";
+import {BlockpitTxTypes, SetCointracking2BlockpitMapping, TxTypeMappings} from "../../wailsjs/go/cointracking/ct";
 import {common} from "../../wailsjs/go/models";
 
 const router = useRouter()
@@ -28,6 +28,17 @@ onMounted(() => {
     console.log(`failed getting blockpit tx types: ${reason}`)
   })
 })
+
+const blockpitTxTypeChanged = (idx: number) => {
+  if (txMappings.value == undefined) {
+    return
+  }
+  let mapping = txMappings.value[idx]
+  SetCointracking2BlockpitMapping(
+      mapping.cointracking.value,
+      mapping.blockpit.value,
+  )
+}
 
 </script>
 
@@ -57,7 +68,7 @@ onMounted(() => {
       <tbody>
       <!-- TODO: mapping change to backend -->
       <tr
-          v-for="mapping in txMappings"
+          v-for="(mapping, index) in txMappings"
           :key="mapping.cointracking.value">
         <td>{{ mapping.cointracking.title }}</td>
         <td>
@@ -66,6 +77,7 @@ onMounted(() => {
               v-model="mapping.blockpit.value"
               :items="blockpitTxTypes"
               hide-details="auto"
+              @update:model-value="blockpitTxTypeChanged(index)"
           ></v-select>
         </td>
       </tr>
