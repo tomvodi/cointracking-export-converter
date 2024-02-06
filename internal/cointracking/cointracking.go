@@ -161,6 +161,7 @@ func (c *ct) writeTransactionsToXmlFile(filePath string) error {
 				tx.FeeCurrency,
 				tx.FeeValue,
 				tx.Comment,
+				tx.ID,
 			}
 
 			err = f.SetSheetRow("Sheet1", fmt.Sprintf("A%d", rowNr), &excelRow)

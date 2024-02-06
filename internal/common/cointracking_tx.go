@@ -12,4 +12,5 @@ type CointrackingTx struct {
 	Group        string       `csv:"group"`
 	Comment      string       `csv:"comment"`
 	DateTime     *TxTimestamp `csv:"date"`
+	ID           string       `csv:"-" hash:"-"`
 }

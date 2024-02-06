@@ -3,7 +3,9 @@ package cointracking
 import (
 	"cointracking-export-converter/internal/common"
 	"cointracking-export-converter/internal/interfaces"
+	"fmt"
 	"github.com/gocarina/gocsv"
+	"github.com/mitchellh/hashstructure/v2"
 	"os"
 	"path/filepath"
 	"time"
@@ -29,6 +31,14 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 			if tx.BuyValue == 0.0 && tx.SellValue == 0.0 && tx.FeeValue == 0.0 {
 				return
 			}
+
+			// finally add a transaction ID
+			hash, err := hashstructure.Hash(tx, hashstructure.FormatV2, nil)
+			if err != nil {
+				return
+			}
+			tx.ID = fmt.Sprintf("%x", hash)
+
 			txs = append(txs, tx)
 		})
 	if err != nil {
