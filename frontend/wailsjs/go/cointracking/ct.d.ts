@@ -4,6 +4,10 @@ import {common} from '../models';
 
 export function BlockpitTxTypes():Promise<Array<common.TxDisplayName>>;
 
+export function ExportToBlockpitXlsx():Promise<void>;
+
+export function GetExportFiles():Promise<Array<common.ExportFileInfo>>;
+
 export function OpenExportFile(arg1:string):Promise<string>;
 
 export function SetCointracking2BlockpitMapping(arg1:string,arg2:string):Promise<void>;

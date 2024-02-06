@@ -6,6 +6,14 @@ export function BlockpitTxTypes() {
   return window['go']['cointracking']['ct']['BlockpitTxTypes']();
 }
 
+export function ExportToBlockpitXlsx() {
+  return window['go']['cointracking']['ct']['ExportToBlockpitXlsx']();
+}
+
+export function GetExportFiles() {
+  return window['go']['cointracking']['ct']['GetExportFiles']();
+}
+
 export function OpenExportFile(arg1) {
   return window['go']['cointracking']['ct']['OpenExportFile'](arg1);
 }

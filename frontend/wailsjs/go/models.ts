@@ -46,6 +46,22 @@ export namespace common {
 		    return a;
 		}
 	}
+	export class ExportFileInfo {
+	    fileName: string;
+	    txCount: number;
+	    exchanges: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new ExportFileInfo(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.fileName = source["fileName"];
+	        this.txCount = source["txCount"];
+	        this.exchanges = source["exchanges"];
+	    }
+	}
 
 }
 
