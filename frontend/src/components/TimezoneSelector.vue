@@ -6,12 +6,13 @@ const props = defineProps({
 
 const rawSelected = ref(props.selectedTimezone)
 
-const emit = defineEmits<{
+const $emit = defineEmits<{
   timezoneChanged: [zone: string]
 }>()
 
 const onTimezoneSelected = (newTimezone: string) => {
-  emit('timezoneChanged', newTimezone)
+  console.log("timezone selected " + newTimezone)
+  $emit('timezoneChanged', newTimezone)
 }
 
 import {ref} from "vue";
@@ -114,7 +115,7 @@ const timezoneData = ref([
 </script>
 
 <template>
-  <v-select
+  <v-autocomplete
       :items="timezoneData"
       v-model="rawSelected"
       label="Transaction Timezone"
@@ -134,7 +135,7 @@ const timezoneData = ref([
         </div>
       </InfoButton>
     </template>
-  </v-select>
+  </v-autocomplete>
 </template>
 
 <style scoped>
