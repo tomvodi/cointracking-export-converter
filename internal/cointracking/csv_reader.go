@@ -24,6 +24,11 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 	var txs []*common.CointrackingTx
 	err = gocsv.UnmarshalDecoderToCallback(decoder,
 		func(tx *common.CointrackingTx) {
+			// There are sometimes nonsense transactions that transfer no value
+			// and will be rejected by blockpit
+			if tx.BuyValue == 0.0 && tx.SellValue == 0.0 && tx.FeeValue == 0.0 {
+				return
+			}
 			txs = append(txs, tx)
 		})
 	if err != nil {
