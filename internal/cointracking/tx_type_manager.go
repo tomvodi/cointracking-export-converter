@@ -20,6 +20,20 @@ type mapper struct {
 	mapping    map[ctt.CtTxType]bpt.BpTxType
 }
 
+func (m *mapper) BlockpitTxType(ctTxType ctt.CtTxType) (common.TxDisplayName, error) {
+	bpType, found := m.mapping[ctTxType]
+	if !found {
+		return common.TxDisplayName{}, fmt.Errorf("no blockpit tx type for cointracking type '%s'", ctTxType.String())
+	}
+
+	bpDisplay, found := m.bpDisplays[bpType]
+	if !found {
+		return common.TxDisplayName{}, fmt.Errorf("no blockpit display type for '%s'", bpType.String())
+	}
+
+	return bpDisplay, nil
+}
+
 func (m *mapper) Init() (err error) {
 	m.bpDisplays, err = initBlockpitDisplaysLocalized("english", en.BpTxTypeNames)
 	if err != nil {

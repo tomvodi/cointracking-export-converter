@@ -12,4 +12,5 @@ type TxTypeManager interface {
 	GetMapping() ([]common.Ct2BpTxMapping, error)
 	SetMapping(ctTxType ct.CtTxType, bpTxType bp.BpTxType) error
 	BlockpitTxTypes() ([]common.TxDisplayName, error)
+	BlockpitTxType(ctTxType ct.CtTxType) (common.TxDisplayName, error)
 }
