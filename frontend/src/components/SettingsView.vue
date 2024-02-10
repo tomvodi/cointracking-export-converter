@@ -7,7 +7,7 @@ import {BlockpitTxTypes, SetCointracking2BlockpitMapping, TxTypeMappings} from "
 import {common} from "../../wailsjs/go/models";
 import TimezoneSelector from "./TimezoneSelector.vue";
 import {useSettingsStore} from "../stores/SettingsStore";
-import {SetTimezoneLocation} from "../../wailsjs/go/app/App";
+import {SetTimezone, Timezone} from "../../wailsjs/go/config/appConfig";
 
 const router = useRouter()
 const store = useSettingsStore()
@@ -31,6 +31,10 @@ onMounted(() => {
   }).catch((reason) => {
     console.log(`failed getting blockpit tx types: ${reason}`)
   })
+
+  Timezone().then((timezone: string) => {
+    store.timezone = timezone
+  })
 })
 
 const blockpitTxTypeChanged = (idx: number) => {
@@ -46,8 +50,8 @@ const blockpitTxTypeChanged = (idx: number) => {
 
 const setTimezone = async (newTz: string) => {
   store.timezone = newTz
-  SetTimezoneLocation(newTz).catch(() => {
-    console.log("failed setting timezone to backend")
+  SetTimezone(newTz).catch((msg: any) => {
+    console.log("failed setting timezone to backend " + msg)
   })
 }
 
@@ -68,7 +72,6 @@ const setTimezone = async (newTz: string) => {
         :selected-timezone="store.timezone"
         @timezoneChanged="setTimezone"></TimezoneSelector>
 
-
     <p class="text-h7 font-weight-bold mt-5">Tx Type Mapping</p>
     <p class="text-subtitle-2">A mapping between CoinTracking and Blockpit transaction types</p>
     <v-table class="mt-4">
@@ -83,7 +86,6 @@ const setTimezone = async (newTz: string) => {
       </tr>
       </thead>
       <tbody>
-      <!-- TODO: mapping change to backend -->
       <tr
           v-for="(mapping, index) in txMappings"
           :key="mapping.cointracking.value">

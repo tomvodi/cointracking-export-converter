@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 
 import {onMounted} from "vue";
-import {GetTimezoneLocation} from "../wailsjs/go/app/App";
 import {useSettingsStore} from "./stores/SettingsStore";
+import {Timezone} from "../wailsjs/go/config/appConfig";
 
 const store = useSettingsStore()
 
 onMounted(() => {
-  GetTimezoneLocation().then((loc: string) => {
+  Timezone().then((loc: string) => {
     store.timezone = loc
   })
 })
