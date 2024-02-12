@@ -35,14 +35,15 @@ func main() {
 		log.Fatalf("failed initializing config: %s", err.Error())
 	}
 
-	appConfig := config.NewAppConfig(appCtx)
-
-	appInstance := app.NewApp(appCtx, logger.INFO)
-	csvReader := cointracking.NewCsvReader()
 	txManager := cointracking.NewTxTypeManagerInitializer()
 	if err = txManager.Init(); err != nil {
 		log.Fatalf("failed initializing TX manager: %s", err.Error())
 	}
+
+	appInstance := app.NewApp(appCtx, logger.INFO)
+	csvReader := cointracking.NewCsvReader()
+
+	appConfig := config.NewAppConfig(appCtx, txManager)
 
 	ct := cointracking.New(appCtx, csvReader, txManager)
 

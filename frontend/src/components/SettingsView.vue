@@ -3,11 +3,16 @@
 import {useRouter} from "vue-router";
 import TitledPanel from "./TitledPanel.vue";
 import {onMounted, ref} from "vue";
-import {BlockpitTxTypes, SetCointracking2BlockpitMapping, TxTypeMappings} from "../../wailsjs/go/cointracking/ct";
+import {
+  BlockpitTxTypes,
+  SetCointracking2BlockpitMapping,
+  SetTimezone,
+  Timezone,
+  TxTypeMappings
+} from "../../wailsjs/go/config/appConfig";
 import {common} from "../../wailsjs/go/models";
 import TimezoneSelector from "./TimezoneSelector.vue";
 import {useSettingsStore} from "../stores/SettingsStore";
-import {SetTimezone, Timezone} from "../../wailsjs/go/config/appConfig";
 
 const router = useRouter()
 const store = useSettingsStore()
