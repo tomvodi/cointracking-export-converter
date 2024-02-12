@@ -29,11 +29,13 @@ func main() {
 	}
 
 	appConfigDir := filepath.Join(configDir, appName)
-	appConfig := config.NewAppConfig(appConfigDir, appCtx)
-	err = appConfig.Init()
+	appConfigFileHandler := config.NewConfigFileHandler(appConfigDir)
+	err = appConfigFileHandler.Init()
 	if err != nil {
 		log.Fatalf("failed initializing config: %s", err.Error())
 	}
+
+	appConfig := config.NewAppConfig(appCtx)
 
 	appInstance := app.NewApp(appCtx, logger.INFO)
 	csvReader := cointracking.NewCsvReader()

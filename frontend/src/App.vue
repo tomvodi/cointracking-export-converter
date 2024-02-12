@@ -2,13 +2,17 @@
 
 import {onMounted} from "vue";
 import {useSettingsStore} from "./stores/SettingsStore";
-import {Timezone} from "../wailsjs/go/config/appConfig";
+import {AllTimezones, Timezone} from "../wailsjs/go/config/appConfig";
+import {common} from "../wailsjs/go/models";
 
 const store = useSettingsStore()
 
 onMounted(() => {
   Timezone().then((loc: string) => {
     store.timezone = loc
+  })
+  AllTimezones().then((timezones: Array<common.TimezoneData>) => {
+    store.allTimezones = timezones
   })
 })
 </script>

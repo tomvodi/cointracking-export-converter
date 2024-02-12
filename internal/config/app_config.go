@@ -1,44 +1,13 @@
 package config
 
 import (
+	"cointracking-export-converter/internal/common"
 	"cointracking-export-converter/internal/interfaces"
-	"fmt"
 	"github.com/spf13/viper"
-	"os"
-	"path/filepath"
 )
 
-type AppConfigInitializer interface {
-	interfaces.AppConfig
-	interfaces.Initializer
-}
-
-var configFileName = "config"
-
 type appConfig struct {
-	configDir string
-	appCtx    interfaces.AppContext
-}
-
-func (a *appConfig) Init() error {
-	viper.AddConfigPath(a.configDir)
-	viper.SetConfigName(configFileName)
-	viper.SetConfigType("yaml")
-
-	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			return nil
-		} else {
-			return err
-		}
-	}
-
-	err := os.MkdirAll(a.configDir, os.ModePerm)
-	if err != nil {
-		return fmt.Errorf("failed creating config dir: %s", err.Error())
-	}
-
-	return nil
+	appCtx interfaces.AppContext
 }
 
 func (a *appConfig) SetTimezone(tz string) error {
@@ -51,25 +20,21 @@ func (a *appConfig) Timezone() string {
 	//locTime := time.Now()
 	//zone, offset := locTime.Zone()
 	//fmt.Println(zone, offset)
+	tz := viper.GetString("timezone")
 
-	return viper.GetString("timezone")
+	return tz
+}
+
+func (a *appConfig) AllTimezones() []common.TimezoneData {
+	return AllTimezones
 }
 
 func (a *appConfig) writeConfig() error {
-	configPath := filepath.Join(a.configDir, configFileName+".yaml")
-	_, err := os.Stat(configPath)
-	if !os.IsExist(err) {
-		if _, err := os.Create(configPath); err != nil {
-			return fmt.Errorf("failed creating config file: %s", err.Error())
-		}
-	}
-
 	return viper.WriteConfig()
 }
 
-func NewAppConfig(configDir string, appCtx interfaces.AppContext) AppConfigInitializer {
+func NewAppConfig(appCtx interfaces.AppContext) interfaces.AppConfig {
 	return &appConfig{
-		configDir: configDir,
-		appCtx:    appCtx,
+		appCtx: appCtx,
 	}
 }

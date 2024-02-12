@@ -62,6 +62,20 @@ export namespace common {
 	        this.exchanges = source["exchanges"];
 	    }
 	}
+	export class TimezoneData {
+	    value: string;
+	    title: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new TimezoneData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.value = source["value"];
+	        this.title = source["title"];
+	    }
+	}
 
 }
 
