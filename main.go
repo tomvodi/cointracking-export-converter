@@ -35,7 +35,7 @@ func main() {
 		log.Fatalf("failed initializing config: %s", err.Error())
 	}
 
-	txManager := cointracking.NewTxTypeManagerInitializer()
+	txManager := config.NewTxTypeManagerInitializer()
 	if err = txManager.Init(); err != nil {
 		log.Fatalf("failed initializing TX manager: %s", err.Error())
 	}
