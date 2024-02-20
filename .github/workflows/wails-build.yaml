@@ -42,5 +42,7 @@ jobs:
         with:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
-          package: true
+          package: false
+          wails-version: 'latest'
           go-version: '1.21'
+          node-version: '20.11.x'
