@@ -1,11 +1,14 @@
-# cointracking-export-converter
-A converter for cointracking export .csv files.
+# Cointracking Export File Converter
+
+A converter for [CoinTracking](https://cointracking.info/) export .csv files. 
+
 ## About
 
-This is the official Wails Vue-TS template.
+CoinTracking is a widely used crypto portfolio tracker. Though it has many integrations for all kinds of crypto exchanges it lacks in my opinion of a good user experience.
+As I tried out [Blockpit](https://www.blockpit.io/), i found that this is much better but it lacks of an import from CoinTracking exports in order to have an easy migration path.
+This was the reason why I created this tool which takes CoinTracking export files in `.csv` format and converts it into Blockpit's `.xslx` files for import.
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+Currently there is only support for a conversion to Blockpit but it is possible to extend it in the future to other portfolio tracker.
 
 ## Live Development
 
@@ -18,6 +21,7 @@ to this in your browser, and you can call your Go code from devtools.
 
 To build a redistributable, production mode package, use `wails build`.
 
-### Notice
+### Known Issues
 
-- TX IDs are generated from export and don't match with CoinTracking Tx IDs as they are not exported
+CoinTracking does not export the transaction IDs in their `.csv` files. Transaction IDs are used by portfolio trackers to distinguish if a transaction is a duplicate of another one. 
+Therefore, the tool creates a unique transaction ID from the transaction data. This means that Blockpit can see if the transaction was already imported but if you have created another integration in Blockpit that has imported this transaction automatically, the IDs are different and Blockpit won't notice that these transactions are the same.
