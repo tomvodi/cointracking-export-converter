@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import {computed} from 'vue'
 import {OpenExportFile} from "../../wailsjs/go/cointracking/ct";
-import {useSettingsStore} from "../stores/SettingsStore";
+import {useSettingsStore} from "../stores/settingsStore";
 import TitledPanel from "./TitledPanel.vue";
 
 const store = useSettingsStore()
 
-const timezoneEmpty = computed(() => {
-  return store.timezone.length == 0
-})
 
 const selectFile = async () => {
   OpenExportFile(store.timezone).catch((reason: any) => {
@@ -19,7 +15,7 @@ const selectFile = async () => {
 </script>
 <template>
   <v-alert
-      v-if="timezoneEmpty"
+      v-if="store.timezoneEmpty"
       title="Missing timezone configuration"
       type="info"
       class="mb-5"
@@ -33,7 +29,7 @@ const selectFile = async () => {
   </v-alert>
   <TitledPanel title="Add a CoinTracking export file">
     <v-btn
-        :disabled="timezoneEmpty"
+        :disabled="store.timezoneEmpty"
         @click="selectFile"
     >Select File
     </v-btn>

@@ -10,7 +10,7 @@ import {
   TxTypeMappings
 } from "../../wailsjs/go/config/appConfig";
 import {common} from "../../wailsjs/go/models";
-import {useSettingsStore} from "../stores/SettingsStore";
+import {useSettingsStore} from "../stores/settingsStore";
 import TitledPanel from "../components/TitledPanel.vue";
 import TimezoneSelector from "../components/TimezoneSelector.vue";
 
