@@ -4,6 +4,7 @@ import {onMounted} from "vue";
 import {useSettingsStore} from "./stores/SettingsStore";
 import {AllTimezones, Timezone} from "../wailsjs/go/config/appConfig";
 import {common} from "../wailsjs/go/models";
+import Snackbar from "./components/Snackbar.vue";
 
 const store = useSettingsStore()
 
@@ -30,6 +31,7 @@ onMounted(() => {
     <v-main>
       <v-container class="my-4 pa-3">
         <router-view></router-view>
+        <Snackbar/>
       </v-container>
     </v-main>
   </v-app>

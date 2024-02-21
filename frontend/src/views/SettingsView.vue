@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import {useRouter} from "vue-router";
-import TitledPanel from "./TitledPanel.vue";
 import {onMounted, ref} from "vue";
 import {
   BlockpitTxTypes,
@@ -11,8 +10,9 @@ import {
   TxTypeMappings
 } from "../../wailsjs/go/config/appConfig";
 import {common} from "../../wailsjs/go/models";
-import TimezoneSelector from "./TimezoneSelector.vue";
 import {useSettingsStore} from "../stores/SettingsStore";
+import TitledPanel from "../components/TitledPanel.vue";
+import TimezoneSelector from "../components/TimezoneSelector.vue";
 
 const router = useRouter()
 const store = useSettingsStore()
