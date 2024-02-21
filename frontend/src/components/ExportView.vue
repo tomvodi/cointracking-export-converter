@@ -28,6 +28,7 @@ const exportedFilesChanged = async (files: Array<common.ExportFileInfo>) => {
   <v-btn
       class="mt-4 mx-5"
       @click="saveBlockpitFile"
+      :disabled="!exportEnabled"
   >Save Blockpit File
   </v-btn>
 </template>
