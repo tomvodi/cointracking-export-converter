@@ -9,16 +9,36 @@ import Snackbar from "./components/Snackbar.vue";
 const store = useSettingsStore()
 
 onMounted(() => {
-  Timezone().then((loc: string) => {
+  const tzPromise = Timezone()
+  const allTzPromise = AllTimezones()
+  const promises = [
+    tzPromise,
+    allTzPromise
+  ]
+  tzPromise.then((loc: string) => {
     store.timezone = loc
   })
-  AllTimezones().then((timezones: Array<common.TimezoneData>) => {
+  allTzPromise.then((timezones: Array<common.TimezoneData>) => {
     store.allTimezones = timezones
+  })
+
+  Promise.allSettled(promises).then((results) => {
+    store.settingsLoaded = true
   })
 })
 </script>
 
 <template>
+  <v-overlay
+      :model-value="!store.settingsLoaded"
+      class="align-center justify-center"
+  >
+    <v-progress-circular
+        color="primary"
+        indeterminate
+        size="64"
+    ></v-progress-circular>
+  </v-overlay>
   <v-app>
     <v-app-bar :elevation="2" color="blue-grey-lighten-5">
       <v-app-bar-title>CoinTracking CSV Export File Converter</v-app-bar-title>
