@@ -2,13 +2,15 @@
 import {OpenExportFile} from "../../wailsjs/go/cointracking/ct";
 import {useSettingsStore} from "../stores/settingsStore";
 import TitledPanel from "./TitledPanel.vue";
+import {useSnackbarStore} from "../stores/snackbarStore";
 
 const store = useSettingsStore()
+const snackStore = useSnackbarStore()
 
 
 const selectFile = async () => {
   OpenExportFile(store.timezone).catch((reason: any) => {
-    console.log("error selecting file: " + reason)
+    snackStore.showError(reason)
   })
 }
 

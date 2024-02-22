@@ -10,8 +10,8 @@ var marginTrades = []string{"Margin Trade", "Margin Trade"}
 var derivativesFuturesTrades = []string{"Derivatives / Futures Trade", "Derivate / Futures Trade"}
 var deposits = []string{"Deposit", "Einzahlung"}
 var incomes = []string{"Income", "Einnahme"}
-var giftTips = []string{"Gift / Tip", "Geschenk"}
-var rewardBonuses = []string{"Reward / Bonus", "Belohnung"}
+var giftTips = []string{"Gift/Tip", "Geschenk"}
+var rewardBonuses = []string{"Reward / Bonus", "Belohnung / Bonus"}
 var minings = []string{"Mining", "Mining"}
 var airdrops = []string{"Airdrop", "Airdrop"}
 var airdropNonTaxables = []string{"Airdrop (non taxable)", "Airdrop (steuerfrei)"}
@@ -119,5 +119,5 @@ func (tt *TxType) UnmarshalCSV(csv string) error {
 		}
 	}
 
-	return fmt.Errorf("no trade type found for %s", csv)
+	return fmt.Errorf("%w: no trade type found for %s", NoKnownTradeType, csv)
 }

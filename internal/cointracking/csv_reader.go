@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gocarina/gocsv"
 	"github.com/mitchellh/hashstructure/v2"
+	"github.com/pkg/errors"
 	"os"
 	"path/filepath"
 	"time"
@@ -42,6 +43,9 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 			txs = append(txs, tx)
 		})
 	if err != nil {
+		if errors.Is(err, common.NoKnownTradeType) {
+			return nil, fmt.Errorf("could not get trade types. Maybe your file was exported with an unsupported language")
+		}
 		return nil, err
 	}
 
