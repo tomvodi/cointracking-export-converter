@@ -64,7 +64,7 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 }
 
 func distinctExchangesFromTransactions(txs []*common.CointrackingTx) []string {
-	var exchanges []string
+	exchanges := []string{}
 	for _, tx := range txs {
 		if tx.Exchange == "" {
 			continue
