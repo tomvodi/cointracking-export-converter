@@ -58,34 +58,42 @@ func (m *mapper) initMappingFromConfig() error {
 
 	config := viper.Get("tx_mapping")
 
-	genericConfigMap, ok := config.(map[string]interface{})
-	if !ok {
-		return fmt.Errorf("failed converting mapping value in config file to map structure")
+	switch v := config.(type) {
+	case map[ctt.CtTxType]bpt.BpTxType:
+		m.mapping = v
+	case map[string]interface{}:
+		configMap, err := typedConfigFromGeneric(v)
+		if err != nil {
+			return err
+		}
+		m.mapping = configMap
+	default:
+		return fmt.Errorf("unhandled type of data in config file: %T", config)
 	}
+	return nil
+}
 
+func typedConfigFromGeneric(genericConfigMap map[string]interface{}) (map[ctt.CtTxType]bpt.BpTxType, error) {
 	configMap := map[ctt.CtTxType]bpt.BpTxType{}
 	for key, value := range genericConfigMap {
 		ctType, err := ctt.CtTxTypeString(key)
 		if err != nil {
-			return fmt.Errorf("%s is no cointracking transaction type", key)
+			return nil, fmt.Errorf("%s is no cointracking transaction type", key)
 		}
 		if ctType == ctt.NoCtTxType {
 			continue
 		}
 		bptStr, ok := value.(string)
 		if !ok {
-			return fmt.Errorf("blockpit tx type for cointracking type %s is not a string", key)
+			return nil, fmt.Errorf("blockpit tx type for cointracking type %s is not a string", key)
 		}
 		bpType, err := bpt.BpTxTypeString(bptStr)
 		if err != nil {
-			return fmt.Errorf("%s is no blockpit transaction type", bptStr)
+			return nil, fmt.Errorf("%s is no blockpit transaction type", bptStr)
 		}
 		configMap[ctType] = bpType
 	}
-
-	m.mapping = configMap
-
-	return nil
+	return configMap, nil
 }
 
 func initBlockpitDisplaysLocalized(
@@ -202,7 +210,7 @@ func (m *mapper) SetMapping(ctTxType ctt.CtTxType, bpTxType bpt.BpTxType) error 
 		return fmt.Errorf("failed saving mapping to config: %s", err.Error())
 	}
 
-	return fmt.Errorf("set mapping from ct %v to bp %v", ctTxType, bpTxType)
+	return nil
 }
 
 func NewTxTypeManagerInitializer() TxTypeManagerInitializer {
