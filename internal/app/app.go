@@ -1,7 +1,7 @@
 package app
 
 import (
-	"cointracking-export-converter/internal/interfaces"
+	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"context"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/runtime"

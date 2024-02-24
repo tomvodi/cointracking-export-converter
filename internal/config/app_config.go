@@ -1,13 +1,12 @@
 package config
 
 import (
-	"cointracking-export-converter/internal/common"
-	bp_type "cointracking-export-converter/internal/common/blockpit_tx_type"
-	ct_type "cointracking-export-converter/internal/common/cointracking_tx_type"
-	"cointracking-export-converter/internal/interfaces"
 	"fmt"
 	"github.com/spf13/viper"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"github.com/tomvodi/cointracking-export-converter/internal/common"
+	bp_type "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
+	ct_type "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 )
 
 type appConfig struct {

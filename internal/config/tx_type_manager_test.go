@@ -1,13 +1,13 @@
 package config
 
 import (
-	"cointracking-export-converter/internal/common"
-	bpt "cointracking-export-converter/internal/common/blockpit_tx_type"
-	ctt "cointracking-export-converter/internal/common/cointracking_tx_type"
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
-	"github.com/spf13/viper"
-	"os"
+"github.com/tomvodi/cointracking-export-converter/internal/common"
+bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
+ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+."github.com/onsi/ginkgo/v2"
+. "github.com/onsi/gomega"
+"github.com/spf13/viper"
+"os"
 )
 
 var _ = Describe("TxTypeManager", func() {

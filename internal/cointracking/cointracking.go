@@ -1,14 +1,13 @@
 package cointracking
 
 import (
-	"cointracking-export-converter/internal/common"
-	"cointracking-export-converter/internal/interfaces"
-	"fmt"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
-	"github.com/xuri/excelize/v2"
-	"time"
+"github.com/tomvodi/cointracking-export-converter/internal/common"
+"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
+"fmt"
+"github.com/wailsapp/wails/v2/pkg/runtime"
+"github.com/xuri/excelize/v2"
+"time"
 )
-
 type ct struct {
 	appCtx        interfaces.AppContext
 	csvReader     interfaces.CointrackingCsvReader

@@ -1,9 +1,9 @@
 package interfaces
 
 import (
-	"cointracking-export-converter/internal/common"
-	bp "cointracking-export-converter/internal/common/blockpit_tx_type"
-	ct "cointracking-export-converter/internal/common/cointracking_tx_type"
+	"github.com/tomvodi/cointracking-export-converter/internal/common"
+	bp "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
+	ct "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
 )
 
 //go:generate mockgen -source tx_type_manager.go -destination ./mocks/mock_tx_type_manager.go

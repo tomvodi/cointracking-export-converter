@@ -1,6 +1,7 @@
 package config
 
-import "cointracking-export-converter/internal/common"
+import
+"github.com/tomvodi/cointracking-export-converter/internal/common"
 
 var AllTimezones = []common.TimezoneData{
 	{

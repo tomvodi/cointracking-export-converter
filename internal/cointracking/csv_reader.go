@@ -1,17 +1,16 @@
 package cointracking
 
 import (
-	"cointracking-export-converter/internal/common"
-	"cointracking-export-converter/internal/interfaces"
-	"fmt"
-	"github.com/gocarina/gocsv"
-	"github.com/mitchellh/hashstructure/v2"
-	"github.com/pkg/errors"
-	"os"
-	"path/filepath"
-	"time"
+"github.com/tomvodi/cointracking-export-converter/internal/common"
+"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
+"fmt"
+"github.com/gocarina/gocsv"
+"github.com/mitchellh/hashstructure/v2"
+"github.com/pkg/errors"
+"os"
+"path/filepath"
+"time"
 )
-
 type csvReader struct {
 }
 

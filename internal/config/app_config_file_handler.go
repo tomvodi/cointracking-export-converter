@@ -1,10 +1,10 @@
 package config
 
 import (
-	"cointracking-export-converter/internal/interfaces"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
+	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"io/fs"
 	"os"
 	"path/filepath"

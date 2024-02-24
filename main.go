@@ -1,10 +1,11 @@
 package main
 
 import (
-	"cointracking-export-converter/internal/app"
-	"cointracking-export-converter/internal/cointracking"
-	"cointracking-export-converter/internal/config"
 	"embed"
+	"github.com/tomvodi/cointracking-export-converter/internal/app"
+	"github.com/tomvodi/cointracking-export-converter/internal/cointracking"
+	"github.com/tomvodi/cointracking-export-converter/internal/config"
+	"github.com/tomvodi/cointracking-export-converter/internal/wails_runtime"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"log"
 	"os"

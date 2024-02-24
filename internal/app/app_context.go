@@ -1,12 +1,11 @@
 package app
 
 import (
-	"cointracking-export-converter/internal/interfaces"
-	"context"
-	"os"
-	"path/filepath"
+"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
+"context"
+"os"
+"path/filepath"
 )
-
 type appCtx struct {
 	ctx                 context.Context
 	lastSelectedFileDir string

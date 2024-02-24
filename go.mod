@@ -1,4 +1,4 @@
-module cointracking-export-converter
+module github.com/tomvodi/cointracking-export-converter
 
 go 1.21
 

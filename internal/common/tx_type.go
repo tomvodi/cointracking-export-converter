@@ -1,8 +1,8 @@
 package common
 
 import (
-	ctt "cointracking-export-converter/internal/common/cointracking_tx_type"
-	"fmt"
+ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+"fmt"
 )
 
 var trades = []string{"Trade", "Trade"}

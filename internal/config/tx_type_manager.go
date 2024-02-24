@@ -1,15 +1,14 @@
 package config
 
 import (
-	"cointracking-export-converter/internal/common"
-	bpt "cointracking-export-converter/internal/common/blockpit_tx_type"
-	ctt "cointracking-export-converter/internal/common/cointracking_tx_type"
-	"cointracking-export-converter/internal/interfaces"
-	"cointracking-export-converter/internal/localization/en"
-	"fmt"
-	"github.com/spf13/viper"
+"github.com/tomvodi/cointracking-export-converter/internal/common"
+bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
+ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
+"github.com/tomvodi/cointracking-export-converter/internal/localization/en"
+"fmt"
+"github.com/spf13/viper"
 )
-
 type TxTypeManagerInitializer interface {
 	interfaces.TxTypeManager
 	interfaces.Initializer
