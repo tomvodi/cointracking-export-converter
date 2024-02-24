@@ -10,6 +10,7 @@ import (
 )
 
 type appConfig struct {
+	wailsLog      interfaces.WailsLog
 	appCtx        interfaces.AppContext
 	txTypeManager interfaces.TxTypeManager
 }
@@ -20,10 +21,6 @@ func (a *appConfig) SetTimezone(tz string) error {
 }
 
 func (a *appConfig) Timezone() string {
-	// Initial timezone from local machine
-	//locTime := time.Now()
-	//zone, offset := locTime.Zone()
-	//fmt.Println(zone, offset)
 	tz := viper.GetString("timezone")
 
 	return tz
@@ -54,7 +51,7 @@ func (a *appConfig) SetCointracking2BlockpitMapping(
 		return fmt.Errorf("blockpit tx type %s is no valid type", bpTxType)
 	}
 
-	runtime.LogTracef(a.appCtx.Context(), "set cointracking tx mapping for '%s' to Blockpit Tx type '%s'",
+	a.wailsLog.LogTracef(a.appCtx.Context(), "set cointracking tx mapping for '%s' to Blockpit Tx type '%s'",
 		ctTxType, bpTxType)
 	return a.txTypeManager.SetMapping(ctType, bpType)
 }
@@ -63,8 +60,13 @@ func (a *appConfig) writeConfig() error {
 	return viper.WriteConfig()
 }
 
-func NewAppConfig(appCtx interfaces.AppContext, txTypeManager interfaces.TxTypeManager) interfaces.AppConfig {
+func NewAppConfig(
+	appCtx interfaces.AppContext,
+	txTypeManager interfaces.TxTypeManager,
+	wailsLog interfaces.WailsLog,
+) interfaces.AppConfig {
 	return &appConfig{
+		wailsLog:      wailsLog,
 		appCtx:        appCtx,
 		txTypeManager: txTypeManager,
 	}
