@@ -3,18 +3,22 @@ package config
 import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 	"os"
 )
 
 var _ = Describe("AppConfigFileHandler", func() {
-	var configDir = "./test_config_dir"
+	var configDir = "/test_config_dir"
 	var fH *fileHandler
+	var fs afero.Fs
 	var err error
 
 	BeforeEach(func() {
+		fs = afero.NewMemMapFs()
 		fH = &fileHandler{
 			configDir: configDir,
+			fs:        fs,
 		}
 	})
 
@@ -29,7 +33,7 @@ var _ = Describe("AppConfigFileHandler", func() {
 				err = fH.Init()
 				Expect(err).ToNot(HaveOccurred())
 
-				_, err = os.Stat(configDir + "/" + configFileName + ".yaml")
+				_, err = fs.Stat(configDir + "/" + configFileName + ".yaml")
 				Expect(err).ToNot(HaveOccurred())
 			})
 		})

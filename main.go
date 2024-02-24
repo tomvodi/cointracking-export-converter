@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"github.com/spf13/afero"
 	"github.com/tomvodi/cointracking-export-converter/internal/app"
 	"github.com/tomvodi/cointracking-export-converter/internal/cointracking"
 	"github.com/tomvodi/cointracking-export-converter/internal/config"
@@ -23,6 +24,8 @@ var appName = "cointracking-export-converter"
 
 func main() {
 	appCtx := app.NewAppContext()
+	wailsLog := wails_runtime.NewWailsLog()
+	fs := afero.NewOsFs()
 
 	configDir, err := os.UserConfigDir()
 	if err != nil {
@@ -30,7 +33,7 @@ func main() {
 	}
 
 	appConfigDir := filepath.Join(configDir, appName)
-	appConfigFileHandler := config.NewConfigFileHandler(appConfigDir)
+	appConfigFileHandler := config.NewConfigFileHandler(fs, appConfigDir)
 	err = appConfigFileHandler.Init()
 	if err != nil {
 		log.Fatalf("failed initializing config: %s", err.Error())
@@ -44,7 +47,7 @@ func main() {
 	appInstance := app.NewApp(appCtx, logger.INFO)
 	csvReader := cointracking.NewCsvReader()
 
-	appConfig := config.NewAppConfig(appCtx, txManager)
+	appConfig := config.NewAppConfig(appCtx, txManager, wailsLog)
 
 	ct := cointracking.New(appCtx, csvReader, txManager)
 

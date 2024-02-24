@@ -1,7 +1,7 @@
 package interfaces
 
 import (
-	"cointracking-export-converter/internal/common"
+	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	"time"
 )
 
