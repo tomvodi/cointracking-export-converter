@@ -1,0 +1,9 @@
+testonly: False
+with-expecter: True
+packages:
+  github.com/tomvodi/cointracking-export-converter/internal/interfaces:
+all: True
+dir: "{{.InterfaceDir}}/mocks"
+outpkg: "mocks"
+mockname: "{{.InterfaceName}}"
+
