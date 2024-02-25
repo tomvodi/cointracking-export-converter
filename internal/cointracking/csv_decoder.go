@@ -27,7 +27,7 @@ func (c *ctCsvDecoder) GetCSVRow() ([]string, error) {
 		return ctCsvHeaders, nil
 	}
 
-	fields := strings.Split(row, ",")
+	fields := strings.Split(row, "\",\"")
 	for i := 0; i < len(fields); i++ {
 		fields[i] = strings.ReplaceAll(fields[i], `"`, "")
 		fields[i] = strings.TrimSpace(fields[i])

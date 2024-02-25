@@ -67,6 +67,38 @@ var _ = Describe("CsvReader", func() {
 		Entry("English file", "./testfiles/file1_en_one_line.csv"),
 	)
 
+	DescribeTable("read valid file with one line and comma in field",
+		func(testfilePath string) {
+			fileInfo, err = csvRd.ReadFile(testfilePath, loc)
+			Expect(err).ToNot(HaveOccurred())
+
+			filename := filepath.Base(testfilePath)
+			Expect(fileInfo.FilePath).To(Equal(fmt.Sprintf(testfilePath)))
+			Expect(fileInfo.FileName).To(Equal(filename))
+			Expect(fileInfo.TxCount).To(Equal(1))
+			Expect(fileInfo.Transactions).To(Equal([]*common.CointrackingTx{
+				{
+					Type:         &common.TxType{TxType: ctt.Withdrawal},
+					BuyValue:     1111.983574,
+					BuyCurrency:  "BTC",
+					SellValue:    300.13506100,
+					SellCurrency: "USDT",
+					FeeValue:     1.456,
+					FeeCurrency:  "USDC",
+					Exchange:     "ETH Wallet",
+					Group:        "testaddress",
+					Comment:      "this, is a comment",
+					DateTime: &common.TxTimestamp{
+						Time: time.Date(
+							2024, 1, 21, 20, 56, 23, 0, loc),
+					},
+					ID: "69be2b239478213a",
+				},
+			}))
+		},
+		Entry("German file and comma in field", "./testfiles/file1_de_one_line_comma_in_field.csv"),
+	)
+
 	DescribeTable("read valid file with all transaction types",
 		func(testfilePath string) {
 			fileInfo, err = csvRd.ReadFile(testfilePath, loc)
