@@ -1,16 +1,17 @@
 package cointracking
 
 import (
-"github.com/tomvodi/cointracking-export-converter/internal/common"
-"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
-"fmt"
-"github.com/gocarina/gocsv"
-"github.com/mitchellh/hashstructure/v2"
-"github.com/pkg/errors"
-"os"
-"path/filepath"
-"time"
+	"fmt"
+	"github.com/gocarina/gocsv"
+	"github.com/mitchellh/hashstructure/v2"
+	"github.com/pkg/errors"
+	"github.com/tomvodi/cointracking-export-converter/internal/common"
+	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
+	"os"
+	"path/filepath"
+	"time"
 )
+
 type csvReader struct {
 }
 
@@ -24,11 +25,13 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 	decoder := NewCsvDecoder(exportFile)
 
 	var txs []*common.CointrackingTx
+	var skippedTxCnt int
 	err = gocsv.UnmarshalDecoderToCallback(decoder,
 		func(tx *common.CointrackingTx) {
 			// There are sometimes nonsense transactions that transfer no value
 			// and will be rejected by blockpit
 			if tx.BuyValue == 0.0 && tx.SellValue == 0.0 && tx.FeeValue == 0.0 {
+				skippedTxCnt++
 				return
 			}
 
@@ -59,6 +62,7 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 		FilePath:     absoluteFilePath,
 		FileName:     filename,
 		TxCount:      len(txs),
+		SkippedTxs:   skippedTxCnt,
 		Exchanges:    distinctExchangesFromTransactions(txs),
 		Transactions: txs,
 	}

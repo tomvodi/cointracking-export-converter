@@ -33,7 +33,7 @@ const setExportFiles = async (files: Array<common.ExportFileInfo>) => {
       <v-list-item
           v-for="exportFile in exportedFiles"
           :title="exportFile.fileName"
-          :subtitle="`${exportFile.txCount} transactions on ${exportFile.exchanges.length} exchanges`"
+          :subtitle="`${exportFile.txCount} transactions on ${exportFile.exchanges.length} exchanges. ${exportFile.skippedTxs} skipped transactions.`"
       >
         <template v-slot:prepend>
           <v-icon icon="mdi-file-delimited-outline"></v-icon>

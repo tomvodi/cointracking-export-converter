@@ -49,6 +49,7 @@ export namespace common {
 	export class ExportFileInfo {
 	    fileName: string;
 	    txCount: number;
+	    skippedTxs: number;
 	    exchanges: string[];
 	
 	    static createFrom(source: any = {}) {
@@ -59,6 +60,7 @@ export namespace common {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.fileName = source["fileName"];
 	        this.txCount = source["txCount"];
+	        this.skippedTxs = source["skippedTxs"];
 	        this.exchanges = source["exchanges"];
 	    }
 	}
