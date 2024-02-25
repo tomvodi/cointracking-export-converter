@@ -1,8 +1,8 @@
 package en
 
 import (
-bp "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
-ct "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	bp "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
+	ct "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
 )
 
 var CtTxTypeNames = map[ct.CtTxType]string{
@@ -60,7 +60,7 @@ var BpTxTypeNames = map[bp.BpTxType]string{
 	bp.Withdrawal:       "Withdrawal",
 	bp.Mining:           "Mining",
 	bp.Staking:          "Staking",
-	bp.GiftSent:         "GiftSent",
+	bp.GiftSent:         "Gift Sent",
 	bp.Airdrop:          "Airdrop",
 	bp.GiftReceived:     "Gift Received",
 	bp.Masternode:       "Masternode",
