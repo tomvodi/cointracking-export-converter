@@ -3,3 +3,6 @@ mocks:
 
 test:
 	go test ./...
+
+wails:
+	wails dev
