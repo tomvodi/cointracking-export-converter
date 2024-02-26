@@ -1,14 +1,25 @@
 package app
 
 import (
-"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
-"context"
-"os"
-"path/filepath"
+	"context"
+	"github.com/tomvodi/cointracking-export-converter/internal/common"
+	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
+	"os"
+	"path/filepath"
 )
+
 type appCtx struct {
 	ctx                 context.Context
 	lastSelectedFileDir string
+	exportFiles         []*common.ExportFileInfo
+}
+
+func (a *appCtx) ExportFiles() []*common.ExportFileInfo {
+	return a.exportFiles
+}
+
+func (a *appCtx) AddExportFile(file *common.ExportFileInfo) {
+	a.exportFiles = append(a.exportFiles, file)
 }
 
 func (a *appCtx) SetLastSelectedFileDirFromFile(file string) {
@@ -35,5 +46,7 @@ func (a *appCtx) SetContext(ctx context.Context) {
 }
 
 func NewAppContext() interfaces.AppContext {
-	return &appCtx{}
+	return &appCtx{
+		exportFiles: make([]*common.ExportFileInfo, 0),
+	}
 }

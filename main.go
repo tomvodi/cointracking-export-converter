@@ -4,6 +4,7 @@ import (
 	"embed"
 	"github.com/spf13/afero"
 	"github.com/tomvodi/cointracking-export-converter/internal/app"
+	"github.com/tomvodi/cointracking-export-converter/internal/blockpit"
 	"github.com/tomvodi/cointracking-export-converter/internal/cointracking"
 	"github.com/tomvodi/cointracking-export-converter/internal/config"
 	"github.com/tomvodi/cointracking-export-converter/internal/wails_runtime"
@@ -49,7 +50,9 @@ func main() {
 
 	appConfig := config.NewAppConfig(appCtx, txManager, wailsLog)
 
-	ct := cointracking.New(appCtx, csvReader, txManager)
+	bpXmlWriter := blockpit.NewXmlWriter(txManager)
+	bp := blockpit.New(appCtx, bpXmlWriter)
+	ct := cointracking.New(appCtx, csvReader)
 
 	// Create application with options
 	err = wails.Run(&options.App{
@@ -63,6 +66,7 @@ func main() {
 		OnStartup:        appInstance.Startup,
 		Bind: []interface{}{
 			ct,
+			bp,
 			appConfig,
 		},
 	})

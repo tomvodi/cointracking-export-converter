@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {ExportToBlockpitXlsx} from "../../wailsjs/go/cointracking/ct";
+import {ExportToBlockpitXlsx} from "../../wailsjs/go/blockpit/bp";
 import {ref} from "vue";
 import {common} from "../../wailsjs/go/models";
 import {useSnackbarStore} from "../stores/snackbarStore";

@@ -5,6 +5,8 @@ package mocks
 import (
 	context "context"
 
+	common "github.com/tomvodi/cointracking-export-converter/internal/common"
+
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -19,6 +21,39 @@ type AppContext_Expecter struct {
 
 func (_m *AppContext) EXPECT() *AppContext_Expecter {
 	return &AppContext_Expecter{mock: &_m.Mock}
+}
+
+// AddExportFile provides a mock function with given fields: file
+func (_m *AppContext) AddExportFile(file *common.ExportFileInfo) {
+	_m.Called(file)
+}
+
+// AppContext_AddExportFile_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddExportFile'
+type AppContext_AddExportFile_Call struct {
+	*mock.Call
+}
+
+// AddExportFile is a helper method to define mock.On call
+//   - file *common.ExportFileInfo
+func (_e *AppContext_Expecter) AddExportFile(file interface{}) *AppContext_AddExportFile_Call {
+	return &AppContext_AddExportFile_Call{Call: _e.mock.On("AddExportFile", file)}
+}
+
+func (_c *AppContext_AddExportFile_Call) Run(run func(file *common.ExportFileInfo)) *AppContext_AddExportFile_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(*common.ExportFileInfo))
+	})
+	return _c
+}
+
+func (_c *AppContext_AddExportFile_Call) Return() *AppContext_AddExportFile_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *AppContext_AddExportFile_Call) RunAndReturn(run func(*common.ExportFileInfo)) *AppContext_AddExportFile_Call {
+	_c.Call.Return(run)
+	return _c
 }
 
 // Context provides a mock function with given fields:
@@ -64,6 +99,53 @@ func (_c *AppContext_Context_Call) Return(_a0 context.Context) *AppContext_Conte
 }
 
 func (_c *AppContext_Context_Call) RunAndReturn(run func() context.Context) *AppContext_Context_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// ExportFiles provides a mock function with given fields:
+func (_m *AppContext) ExportFiles() []*common.ExportFileInfo {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for ExportFiles")
+	}
+
+	var r0 []*common.ExportFileInfo
+	if rf, ok := ret.Get(0).(func() []*common.ExportFileInfo); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*common.ExportFileInfo)
+		}
+	}
+
+	return r0
+}
+
+// AppContext_ExportFiles_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ExportFiles'
+type AppContext_ExportFiles_Call struct {
+	*mock.Call
+}
+
+// ExportFiles is a helper method to define mock.On call
+func (_e *AppContext_Expecter) ExportFiles() *AppContext_ExportFiles_Call {
+	return &AppContext_ExportFiles_Call{Call: _e.mock.On("ExportFiles")}
+}
+
+func (_c *AppContext_ExportFiles_Call) Run(run func()) *AppContext_ExportFiles_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *AppContext_ExportFiles_Call) Return(_a0 []*common.ExportFileInfo) *AppContext_ExportFiles_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *AppContext_ExportFiles_Call) RunAndReturn(run func() []*common.ExportFileInfo) *AppContext_ExportFiles_Call {
 	_c.Call.Return(run)
 	return _c
 }
