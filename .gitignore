@@ -26,3 +26,9 @@ frontend/dist
 
 # IDE dirs
 .idea
+
+# Developer's taskfiles
+Taskfile.yml
+Taskfile.yaml
+taskfile.yml
+taskfile.yaml
