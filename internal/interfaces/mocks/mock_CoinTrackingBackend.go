@@ -17,51 +17,6 @@ func (_m *CoinTrackingBackend) EXPECT() *CoinTrackingBackend_Expecter {
 	return &CoinTrackingBackend_Expecter{mock: &_m.Mock}
 }
 
-// ExportToBlockpitXlsx provides a mock function with given fields:
-func (_m *CoinTrackingBackend) ExportToBlockpitXlsx() error {
-	ret := _m.Called()
-
-	if len(ret) == 0 {
-		panic("no return value specified for ExportToBlockpitXlsx")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func() error); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
-// CoinTrackingBackend_ExportToBlockpitXlsx_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ExportToBlockpitXlsx'
-type CoinTrackingBackend_ExportToBlockpitXlsx_Call struct {
-	*mock.Call
-}
-
-// ExportToBlockpitXlsx is a helper method to define mock.On call
-func (_e *CoinTrackingBackend_Expecter) ExportToBlockpitXlsx() *CoinTrackingBackend_ExportToBlockpitXlsx_Call {
-	return &CoinTrackingBackend_ExportToBlockpitXlsx_Call{Call: _e.mock.On("ExportToBlockpitXlsx")}
-}
-
-func (_c *CoinTrackingBackend_ExportToBlockpitXlsx_Call) Run(run func()) *CoinTrackingBackend_ExportToBlockpitXlsx_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run()
-	})
-	return _c
-}
-
-func (_c *CoinTrackingBackend_ExportToBlockpitXlsx_Call) Return(_a0 error) *CoinTrackingBackend_ExportToBlockpitXlsx_Call {
-	_c.Call.Return(_a0)
-	return _c
-}
-
-func (_c *CoinTrackingBackend_ExportToBlockpitXlsx_Call) RunAndReturn(run func() error) *CoinTrackingBackend_ExportToBlockpitXlsx_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // OpenExportFile provides a mock function with given fields: timezone
 func (_m *CoinTrackingBackend) OpenExportFile(timezone string) (string, error) {
 	ret := _m.Called(timezone)

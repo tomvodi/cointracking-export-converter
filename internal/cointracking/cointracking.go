@@ -1,22 +1,20 @@
 package cointracking
 
 import (
-"github.com/tomvodi/cointracking-export-converter/internal/common"
-"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
-"fmt"
-"github.com/wailsapp/wails/v2/pkg/runtime"
-"github.com/xuri/excelize/v2"
-"time"
+	"fmt"
+	"github.com/tomvodi/cointracking-export-converter/internal/common"
+	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"time"
 )
+
 type ct struct {
-	appCtx        interfaces.AppContext
-	csvReader     interfaces.CointrackingCsvReader
-	exportFiles   []*common.ExportFileInfo
-	txTypeManager interfaces.TxTypeManager
+	appCtx    interfaces.AppContext
+	csvReader interfaces.CointrackingCsvReader
 }
 
 func (c *ct) GetExportFiles() ([]*common.ExportFileInfo, error) {
-	return c.exportFiles, nil
+	return c.appCtx.ExportFiles(), nil
 }
 
 func (c *ct) OpenExportFile(timezone string) (string, error) {
@@ -42,7 +40,7 @@ func (c *ct) OpenExportFile(timezone string) (string, error) {
 		return "", fmt.Errorf("failed getting timezone from string %s", timezone)
 	}
 
-	for _, file := range c.exportFiles {
+	for _, file := range c.appCtx.ExportFiles() {
 		if file.FilePath == filename {
 			return "", fmt.Errorf("file already added")
 		}
@@ -55,112 +53,19 @@ func (c *ct) OpenExportFile(timezone string) (string, error) {
 		return "", fmt.Errorf("failed reading file %s: %s", filename, err.Error())
 	}
 
-	c.exportFiles = append(c.exportFiles, fileInfo)
+	c.appCtx.AddExportFile(fileInfo)
 
-	runtime.EventsEmit(c.appCtx.Context(), "ExportFilesChanged", c.exportFiles)
+	runtime.EventsEmit(c.appCtx.Context(), "ExportFilesChanged", c.appCtx.ExportFiles())
 
 	return filename, nil
-}
-
-func (c *ct) ExportToBlockpitXlsx() error {
-	filename, err := runtime.SaveFileDialog(c.appCtx.Context(), runtime.SaveDialogOptions{
-		DefaultDirectory: c.appCtx.LastSelectedFileDir(),
-		DefaultFilename:  "blockpit-import.xlsx",
-		Title:            "Save Blockpit manual import file",
-		Filters: []runtime.FileFilter{
-			{
-				DisplayName: "Blockpit import files (.xlsx)",
-				Pattern:     "*.xlsx",
-			},
-		},
-	})
-	if err != nil {
-		return err
-	}
-	if filename == "" {
-		return nil
-	}
-
-	return c.writeTransactionsToXmlFile(filename)
-}
-
-func (c *ct) writeTransactionsToXmlFile(filePath string) error {
-	f := excelize.NewFile()
-	defer func() {
-		if err := f.Close(); err != nil {
-			fmt.Println(err)
-		}
-	}()
-
-	header := []string{
-		"Date (UTC)",
-		"Integration Name",
-		"Label",
-		"Outgoing Asset",
-		"Outgoing Amount",
-		"Incoming Asset",
-		"Incoming Amount",
-		"Fee Asset (optional)",
-		"Fee Amount (optional)",
-		"Comment (optional)",
-		"Trx. ID (optional)",
-	}
-
-	// Set value of a cell.
-	err := f.SetSheetRow("Sheet1", "A1", &header)
-	if err != nil {
-		return err
-	}
-
-	rowNr := 2
-	for _, file := range c.exportFiles {
-		for _, tx := range file.Transactions {
-			excelDate := tx.DateTime.Time.UTC().Format("02.01.2006 15:04:05")
-			excelTxType, err := c.txTypeManager.BlockpitTxType(tx.Type.TxType)
-			if err != nil {
-				return err
-			}
-
-			excelRow := []interface{}{
-				excelDate,
-				tx.Exchange,
-				excelTxType.Title,
-				tx.SellCurrency,
-				tx.SellValue,
-				tx.BuyCurrency,
-				tx.BuyValue,
-				tx.FeeCurrency,
-				tx.FeeValue,
-				tx.Comment,
-				tx.ID,
-			}
-
-			err = f.SetSheetRow("Sheet1", fmt.Sprintf("A%d", rowNr), &excelRow)
-			if err != nil {
-				return fmt.Errorf("failed settings row in excel sheet: %s", err.Error())
-			}
-
-			rowNr++
-		}
-	}
-
-	// Save spreadsheet by the given path.
-	if err = f.SaveAs(filePath); err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	return nil
 }
 
 func New(
 	appCtx interfaces.AppContext,
 	csvReader interfaces.CointrackingCsvReader,
-	txTypeManager interfaces.TxTypeManager,
 ) interfaces.CoinTrackingBackend {
 	return &ct{
-		appCtx:        appCtx,
-		csvReader:     csvReader,
-		txTypeManager: txTypeManager,
+		appCtx:    appCtx,
+		csvReader: csvReader,
 	}
 }
