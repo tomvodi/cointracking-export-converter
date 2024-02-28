@@ -17,6 +17,7 @@ Currently there is only support for a conversion to Blockpit but it is possible 
 - User configuration for custom mapping between CoinTracking and Blockpit transaction types
 - User configuration for timezone of the timestamps in the CoinTracking export file 
 - Skipping of empty transactions that don't have an outgoing, incoming or fee amount
+- Generated a transaction ID as CoinTracking does not include the ID in the export file
 
 ## Live Development
 
