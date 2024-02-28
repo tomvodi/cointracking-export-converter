@@ -3,21 +3,24 @@ package config
 import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
 	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
-	"os"
 )
 
 var _ = Describe("TxTypeManager", func() {
 	typeMgr := &mapper{}
 	var mapping []common.Ct2BpTxMapping
+	var fs afero.Fs
 	var err error
-	var tempConfig *os.File
+	var tempConfig afero.File
 
 	BeforeEach(func() {
-		tempConfig, err = os.CreateTemp("", "*.yaml")
+		fs = afero.NewMemMapFs()
+		viper.SetFs(fs)
+		tempConfig, err = afero.TempFile(fs, "", "*.yaml")
 		Expect(err).ToNot(HaveOccurred())
 		viper.SetConfigFile(tempConfig.Name())
 		err = viper.ReadInConfig()
@@ -28,7 +31,7 @@ var _ = Describe("TxTypeManager", func() {
 	})
 
 	AfterEach(func() {
-		err = os.Remove(tempConfig.Name())
+		err = fs.Remove(tempConfig.Name())
 		Expect(err).ToNot(HaveOccurred())
 	})
 
