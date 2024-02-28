@@ -14,8 +14,16 @@ export function SetCointracking2BlockpitMapping(arg1, arg2) {
   return window['go']['config']['appConfig']['SetCointracking2BlockpitMapping'](arg1, arg2);
 }
 
+export function SetSwapHandling(arg1) {
+  return window['go']['config']['appConfig']['SetSwapHandling'](arg1);
+}
+
 export function SetTimezone(arg1) {
   return window['go']['config']['appConfig']['SetTimezone'](arg1);
+}
+
+export function SwapHandling() {
+  return window['go']['config']['appConfig']['SwapHandling']();
 }
 
 export function Timezone() {

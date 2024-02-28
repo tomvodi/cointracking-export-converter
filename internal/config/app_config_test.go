@@ -132,4 +132,21 @@ var _ = Describe("AppConfig", func() {
 		})
 	})
 
+	Describe("SwapHandling", func() {
+		Context("when swap handling is not set", func() {
+			It("should return SwapNonTaxable", func() {
+				Expect(appConf.SwapHandling()).To(Equal("swap_non_taxable"))
+			})
+		})
+
+		Context("when swap handling is set", func() {
+			BeforeEach(func() {
+				viper.Set("swap_handling", "swap_to_trade")
+			})
+
+			It("should return SwapToTrade", func() {
+				Expect(appConf.SwapHandling()).To(Equal("swap_to_trade"))
+			})
+		})
+	})
 })

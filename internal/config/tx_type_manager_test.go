@@ -1,13 +1,13 @@
 package config
 
 import (
-"github.com/tomvodi/cointracking-export-converter/internal/common"
-bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
-ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
-."github.com/onsi/ginkgo/v2"
-. "github.com/onsi/gomega"
-"github.com/spf13/viper"
-"os"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+	"github.com/spf13/viper"
+	"github.com/tomvodi/cointracking-export-converter/internal/common"
+	bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	"os"
 )
 
 var _ = Describe("TxTypeManager", func() {
@@ -75,9 +75,9 @@ var _ = Describe("TxTypeManager", func() {
 			Entry("should have correct values for receiveLpToken", ctt.ReceiveLpToken, "Non-Taxable In", "non_taxable_in"),
 			Entry("should have correct values for lpRewards", ctt.LpRewards, "Income", "income"),
 			Entry("should have correct values for withdrawal", ctt.Withdrawal, "Withdrawal", "withdrawal"),
-			Entry("should have correct values for spend", ctt.Spend, "GiftSent", "gift_sent"),
-			Entry("should have correct values for donation", ctt.Donation, "GiftSent", "gift_sent"),
-			Entry("should have correct values for gift", ctt.Gift, "GiftSent", "gift_sent"),
+			Entry("should have correct values for spend", ctt.Spend, "Gift Sent", "gift_sent"),
+			Entry("should have correct values for donation", ctt.Donation, "Gift Sent", "gift_sent"),
+			Entry("should have correct values for gift", ctt.Gift, "Gift Sent", "gift_sent"),
 			Entry("should have correct values for stolen", ctt.Stolen, "Lost", "lost"),
 			Entry("should have correct values for lost", ctt.Lost, "Lost", "lost"),
 			Entry("should have correct values for borrowingFee", ctt.BorrowingFee, "Fee", "fee"),
@@ -90,7 +90,6 @@ var _ = Describe("TxTypeManager", func() {
 			Entry("should have correct values for provideLiquidity", ctt.ProvideLiquidity, "Non-Taxable Out", "non_taxable_out"),
 			Entry("should have correct values for returnLpToken", ctt.ReturnLpToken, "Non-Taxable Out", "non_taxable_out"),
 			Entry("should have correct values for expenseNonTaxable", ctt.ExpenseNonTaxable, "Non-Taxable Out", "non_taxable_out"),
-			Entry("should have correct values for swapNonTaxable", ctt.SwapNonTaxable, "Non-Taxable Out", "non_taxable_out"),
 			Entry("should have correct values for receiveLoan", ctt.ReceiveLoan, "Non-Taxable In", "non_taxable_in"),
 			Entry("should have correct values for receiveCollateral", ctt.ReceiveCollateral, "Non-Taxable In", "non_taxable_in"),
 			Entry("should have correct values for sendCollateral", ctt.SendCollateral, "Non-Taxable Out", "non_taxable_out"),

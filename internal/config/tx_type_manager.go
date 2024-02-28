@@ -1,14 +1,15 @@
 package config
 
 import (
-"github.com/tomvodi/cointracking-export-converter/internal/common"
-bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
-ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
-"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
-"github.com/tomvodi/cointracking-export-converter/internal/localization/en"
-"fmt"
-"github.com/spf13/viper"
+	"fmt"
+	"github.com/spf13/viper"
+	"github.com/tomvodi/cointracking-export-converter/internal/common"
+	bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
+	"github.com/tomvodi/cointracking-export-converter/internal/localization/en"
 )
+
 type TxTypeManagerInitializer interface {
 	interfaces.TxTypeManager
 	interfaces.Initializer
@@ -161,7 +162,8 @@ func (m *mapper) BlockpitTxTypes() (txNames []common.TxDisplayName, err error) {
 
 func (m *mapper) GetMapping() (mapping []common.Ct2BpTxMapping, err error) {
 	for _, txType := range ctt.CtTxTypeValues() {
-		if txType == ctt.NoCtTxType {
+		if txType == ctt.NoCtTxType ||
+			txType == ctt.SwapNonTaxable {
 			continue
 		}
 
@@ -258,7 +260,6 @@ var defaultCt2BpMap = map[string]interface{}{
 	ctt.ProvideLiquidity.String():         bpt.NonTaxableOut.String(),
 	ctt.ReturnLpToken.String():            bpt.NonTaxableOut.String(),
 	ctt.ExpenseNonTaxable.String():        bpt.NonTaxableOut.String(),
-	ctt.SwapNonTaxable.String():           bpt.NonTaxableOut.String(),
 	ctt.ReceiveLoan.String():              bpt.NonTaxableIn.String(),
 	ctt.ReceiveCollateral.String():        bpt.NonTaxableIn.String(),
 	ctt.SendCollateral.String():           bpt.NonTaxableOut.String(),
