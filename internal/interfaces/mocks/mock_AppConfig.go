@@ -125,6 +125,52 @@ func (_c *AppConfig_SetCointracking2BlockpitMapping_Call) RunAndReturn(run func(
 	return _c
 }
 
+// SetSwapHandling provides a mock function with given fields: handling
+func (_m *AppConfig) SetSwapHandling(handling string) error {
+	ret := _m.Called(handling)
+
+	if len(ret) == 0 {
+		panic("no return value specified for SetSwapHandling")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string) error); ok {
+		r0 = rf(handling)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// AppConfig_SetSwapHandling_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SetSwapHandling'
+type AppConfig_SetSwapHandling_Call struct {
+	*mock.Call
+}
+
+// SetSwapHandling is a helper method to define mock.On call
+//   - handling string
+func (_e *AppConfig_Expecter) SetSwapHandling(handling interface{}) *AppConfig_SetSwapHandling_Call {
+	return &AppConfig_SetSwapHandling_Call{Call: _e.mock.On("SetSwapHandling", handling)}
+}
+
+func (_c *AppConfig_SetSwapHandling_Call) Run(run func(handling string)) *AppConfig_SetSwapHandling_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string))
+	})
+	return _c
+}
+
+func (_c *AppConfig_SetSwapHandling_Call) Return(_a0 error) *AppConfig_SetSwapHandling_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *AppConfig_SetSwapHandling_Call) RunAndReturn(run func(string) error) *AppConfig_SetSwapHandling_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // SetTimezone provides a mock function with given fields: tz
 func (_m *AppConfig) SetTimezone(tz string) error {
 	ret := _m.Called(tz)
@@ -167,6 +213,51 @@ func (_c *AppConfig_SetTimezone_Call) Return(_a0 error) *AppConfig_SetTimezone_C
 }
 
 func (_c *AppConfig_SetTimezone_Call) RunAndReturn(run func(string) error) *AppConfig_SetTimezone_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// SwapHandling provides a mock function with given fields:
+func (_m *AppConfig) SwapHandling() string {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for SwapHandling")
+	}
+
+	var r0 string
+	if rf, ok := ret.Get(0).(func() string); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	return r0
+}
+
+// AppConfig_SwapHandling_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SwapHandling'
+type AppConfig_SwapHandling_Call struct {
+	*mock.Call
+}
+
+// SwapHandling is a helper method to define mock.On call
+func (_e *AppConfig_Expecter) SwapHandling() *AppConfig_SwapHandling_Call {
+	return &AppConfig_SwapHandling_Call{Call: _e.mock.On("SwapHandling")}
+}
+
+func (_c *AppConfig_SwapHandling_Call) Run(run func()) *AppConfig_SwapHandling_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *AppConfig_SwapHandling_Call) Return(_a0 string) *AppConfig_SwapHandling_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *AppConfig_SwapHandling_Call) RunAndReturn(run func() string) *AppConfig_SwapHandling_Call {
 	_c.Call.Return(run)
 	return _c
 }

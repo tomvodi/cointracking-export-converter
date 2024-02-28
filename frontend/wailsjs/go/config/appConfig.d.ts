@@ -8,7 +8,11 @@ export function BlockpitTxTypes():Promise<Array<common.TxDisplayName>>;
 
 export function SetCointracking2BlockpitMapping(arg1:string,arg2:string):Promise<void>;
 
+export function SetSwapHandling(arg1:string):Promise<void>;
+
 export function SetTimezone(arg1:string):Promise<void>;
+
+export function SwapHandling():Promise<string>;
 
 export function Timezone():Promise<string>;
 

@@ -6,6 +6,7 @@ import (
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	bp_type "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
 	ct_type "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	"github.com/tomvodi/cointracking-export-converter/internal/common/swap_handling"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 )
 
@@ -36,6 +37,25 @@ func (a *appConfig) BlockpitTxTypes() ([]common.TxDisplayName, error) {
 
 func (a *appConfig) TxTypeMappings() ([]common.Ct2BpTxMapping, error) {
 	return a.txTypeManager.GetMapping()
+}
+
+func (a *appConfig) SwapHandling() string {
+	viper.SetDefault("swap_handling", swap_handling.SwapNonTaxable)
+	handling, err := swap_handling.SwapHandlingString(viper.GetString("swap_handling"))
+	if err != nil {
+		return swap_handling.NoSwapHandling.String()
+	}
+
+	return handling.String()
+}
+
+func (a *appConfig) SetSwapHandling(handling string) error {
+	swapHandling, err := swap_handling.SwapHandlingString(handling)
+	if err != nil {
+		return fmt.Errorf("swap handling %s is no valid handling", handling)
+	}
+	viper.Set("swap_handling", swapHandling)
+	return a.writeConfig()
 }
 
 func (a *appConfig) SetCointracking2BlockpitMapping(

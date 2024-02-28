@@ -5,6 +5,7 @@ import {onMounted, ref} from "vue";
 import {
   BlockpitTxTypes,
   SetCointracking2BlockpitMapping,
+  SetSwapHandling,
   SetTimezone,
   Timezone,
   TxTypeMappings
@@ -13,9 +14,12 @@ import {common} from "../../wailsjs/go/models";
 import {useSettingsStore} from "../stores/settingsStore";
 import TitledPanel from "../components/TitledPanel.vue";
 import TimezoneSelector from "../components/TimezoneSelector.vue";
+import InfoButton from "../components/InfoButton.vue";
+import {useSnackbarStore} from "../stores/snackbarStore";
 
 const router = useRouter()
-const store = useSettingsStore()
+const settingsStore = useSettingsStore()
+const snackStore = useSnackbarStore()
 
 const txMappings = ref<Array<common.Ct2BpTxMapping>>()
 let blockpitTxTypes = ref(Array<common.TxDisplayName>())
@@ -28,17 +32,17 @@ onMounted(() => {
   TxTypeMappings().then((mappings) => {
     txMappings.value = mappings
   }).catch((reason) => {
-    console.log(`failed getting tx type mappings between cointracking and blockpit: ${reason}`)
+    snackStore.showError(`failed getting tx type mappings between cointracking and blockpit: ${reason}`)
   })
 
   BlockpitTxTypes().then((displayNames) => {
     blockpitTxTypes.value = displayNames
   }).catch((reason) => {
-    console.log(`failed getting blockpit tx types: ${reason}`)
+    snackStore.showError(`failed getting blockpit tx types: ${reason}`)
   })
 
   Timezone().then((timezone: string) => {
-    store.timezone = timezone
+    settingsStore.timezone = timezone
   })
 })
 
@@ -54,9 +58,18 @@ const blockpitTxTypeChanged = (idx: number) => {
 }
 
 const setTimezone = async (newTz: string) => {
-  store.timezone = newTz
+  settingsStore.timezone = newTz
   SetTimezone(newTz).catch((msg: any) => {
-    console.log("failed setting timezone to backend " + msg)
+    snackStore.showError("failed setting timezone to backend " + msg)
+  })
+}
+
+const onSwapHandlingChanged = (newSwapHandling: string | null) => {
+  if (!newSwapHandling) {
+    return
+  }
+  SetSwapHandling(newSwapHandling).catch((msg: any) => {
+    snackStore.showError(`failed changing swap handling: ${msg}`)
   })
 }
 
@@ -74,8 +87,33 @@ const setTimezone = async (newTz: string) => {
 
     <p class="text-h7 font-weight-bold mt-5">General</p>
     <TimezoneSelector
-        :selected-timezone="store.timezone"
+        :selected-timezone="settingsStore.timezone"
         @timezoneChanged="setTimezone"></TimezoneSelector>
+
+    <p class="text-h7 font-weight-bold mt-5">Swap Transaction Handling</p>
+    <p class="text-subtitle-2">How to handle CoinTracking Swap transactions for Blockpit export.</p>
+    <v-radio-group
+        v-model="settingsStore.swapHandling"
+        @update:model-value="onSwapHandlingChanged">
+      <v-radio value="swap_non_taxable">
+        <template #label>
+          <v-label>Non Taxable</v-label>
+          <InfoButton>
+            A CoinTracking swap transaction will be split up into a "Non-Taxable Out" and a "Non-Taxable In" transaction
+            for Blockpit.
+          </InfoButton>
+        </template>
+      </v-radio>
+      <v-radio value="swap_to_trade">
+        <template #label>
+          <v-label>Trade</v-label>
+          <InfoButton>
+            A CoinTracking swap transaction will be converted into a "Trade" transaction for Blockpit which is a taxable
+            event.
+          </InfoButton>
+        </template>
+      </v-radio>
+    </v-radio-group>
 
     <p class="text-h7 font-weight-bold mt-5">Tx Type Mapping</p>
     <p class="text-subtitle-2">A mapping between CoinTracking and Blockpit transaction types</p>

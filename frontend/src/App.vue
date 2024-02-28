@@ -2,7 +2,7 @@
 
 import {onMounted} from "vue";
 import {useSettingsStore} from "./stores/settingsStore";
-import {AllTimezones, Timezone} from "../wailsjs/go/config/appConfig";
+import {AllTimezones, SwapHandling, Timezone} from "../wailsjs/go/config/appConfig";
 import {common} from "../wailsjs/go/models";
 import Snackbar from "./components/Snackbar.vue";
 
@@ -11,15 +11,20 @@ const store = useSettingsStore()
 onMounted(() => {
   const tzPromise = Timezone()
   const allTzPromise = AllTimezones()
+  const swapHandlingPromise = SwapHandling()
   const promises = [
     tzPromise,
-    allTzPromise
+    allTzPromise,
+    swapHandlingPromise,
   ]
   tzPromise.then((loc: string) => {
     store.timezone = loc
   })
   allTzPromise.then((timezones: Array<common.TimezoneData>) => {
     store.allTimezones = timezones
+  })
+  swapHandlingPromise.then((swpHandling: string) => {
+    store.swapHandling = swpHandling
   })
 
   Promise.allSettled(promises).then((results) => {
