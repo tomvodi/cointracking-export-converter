@@ -3,7 +3,6 @@ package cointracking
 import (
 	"fmt"
 	"github.com/gocarina/gocsv"
-	"github.com/mitchellh/hashstructure/v2"
 	"github.com/pkg/errors"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
@@ -36,11 +35,10 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 			}
 
 			// finally add a transaction ID
-			hash, err := hashstructure.Hash(tx, hashstructure.FormatV2, nil)
+			err = common.SetIdForTransaction(tx)
 			if err != nil {
 				return
 			}
-			tx.ID = fmt.Sprintf("%x", hash)
 
 			txs = append(txs, tx)
 		})
