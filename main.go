@@ -50,7 +50,7 @@ func main() {
 
 	appConfig := config.NewAppConfig(appCtx, txManager, wailsLog)
 
-	bpXmlWriter := blockpit.NewXmlWriter(txManager)
+	bpXmlWriter := blockpit.NewXmlWriter(txManager, appConfig)
 	bp := blockpit.New(appCtx, bpXmlWriter)
 	ct := cointracking.New(appCtx, csvReader)
 
