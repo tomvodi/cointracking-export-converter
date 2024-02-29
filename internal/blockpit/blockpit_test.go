@@ -51,6 +51,36 @@ var _ = Describe("Blockpit", func() {
 			false,
 		),
 	)
+
+	Describe("adaptTxTypeForTradesWith0Income", func() {
+		var txIn *common.CointrackingTx
+
+		Context("when trade has 0 sell value", func() {
+			BeforeEach(func() {
+				txIn = txWithValues(0.00001, "DFI", 0.0, "BTC", 0.0, "")
+				Expect(txIn.Type.TxType).To(Equal(ctt.Trade))
+
+				adaptTxTypeForTradesWith0Income(txIn)
+			})
+
+			It("should change tx type to other income", func() {
+				Expect(txIn.Type.TxType).To(Equal(ctt.OtherIncome))
+			})
+		})
+
+		Context("when trade has 0 buy value", func() {
+			BeforeEach(func() {
+				txIn = txWithValues(0.0, "BTC", 0.000001, "DFI", 0.0, "")
+				Expect(txIn.Type.TxType).To(Equal(ctt.Trade))
+
+				adaptTxTypeForTradesWith0Income(txIn)
+			})
+
+			It("should change tx type to other expense", func() {
+				Expect(txIn.Type.TxType).To(Equal(ctt.OtherExpense))
+			})
+		})
+	})
 })
 
 func txWithValues(
@@ -71,5 +101,4 @@ func txWithValues(
 		DateTime:     &common.TxTimestamp{Time: time.Date(2024, 1, 21, 20, 56, 23, 0, time.UTC)},
 		ID:           "xxx-yyyy-zzz",
 	}
-
 }

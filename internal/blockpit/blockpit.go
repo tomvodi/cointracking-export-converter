@@ -3,6 +3,7 @@ package blockpit
 import (
 	"fmt"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -38,6 +39,7 @@ func (b *bp) ExportToBlockpitXlsx() error {
 
 	for i, tx := range allTxs {
 		allTxs[i], err = getBlockpitTxFeeAdapted(tx)
+		adaptTxTypeForTradesWith0Income(allTxs[i])
 		if err != nil {
 			return err
 		}
@@ -66,6 +68,20 @@ func getBlockpitTxFeeAdapted(ctTx *common.CointrackingTx) (*common.CointrackingT
 	}
 
 	return &bpTx, nil
+}
+
+func adaptTxTypeForTradesWith0Income(ctTx *common.CointrackingTx) {
+	if ctTx.Type.TxType != ctt.Trade {
+		return
+	}
+
+	if ctTx.BuyValue == 0 {
+		ctTx.Type.TxType = ctt.OtherExpense
+	}
+
+	if ctTx.SellValue == 0 {
+		ctTx.Type.TxType = ctt.OtherIncome
+	}
 }
 
 func New(
