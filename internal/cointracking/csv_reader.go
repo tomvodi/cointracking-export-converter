@@ -25,6 +25,7 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 
 	var txs []*common.CointrackingTx
 	var skippedTxCnt int
+	var txIds []string
 	err = gocsv.UnmarshalDecoderToCallback(decoder,
 		func(tx *common.CointrackingTx) {
 			// There are sometimes nonsense transactions that transfer no value
@@ -40,6 +41,14 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 				return
 			}
 
+			// Skip transactions that have already been added
+			for _, id := range txIds {
+				if id == tx.ID {
+					return
+				}
+			}
+
+			txIds = append(txIds, tx.ID)
 			txs = append(txs, tx)
 		})
 	if err != nil {

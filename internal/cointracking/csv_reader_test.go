@@ -114,4 +114,15 @@ var _ = Describe("CsvReader", func() {
 		Entry("English file", "./testfiles/CoinTracking_trades_default_en.csv"),
 		Entry("German file", "./testfiles/CoinTracking_trades_default_de.csv"),
 	)
+
+	Describe("read file with duplicate transactions", func() {
+		BeforeEach(func() {
+			fileInfo, err = csvRd.ReadFile("./testfiles/file_with_duplicate_tx_de.csv", loc)
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("should return transactions without duplicates", func() {
+			Expect(fileInfo.TxCount).To(Equal(1))
+		})
+	})
 })
