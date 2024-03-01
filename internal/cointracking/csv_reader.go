@@ -14,7 +14,7 @@ import (
 type csvReader struct {
 }
 
-func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*common.ExportFileInfo, error) {
+func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location, existingTxIds []string) (*common.ExportFileInfo, error) {
 	exportFile, err := os.OpenFile(absoluteFilePath, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		return nil, err
@@ -35,14 +35,21 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location) (*comm
 				return
 			}
 
-			// finally add a transaction ID
+			// add a transaction ID
 			err = common.SetIdForTransaction(tx)
 			if err != nil {
 				return
 			}
 
-			// Skip transactions that have already been added
+			// Skip transactions that have already been added from this file
 			for _, id := range txIds {
+				if id == tx.ID {
+					return
+				}
+			}
+
+			// Skip transactions that have already been added from another file
+			for _, id := range existingTxIds {
 				if id == tx.ID {
 					return
 				}

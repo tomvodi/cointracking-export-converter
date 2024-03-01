@@ -16,4 +16,6 @@ type AppContext interface {
 
 	ExportFiles() []*common.ExportFileInfo
 	AddExportFile(file *common.ExportFileInfo)
+
+	AllTxIds() []string
 }

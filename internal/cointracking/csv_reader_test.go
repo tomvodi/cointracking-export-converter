@@ -25,7 +25,7 @@ var _ = Describe("CsvReader", func() {
 	Describe("ReadFile", func() {
 		Context("when file is not found", func() {
 			BeforeEach(func() {
-				fileInfo, err = csvRd.ReadFile("non-existing-file.csv", loc)
+				fileInfo, err = csvRd.ReadFile("non-existing-file.csv", loc, nil)
 			})
 
 			It("should return an error", func() {
@@ -36,7 +36,7 @@ var _ = Describe("CsvReader", func() {
 
 	DescribeTable("read valid file with one line",
 		func(testfilePath string) {
-			fileInfo, err = csvRd.ReadFile(testfilePath, loc)
+			fileInfo, err = csvRd.ReadFile(testfilePath, loc, nil)
 			Expect(err).ToNot(HaveOccurred())
 
 			filename := filepath.Base(testfilePath)
@@ -69,7 +69,7 @@ var _ = Describe("CsvReader", func() {
 
 	DescribeTable("read valid file with one line and comma in field",
 		func(testfilePath string) {
-			fileInfo, err = csvRd.ReadFile(testfilePath, loc)
+			fileInfo, err = csvRd.ReadFile(testfilePath, loc, nil)
 			Expect(err).ToNot(HaveOccurred())
 
 			filename := filepath.Base(testfilePath)
@@ -101,7 +101,7 @@ var _ = Describe("CsvReader", func() {
 
 	DescribeTable("read valid file with all transaction types",
 		func(testfilePath string) {
-			fileInfo, err = csvRd.ReadFile(testfilePath, loc)
+			fileInfo, err = csvRd.ReadFile(testfilePath, loc, nil)
 			Expect(err).ToNot(HaveOccurred())
 
 			var txTypes []ctt.CtTxType
@@ -117,12 +117,27 @@ var _ = Describe("CsvReader", func() {
 
 	Describe("read file with duplicate transactions", func() {
 		BeforeEach(func() {
-			fileInfo, err = csvRd.ReadFile("./testfiles/file_with_duplicate_tx_de.csv", loc)
+			fileInfo, err = csvRd.ReadFile("./testfiles/file_with_duplicate_tx_de.csv", loc, []string{})
 			Expect(err).ToNot(HaveOccurred())
 		})
 
 		It("should return transactions without duplicates", func() {
 			Expect(fileInfo.TxCount).To(Equal(1))
+		})
+	})
+
+	Describe("opening the file with existing tx id", func() {
+		BeforeEach(func() {
+			fileInfo, err = csvRd.ReadFile(
+				"./testfiles/file1_de_one_line.csv",
+				loc,
+				[]string{"12543af52fdbaff4"},
+			)
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("should not import the transaction", func() {
+			Expect(fileInfo.TxCount).To(Equal(0))
 		})
 	})
 })

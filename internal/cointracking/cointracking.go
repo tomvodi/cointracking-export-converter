@@ -47,8 +47,7 @@ func (c *ct) OpenExportFile(timezone string) (string, error) {
 	}
 
 	c.appCtx.SetLastSelectedFileDirFromFile(filename)
-
-	fileInfo, err := c.csvReader.ReadFile(filename, loc)
+	fileInfo, err := c.csvReader.ReadFile(filename, loc, c.appCtx.AllTxIds())
 	if err != nil {
 		return "", fmt.Errorf("failed reading file %s: %s", filename, err.Error())
 	}

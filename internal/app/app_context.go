@@ -12,6 +12,11 @@ type appCtx struct {
 	ctx                 context.Context
 	lastSelectedFileDir string
 	exportFiles         []*common.ExportFileInfo
+	txIds               []string
+}
+
+func (a *appCtx) AllTxIds() []string {
+	return a.txIds
 }
 
 func (a *appCtx) ExportFiles() []*common.ExportFileInfo {
@@ -19,6 +24,21 @@ func (a *appCtx) ExportFiles() []*common.ExportFileInfo {
 }
 
 func (a *appCtx) AddExportFile(file *common.ExportFileInfo) {
+	for _, transaction := range file.Transactions {
+		// Skip transaction ids that have already been added
+		containsId := false
+		for _, id := range a.txIds {
+			if id == transaction.ID {
+				containsId = true
+				break
+			}
+		}
+
+		if !containsId {
+			a.txIds = append(a.txIds, transaction.ID)
+		}
+	}
+
 	a.exportFiles = append(a.exportFiles, file)
 }
 

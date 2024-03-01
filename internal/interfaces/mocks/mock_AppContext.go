@@ -56,6 +56,53 @@ func (_c *AppContext_AddExportFile_Call) RunAndReturn(run func(*common.ExportFil
 	return _c
 }
 
+// AllTxIds provides a mock function with given fields:
+func (_m *AppContext) AllTxIds() []string {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for AllTxIds")
+	}
+
+	var r0 []string
+	if rf, ok := ret.Get(0).(func() []string); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]string)
+		}
+	}
+
+	return r0
+}
+
+// AppContext_AllTxIds_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AllTxIds'
+type AppContext_AllTxIds_Call struct {
+	*mock.Call
+}
+
+// AllTxIds is a helper method to define mock.On call
+func (_e *AppContext_Expecter) AllTxIds() *AppContext_AllTxIds_Call {
+	return &AppContext_AllTxIds_Call{Call: _e.mock.On("AllTxIds")}
+}
+
+func (_c *AppContext_AllTxIds_Call) Run(run func()) *AppContext_AllTxIds_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *AppContext_AllTxIds_Call) Return(_a0 []string) *AppContext_AllTxIds_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *AppContext_AllTxIds_Call) RunAndReturn(run func() []string) *AppContext_AllTxIds_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Context provides a mock function with given fields:
 func (_m *AppContext) Context() context.Context {
 	ret := _m.Called()
