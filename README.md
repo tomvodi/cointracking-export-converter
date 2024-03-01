@@ -19,6 +19,10 @@ Currently there is only support for a conversion to Blockpit but it is possible 
 - Skipping of empty transactions that don't have an outgoing, incoming or fee amount
 - Generated a transaction ID as CoinTracking does not include the ID in the export file
 
+## Documentation
+
+The documentation is available in the [wiki](https://github.com/tomvodi/cointracking-export-converter/wiki).
+
 ## Live Development
 
 To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
