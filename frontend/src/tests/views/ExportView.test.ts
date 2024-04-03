@@ -3,33 +3,38 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import {describe, expect, test, vi} from "vitest";
 import {createTestingPinia} from "@pinia/testing";
-import {mount} from "@vue/test-utils";
 import ExportView from "@/views/ExportView.vue";
 import {router} from "@/router";
+import {flushPromises, mount} from "@vue/test-utils";
+import {useSnackbarStore} from "@/stores/snackbarStore";
 
 const vuetify = createVuetify({
     components,
     directives,
 })
 
+const testTimezone = "Europe/Lisabon"
+const openExportFileMock = vi.fn()
+const exportToBlockpitMock = vi.fn()
+
 const pinia = createTestingPinia({
+    createSpy: vi.fn,
     initialState: {
         settings: {
-            timezone: "",
+            timezone: testTimezone,
+        },
+        snackbar: {
+            visible: false,
+            text: '',
+            color: '',
+            timeout: 5000,
         }
     }
 })
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
-
 function defaultWrapper() {
-    const mockedEventsOn = vi.fn((event: string, callback: Function) => {
-        console.log("mockedEventsOn called");
-    })
-    const mockedEventsOnMultiple = vi.fn((event: string, callback: Function, maxCallback: number) => {
-        console.log("mockedEventsOnMultiple called");
-    })
     const wrapper = mount(ExportView, {
         global: {
             plugins: [
@@ -37,35 +42,45 @@ function defaultWrapper() {
                 pinia,
                 vuetify,
             ],
-            mocks: {
-                EventsOn: mockedEventsOn,
-                EventsOnMultiple: mockedEventsOnMultiple,
+            stubs: {
+                ExportFilesList: {
+                    template: '<div />',
+                }
             },
+            provide: {
+                wailsClient: {
+                    OpenExportFile: openExportFileMock,
+                    ExportToBlockpit: exportToBlockpitMock,
+                },
+            }
         },
     });
 
     return wrapper;
 }
 
-describe("file is selected", () => {
+describe("selecting a file", () => {
     test("should call OpenExportFile on wails interface", async () => {
-        const mockedEventsOn = vi.fn((event: string, callback: Function) => {
-            console.log("mockedEventsOn called");
-        })
-        global.EventsOn = mockedEventsOn;
-        const mockedEventsOnMultiple = vi.fn((event: string, callback: Function, maxCallback: number) => {
-            console.log("mockedEventsOnMultiple called");
-        })
-        global.EventsOnMultiple = mockedEventsOnMultiple;
-        const mockOpenExport = vi.fn((tz: string) => {
-            return Promise.resolve("file opened");
-        })
-        global.OpenExportFile = mockOpenExport;
-        const wrapper = defaultWrapper();
-        const exportFile = wrapper.find('AddExportFile');
-        await exportFile.trigger('selectFile')
-        await wrapper.vm.$nextTick();
+        openExportFileMock.mockReturnValue(Promise.resolve());
 
-        expect(mockOpenExport).toHaveBeenCalled();
+        const wrapper = defaultWrapper();
+        const exportFile = wrapper.getComponent({name: 'AddExportFile'});
+        await exportFile.vm.$emit('selectFile');
+
+        expect(openExportFileMock).toHaveBeenCalledWith(testTimezone);
+    });
+
+    test("should show notification when OpenExportFile fails", async () => {
+        const errMsg = 'failed to open file';
+        openExportFileMock.mockReturnValue(Promise.reject(errMsg));
+
+        const snackStore = vi.mocked(useSnackbarStore(pinia));
+
+        const wrapper = defaultWrapper();
+        const exportFile = wrapper.getComponent({name: 'AddExportFile'});
+        await exportFile.vm.$emit('selectFile');
+        await flushPromises();
+
+        expect(snackStore.showError).toHaveBeenCalledWith(errMsg);
     });
 })
