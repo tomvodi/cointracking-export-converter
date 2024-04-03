@@ -2,10 +2,10 @@ import {describe, expect, test, vi} from "vitest";
 import {createVuetify} from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import TimezoneSelector from "../../components/TimezoneSelector.vue";
+import TimezoneSelector from "@/components/TimezoneSelector.vue";
 import {mount, VueWrapper} from "@vue/test-utils";
 import {createTestingPinia} from "@pinia/testing";
-import {useSettingsStore} from "../../stores/settingsStore";
+import {useSettingsStore} from "@/stores/settingsStore";
 
 const vuetify = createVuetify({
     components,

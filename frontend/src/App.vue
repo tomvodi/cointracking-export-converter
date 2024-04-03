@@ -2,9 +2,9 @@
 
 import {onMounted} from "vue";
 import {useSettingsStore} from "./stores/settingsStore";
-import {AllTimezones, SwapHandling, Timezone} from "../wailsjs/go/config/appConfig";
-import {common} from "../wailsjs/go/models";
-import Snackbar from "./components/Snackbar.vue";
+import {AllTimezones, SwapHandling, Timezone} from "@wails/go/config/appConfig";
+import {common} from "@wails/go/models";
+import Snackbar from "@/components/Snackbar.vue";
 
 const store = useSettingsStore()
 

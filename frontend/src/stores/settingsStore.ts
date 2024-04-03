@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {computed, ref} from "vue";
-import {common} from "../../wailsjs/go/models";
+import {common} from "@wails/go/models";
 
 
 export const useSettingsStore = defineStore('settings', () => {

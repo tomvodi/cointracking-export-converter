@@ -2,7 +2,7 @@
 
 import {ref} from "vue";
 import InfoButton from "./InfoButton.vue";
-import {useSettingsStore} from "../stores/settingsStore";
+import {useSettingsStore} from "@/stores/settingsStore";
 
 const props = defineProps({
   selectedTimezone: String

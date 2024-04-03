@@ -1,11 +1,13 @@
 <script setup lang="ts">
 
-import {ExportToBlockpitXlsx} from "../../wailsjs/go/blockpit/bp";
+import {ExportToBlockpitXlsx} from "@wails/go/blockpit/bp";
 import {ref} from "vue";
-import {common} from "../../wailsjs/go/models";
-import {useSnackbarStore} from "../stores/snackbarStore";
-import AddExportFile from "../components/AddExportFile.vue";
-import ExportFilesList from "../components/ExportFilesList.vue";
+import {common} from "@wails/go/models";
+import {useSnackbarStore} from "@/stores/snackbarStore";
+import AddExportFile from "@/components/AddExportFile.vue";
+import ExportFilesList from "@/components/ExportFilesList.vue";
+import {OpenExportFile} from "@wails/go/cointracking/ct";
+import {useSettingsStore} from "@/stores/settingsStore";
 
 const exportEnabled = ref(false)
 const snackStore = useSnackbarStore()

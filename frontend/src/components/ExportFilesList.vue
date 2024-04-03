@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import {EventsOn} from "../../wailsjs/runtime";
+import {EventsOn} from "@wails/runtime";
 import {onMounted, ref} from "vue";
-import {GetExportFiles} from "../../wailsjs/go/cointracking/ct";
-import {common} from "../../wailsjs/go/models";
+import {GetExportFiles} from "@wails/go/cointracking/ct";
+import {common} from "@wails/go/models";
 
 const $emit = defineEmits<{
   exportFilesChanged: [files: Array<common.ExportFileInfo>],

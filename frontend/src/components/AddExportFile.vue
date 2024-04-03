@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import {OpenExportFile} from "../../wailsjs/go/cointracking/ct";
-import {useSettingsStore} from "../stores/settingsStore";
+import {useSettingsStore} from "@/stores/settingsStore";
 import TitledPanel from "./TitledPanel.vue";
-import {useSnackbarStore} from "../stores/snackbarStore";
 
 const store = useSettingsStore()
 const snackStore = useSnackbarStore()

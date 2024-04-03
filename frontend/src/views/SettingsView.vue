@@ -9,13 +9,13 @@ import {
   SetTimezone,
   Timezone,
   TxTypeMappings
-} from "../../wailsjs/go/config/appConfig";
-import {common} from "../../wailsjs/go/models";
-import {useSettingsStore} from "../stores/settingsStore";
-import TitledPanel from "../components/TitledPanel.vue";
-import TimezoneSelector from "../components/TimezoneSelector.vue";
-import InfoButton from "../components/InfoButton.vue";
-import {useSnackbarStore} from "../stores/snackbarStore";
+} from "@wails/go/config/appConfig";
+import {common} from "@wails/go/models";
+import {useSettingsStore} from "@/stores/settingsStore";
+import TitledPanel from "@/components/TitledPanel.vue";
+import TimezoneSelector from "@/components/TimezoneSelector.vue";
+import InfoButton from "@/components/InfoButton.vue";
+import {useSnackbarStore} from "@/stores/snackbarStore";
 
 const router = useRouter()
 const settingsStore = useSettingsStore()
