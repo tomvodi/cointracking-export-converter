@@ -11,6 +11,7 @@ import {useSettingsStore} from "@/stores/settingsStore";
 
 const exportEnabled = ref(false)
 const snackStore = useSnackbarStore()
+const settingsStore = useSettingsStore()
 
 const saveBlockpitFile = async () => {
   ExportToBlockpitXlsx().catch((reason: any) => {
@@ -22,10 +23,16 @@ const exportedFilesChanged = async (files: Array<common.ExportFileInfo>) => {
   exportEnabled.value = files.length > 0
 }
 
+const selectFile = async () => {
+  OpenExportFile(settingsStore.timezone).catch((reason: any) => {
+    snackStore.showError(reason)
+  })
+}
+
 </script>
 
 <template>
-  <AddExportFile/>
+  <AddExportFile @selectFile="selectFile"/>
   <ExportFilesList
       class="mt-4"
       @exportFilesChanged="exportedFilesChanged"/>

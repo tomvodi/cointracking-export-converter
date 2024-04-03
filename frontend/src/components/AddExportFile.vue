@@ -3,14 +3,10 @@ import {useSettingsStore} from "@/stores/settingsStore";
 import TitledPanel from "./TitledPanel.vue";
 
 const store = useSettingsStore()
-const snackStore = useSnackbarStore()
 
-
-const selectFile = async () => {
-  OpenExportFile(store.timezone).catch((reason: any) => {
-    snackStore.showError(reason)
-  })
-}
+const $emit = defineEmits<{
+  selectFile: [],
+}>()
 
 </script>
 <template>
@@ -30,7 +26,7 @@ const selectFile = async () => {
   <TitledPanel title="Add a CoinTracking export file">
     <v-btn
         :disabled="store.timezoneEmpty"
-        @click="selectFile"
+        @click="$emit('selectFile')"
     >Select File
     </v-btn>
   </TitledPanel>
