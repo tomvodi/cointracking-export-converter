@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import {inject, onMounted} from "vue";
-import {EventsOn} from "@wails/runtime";
 import {common} from "@wails/go/models";
 import {WailsApi} from "@/wails/wails_api";
-import {wailsClientInjKey} from "@/injection_keys";
+import {wailsClientInjKey, wailsRuntimeInjKey} from "@/injection_keys";
+import {WailsRuntimeApi} from "@/wails/wails_runtime_api";
 
 const wailsClient: WailsApi = inject<WailsApi>(wailsClientInjKey) as WailsApi
+const wailsRuntime: WailsRuntimeApi = inject<WailsRuntimeApi>(wailsRuntimeInjKey) as WailsRuntimeApi
 
 onMounted(() => {
-  EventsOn("ExportFilesChanged", setExportFiles)
+  wailsRuntime.EventsOn("ExportFilesChanged", setExportFiles)
 })
 
 const setExportFiles = async (files: Array<common.ExportFileInfo>) => {

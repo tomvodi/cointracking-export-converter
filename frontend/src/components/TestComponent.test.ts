@@ -4,7 +4,6 @@ import TestComponent from "./TestComponent.vue";
 import {createVuetify} from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-import {WailsApi} from "@/wails/wails_api";
 
 const vuetify = createVuetify({
     components,
@@ -13,20 +12,8 @@ const vuetify = createVuetify({
 
 describe("TestComponent", () => {
     test("should call OpenExportFile on wails interface", async () => {
-        const {mockedEventsOn} = vi.hoisted(() => {
-            return {
-                mockedEventsOn: vi.fn((event: string, callback: Function) => {
-                    console.log("mockedEventsOn called");
-                }),
-            }
-        })
-
-        vi.mock('@wails/runtime', () => ({
-            default: vi.fn(),
-            EventsOn: mockedEventsOn,
-        }));
-
         const openExportMock = vi.fn()
+        const eventsOnMock = vi.fn()
 
         const wrapper = mount(TestComponent, {
             global: {
@@ -36,7 +23,10 @@ describe("TestComponent", () => {
                 provide: {
                     wailsClient: {
                         OpenExportFile: openExportMock,
-                    } as WailsApi,
+                    },
+                    wailsRuntime: {
+                        EventsOn: eventsOnMock,
+                    }
                 }
             },
         })
@@ -46,5 +36,6 @@ describe("TestComponent", () => {
         expect(button.exists()).toBeTruthy();
         await button.trigger('click');
         expect(openExportMock).toHaveBeenCalledWith('Europe/Lisabon');
+        expect(eventsOnMock).toHaveBeenCalledWith('ExportFilesChanged', expect.any(Function));
     });
 })
