@@ -1,20 +1,21 @@
 <script setup lang="ts">
 
-import {ExportToBlockpitXlsx} from "@wails/go/blockpit/bp";
-import {ref} from "vue";
+import {inject, ref} from "vue";
 import {common} from "@wails/go/models";
 import {useSnackbarStore} from "@/stores/snackbarStore";
 import AddExportFile from "@/components/AddExportFile.vue";
 import ExportFilesList from "@/components/ExportFilesList.vue";
-import {OpenExportFile} from "@wails/go/cointracking/ct";
 import {useSettingsStore} from "@/stores/settingsStore";
+import {WailsApi} from "@/wails/wails_api";
+import {wailsClientInjKey} from "@/injection_keys";
 
 const exportEnabled = ref(false)
 const snackStore = useSnackbarStore()
 const settingsStore = useSettingsStore()
+const wailsClient: WailsApi = inject<WailsApi>(wailsClientInjKey) as WailsApi
 
 const saveBlockpitFile = async () => {
-  ExportToBlockpitXlsx().catch((reason: any) => {
+  wailsClient.ExportToBlockpitXlsx().catch((reason: any) => {
     snackStore.showError(`failed saving blockpit file: ${reason}`)
   })
 }
@@ -24,7 +25,7 @@ const exportedFilesChanged = async (files: Array<common.ExportFileInfo>) => {
 }
 
 const selectFile = async () => {
-  OpenExportFile(settingsStore.timezone).catch((reason: any) => {
+  wailsClient.OpenExportFile(settingsStore.timezone).catch((reason: any) => {
     snackStore.showError(reason)
   })
 }

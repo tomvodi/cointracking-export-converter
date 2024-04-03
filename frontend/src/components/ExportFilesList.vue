@@ -1,9 +1,13 @@
 <script setup lang="ts">
 
-import {EventsOn} from "@wails/runtime";
-import {onMounted, ref} from "vue";
-import {GetExportFiles} from "@wails/go/cointracking/ct";
+import {inject, onMounted, ref} from "vue";
 import {common} from "@wails/go/models";
+import {WailsRuntimeApi} from "@/wails/wails_runtime_api";
+import {wailsClientInjKey, wailsRuntimeInjKey} from "@/injection_keys";
+import {WailsApi} from "@/wails/wails_api";
+
+const wailsRuntime: WailsRuntimeApi = inject<WailsRuntimeApi>(wailsRuntimeInjKey) as WailsRuntimeApi
+const wailsClient: WailsApi = inject<WailsApi>(wailsClientInjKey) as WailsApi
 
 const $emit = defineEmits<{
   exportFilesChanged: [files: Array<common.ExportFileInfo>],
@@ -12,9 +16,9 @@ const $emit = defineEmits<{
 const exportedFiles = ref<Array<common.ExportFileInfo>>([])
 
 onMounted(() => {
-  EventsOn("ExportFilesChanged", setExportFiles)
+  wailsRuntime.EventsOn("ExportFilesChanged", setExportFiles)
 
-  GetExportFiles().then(setExportFiles).catch((reason: any) => {
+  wailsClient.GetExportFiles().then(setExportFiles).catch((reason: any) => {
     console.log("failed getting export files initially: " + reason)
   })
 })
