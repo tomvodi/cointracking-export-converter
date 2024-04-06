@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import {useApplicationStore} from "@/stores/application_store";
 
-import {inject, onMounted, ref} from "vue";
+const appStore = useApplicationStore();
 import {common} from "@wails/go/models";
 import {WailsRuntimeApi} from "@/wails/wails_runtime_api";
 import {wailsClientInjKey, wailsRuntimeInjKey} from "@/injection_keys";
@@ -31,11 +32,11 @@ const setExportFiles = async (files: Array<common.ExportFileInfo>) => {
 </script>
 
 <template>
-  <div class="px-5" v-if="exportedFiles.length > 0">
+  <div class="px-5" v-if="appStore.hasExportFiles">
     <p class="text-h6">CoinTracking export files</p>
     <v-list lines="two">
       <v-list-item
-          v-for="exportFile in exportedFiles"
+          v-for="exportFile in appStore.exportFiles"
           :title="exportFile.fileName"
           :subtitle="`${exportFile.txCount} transactions on ${exportFile.exchanges.length} exchanges. ${exportFile.skippedTxs} skipped transactions.`"
       >

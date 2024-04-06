@@ -7,10 +7,12 @@ import ExportFilesList from "@/components/ExportFilesList.vue";
 import {useSettingsStore} from "@/stores/settings_store";
 import {WailsApi} from "@/wails/wails_api";
 import {wailsClientInjKey} from "@/injection_keys";
+import {useApplicationStore} from "@/stores/application_store";
 
 const exportEnabled = ref(false)
 const snackStore = useSnackbarStore()
 const settingsStore = useSettingsStore()
+const appStore = useApplicationStore()
 const wailsClient: WailsApi = inject<WailsApi>(wailsClientInjKey) as WailsApi
 
 const saveBlockpitFile = async () => {
