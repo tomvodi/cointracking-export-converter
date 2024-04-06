@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 import {onMounted} from "vue";
-import {useSettingsStore} from "./stores/settingsStore";
+import {useSettingsStore} from "./stores/settings_store";
 import {AllTimezones, SwapHandling, Timezone} from "@wails/go/config/appConfig";
 import {common} from "@wails/go/models";
 import Snackbar from "@/components/Snackbar.vue";

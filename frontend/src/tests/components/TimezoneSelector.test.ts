@@ -5,7 +5,7 @@ import * as directives from 'vuetify/directives'
 import TimezoneSelector from "@/components/TimezoneSelector.vue";
 import {mount, VueWrapper} from "@vue/test-utils";
 import {createTestingPinia} from "@pinia/testing";
-import {useSettingsStore} from "@/stores/settingsStore";
+import {useSettingsStore} from "@/stores/settings_store";
 
 const vuetify = createVuetify({
     components,

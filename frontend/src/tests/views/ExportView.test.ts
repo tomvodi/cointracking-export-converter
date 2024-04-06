@@ -6,7 +6,7 @@ import {createTestingPinia} from "@pinia/testing";
 import ExportView from "@/views/ExportView.vue";
 import {router} from "@/router";
 import {flushPromises, mount} from "@vue/test-utils";
-import {useSnackbarStore} from "@/stores/snackbarStore";
+import {useSnackbarStore} from "@/stores/snackbar_store";
 
 const vuetify = createVuetify({
     components,
@@ -83,4 +83,10 @@ describe("selecting a file", () => {
 
         expect(snackStore.showError).toHaveBeenCalledWith(errMsg);
     });
+})
+
+describe("exporting to Blockpit enabled", () => {
+    test("should disable button if export is disabled", async () => {
+
+    })
 })

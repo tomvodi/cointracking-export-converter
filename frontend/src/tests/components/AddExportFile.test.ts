@@ -5,7 +5,7 @@ import * as directives from 'vuetify/directives'
 import {mount, RouterLinkStub, VueWrapper} from "@vue/test-utils";
 import AddExportFile from "@/components/AddExportFile.vue";
 import {createTestingPinia} from "@pinia/testing";
-import {useSettingsStore} from "@/stores/settingsStore";
+import {useSettingsStore} from "@/stores/settings_store";
 import {router} from "@/router";
 
 const vuetify = createVuetify({

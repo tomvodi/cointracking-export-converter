@@ -3,11 +3,11 @@
 import {useRouter} from "vue-router";
 import {inject, onMounted, ref} from "vue";
 import {common} from "@wails/go/models";
-import {useSettingsStore} from "@/stores/settingsStore";
+import {useSettingsStore} from "@/stores/settings_store";
 import TitledPanel from "@/components/TitledPanel.vue";
 import TimezoneSelector from "@/components/TimezoneSelector.vue";
 import InfoButton from "@/components/InfoButton.vue";
-import {useSnackbarStore} from "@/stores/snackbarStore";
+import {useSnackbarStore} from "@/stores/snackbar_store";
 import {WailsApi} from "@/wails/wails_api";
 import {wailsClientInjKey} from "@/injection_keys";
 

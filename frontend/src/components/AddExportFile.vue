@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useSettingsStore} from "@/stores/settingsStore";
+import {useSettingsStore} from "@/stores/settings_store";
 import TitledPanel from "./TitledPanel.vue";
 
 const store = useSettingsStore()

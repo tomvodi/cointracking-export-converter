@@ -1,11 +1,10 @@
 <script setup lang="ts">
 
 import {inject, ref} from "vue";
-import {common} from "@wails/go/models";
-import {useSnackbarStore} from "@/stores/snackbarStore";
+import {useSnackbarStore} from "@/stores/snackbar_store";
 import AddExportFile from "@/components/AddExportFile.vue";
 import ExportFilesList from "@/components/ExportFilesList.vue";
-import {useSettingsStore} from "@/stores/settingsStore";
+import {useSettingsStore} from "@/stores/settings_store";
 import {WailsApi} from "@/wails/wails_api";
 import {wailsClientInjKey} from "@/injection_keys";
 
