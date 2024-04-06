@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {inject, ref} from "vue";
+import {inject} from "vue";
 import {useSnackbarStore} from "@/stores/snackbar_store";
 import AddExportFile from "@/components/AddExportFile.vue";
 import ExportFilesList from "@/components/ExportFilesList.vue";
@@ -9,7 +9,6 @@ import {WailsApi} from "@/wails/wails_api";
 import {wailsClientInjKey} from "@/injection_keys";
 import {useApplicationStore} from "@/stores/application_store";
 
-const exportEnabled = ref(false)
 const snackStore = useSnackbarStore()
 const settingsStore = useSettingsStore()
 const appStore = useApplicationStore()
@@ -19,10 +18,6 @@ const saveBlockpitFile = async () => {
   wailsClient.ExportToBlockpitXlsx().catch((reason: any) => {
     snackStore.showError(`failed saving blockpit file: ${reason}`)
   })
-}
-
-const exportedFilesChanged = async (files: Array<common.ExportFileInfo>) => {
-  exportEnabled.value = files.length > 0
 }
 
 const selectFile = async () => {
@@ -36,12 +31,11 @@ const selectFile = async () => {
 <template>
   <AddExportFile @selectFile="selectFile"/>
   <ExportFilesList
-      class="mt-4"
-      @exportFilesChanged="exportedFilesChanged"/>
+      class="mt-4"/>
   <v-btn
       class="mt-4 mx-5"
       @click="saveBlockpitFile"
-      :disabled="!exportEnabled"
+      :disabled="!appStore.hasExportFiles"
   >Save Blockpit File
   </v-btn>
 </template>
