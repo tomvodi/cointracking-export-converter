@@ -7,6 +7,7 @@ import ExportView from "@/views/ExportView.vue";
 import {router} from "@/router";
 import {flushPromises, mount} from "@vue/test-utils";
 import {useSnackbarStore} from "@/stores/snackbar_store";
+import {useSettingsStore} from "@/stores/settings_store";
 
 const vuetify = createVuetify({
     components,
@@ -28,7 +29,7 @@ const pinia = createTestingPinia({
             text: '',
             color: '',
             timeout: 5000,
-        }
+        },
     }
 })
 
@@ -50,7 +51,7 @@ function defaultWrapper() {
             provide: {
                 wailsClient: {
                     OpenExportFile: openExportFileMock,
-                    ExportToBlockpit: exportToBlockpitMock,
+                    ExportToBlockpitXlsx: exportToBlockpitMock,
                 },
             }
         },
@@ -85,8 +86,53 @@ describe("selecting a file", () => {
     });
 })
 
-describe("exporting to Blockpit enabled", () => {
-    test("should disable button if export is disabled", async () => {
+describe("exporting to Blockpit", () => {
+    test("should disable button if there are no export files", async () => {
+        const store = useSettingsStore(pinia);
+        // @ts-ignore
+        store.hasExportFiles = false
+        const wrapper = defaultWrapper();
 
+        expect(wrapper.find('.v-btn').exists()).toBeTruthy();
+        const saveButton = wrapper.find('.v-btn');
+        expect(saveButton.attributes().disabled).toBeDefined();
+    })
+
+    test("should enable button if there are no export files", async () => {
+        const store = useSettingsStore(pinia);
+        // @ts-ignore
+        store.hasExportFiles = true
+        const wrapper = defaultWrapper();
+
+        expect(wrapper.find('.v-btn').exists()).toBeTruthy();
+        const saveButton = wrapper.find('.v-btn');
+        expect(saveButton.attributes().disabled).toBeFalsy();
+    })
+
+    test("should export to blockpit", async () => {
+        exportToBlockpitMock.mockReturnValue(Promise.resolve());
+
+        const wrapper = defaultWrapper();
+        const saveButton = wrapper.findComponent({ref: 'saveBpBtn'});
+        expect(saveButton.exists()).toBeTruthy();
+        await saveButton.vm.$emit('click');
+        await flushPromises();
+
+        expect(exportToBlockpitMock).toHaveBeenCalled();
+    })
+
+    test("should show error when export failed", async () => {
+        const errMsg = 'failed to export file';
+        exportToBlockpitMock.mockReturnValue(Promise.reject(errMsg));
+
+        const snackStore = vi.mocked(useSnackbarStore(pinia));
+
+        const wrapper = defaultWrapper();
+        const saveButton = wrapper.findComponent({ref: 'saveBpBtn'});
+        expect(saveButton.exists()).toBeTruthy();
+        await saveButton.vm.$emit('click');
+        await flushPromises();
+
+        expect(snackStore.showError).toHaveBeenCalledWith(`failed saving blockpit file: ${errMsg}`);
     })
 })

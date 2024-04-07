@@ -33,6 +33,7 @@ const selectFile = async () => {
   <ExportFilesList
       class="mt-4"/>
   <v-btn
+      ref="saveBpBtn"
       class="mt-4 mx-5"
       @click="saveBlockpitFile"
       :disabled="!appStore.hasExportFiles"
