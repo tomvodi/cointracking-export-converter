@@ -10,7 +10,10 @@ export const useSettingsStore = defineStore('settings', () => {
     const swapHandling = ref<string>("")
 
     const timezoneEmpty = computed(() => {
-        return timezone.value.length == 0 && settingsLoaded.value
+        if (settingsLoaded.value) {
+            return timezone.value === ''
+        }
+        return true
     })
 
     return {timezone, timezoneEmpty, allTimezones, settingsLoaded, swapHandling}
