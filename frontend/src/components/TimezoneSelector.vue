@@ -16,7 +16,6 @@ const $emit = defineEmits<{
 }>()
 
 const onTimezoneSelected = (newTimezone: string) => {
-  console.log("timezone selected " + newTimezone)
   $emit('timezoneChanged', newTimezone)
 }
 </script>

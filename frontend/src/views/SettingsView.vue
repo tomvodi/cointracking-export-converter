@@ -83,6 +83,7 @@ const onSwapHandlingChanged = (newSwapHandling: string | null) => {
 
     <p class="text-h7 font-weight-bold mt-5">General</p>
     <TimezoneSelector
+        ref="tzSelector"
         :selected-timezone="settingsStore.timezone"
         @timezoneChanged="setTimezone"></TimezoneSelector>
 
