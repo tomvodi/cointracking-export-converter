@@ -8,6 +8,7 @@ import (
 	"github.com/tomvodi/cointracking-export-converter/internal/cointracking"
 	"github.com/tomvodi/cointracking-export-converter/internal/config"
 	"github.com/tomvodi/cointracking-export-converter/internal/wails_runtime"
+	"github.com/tomvodi/cointracking-export-converter/internal/xml"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"log"
 	"os"
@@ -50,7 +51,10 @@ func main() {
 
 	appConfig := config.NewAppConfig(appCtx, txManager, wailsLog)
 
-	bpXmlWriter := blockpit.NewXmlWriter(txManager, appConfig)
+	xmlFactory := xml.NewXmlFileFactory()
+	txConverter := blockpit.NewTxConvert(appConfig, txManager)
+
+	bpXmlWriter := blockpit.NewTxXmlFileWriter(xmlFactory, txConverter)
 	bp := blockpit.New(appCtx, bpXmlWriter)
 	ct := cointracking.New(appCtx, csvReader)
 
