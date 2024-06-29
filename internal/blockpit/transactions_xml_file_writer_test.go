@@ -5,12 +5,14 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	"github.com/tomvodi/cointracking-export-converter/internal/common/swap_handling"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces/mocks"
+	"testing"
 	"time"
 )
 
 var _ = Describe("XmlWriter convertCtTxToBlockpitTx", func() {
-	var writer *xmlWriter
+	var writer *txXmlFWriter
 	var err error
 	var txIn *common.CointrackingTx
 	var txsOut []*common.CointrackingTx
@@ -19,7 +21,7 @@ var _ = Describe("XmlWriter convertCtTxToBlockpitTx", func() {
 
 	BeforeEach(func() {
 		appCfg = mocks.NewAppConfig(GinkgoT())
-		writer = &xmlWriter{
+		writer = &txXmlFWriter{
 			appCfg: appCfg,
 		}
 	})
@@ -108,3 +110,74 @@ var _ = Describe("XmlWriter convertCtTxToBlockpitTx", func() {
 		})
 	})
 })
+
+func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
+	g := NewGomegaWithT(t)
+	type fields struct {
+		txTypeManager  *mocks.TxTypeManager
+		xmlFileFactory *mocks.XmlFileFactory
+		xmlFile        *mocks.XmlFile
+		appCfg         *mocks.AppConfig
+		filePath       string
+		transactions   []*common.CointrackingTx
+		wantErr        bool
+	}
+
+	tests := []struct {
+		name    string
+		prepare func(f *fields)
+	}{
+		{
+			name: "write transactions to xml file",
+			prepare: func(f *fields) {
+				f.xmlFileFactory.EXPECT().NewXmlFile().Return(f.xmlFile)
+				f.xmlFile.EXPECT().SetSheetHeader(1, header)
+				f.xmlFile.EXPECT().Close()
+				f.appCfg.EXPECT().SwapHandling().
+					Return(swap_handling.SwapToTrade.String())
+				f.txTypeManager.EXPECT().BlockpitTxType(ctt.Airdrop).
+					Return(common.TxDisplayName{
+						Title: "airdrop",
+						Value: "Airdrop",
+					}, nil)
+				f.transactions = []*common.CointrackingTx{
+					{
+						Type: &common.TxType{TxType: ctt.Airdrop},
+						DateTime: &common.TxTimestamp{
+							Time: time.Now(),
+						},
+					},
+				}
+				f.wantErr = false
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := &fields{
+				txTypeManager:  mocks.NewTxTypeManager(t),
+				xmlFileFactory: mocks.NewXmlFileFactory(t),
+				xmlFile:        mocks.NewXmlFile(t),
+				appCfg:         mocks.NewAppConfig(t),
+			}
+
+			if tt.prepare != nil {
+				tt.prepare(f)
+			}
+
+			x := &txXmlFWriter{
+				txTypeManager: f.txTypeManager,
+				xmlFFactory:   f.xmlFileFactory,
+				appCfg:        f.appCfg,
+			}
+
+			err := x.WriteTransactionsToFile(f.filePath, f.transactions)
+
+			if f.wantErr {
+				g.Expect(err).Should(HaveOccurred())
+			} else {
+				g.Expect(err).ShouldNot(HaveOccurred())
+			}
+		})
+	}
+}
