@@ -9,8 +9,8 @@ import (
 )
 
 type bp struct {
-	appCtx            interfaces.AppContext
-	blockpitXmlWriter interfaces.XmlWriter
+	appCtx             interfaces.AppContext
+	blockpitFileWriter interfaces.TransactionsFileWriter
 }
 
 func (b *bp) ExportToBlockpitXlsx() error {
@@ -45,7 +45,7 @@ func (b *bp) ExportToBlockpitXlsx() error {
 		}
 	}
 
-	return b.blockpitXmlWriter.WriteTransactionsToXmlFile(filename, allTxs)
+	return b.blockpitFileWriter.WriteTransactionsToFile(filename, allTxs)
 }
 
 // getBlockpitTxFeeAdapted returns a new CointrackingTx with the fee value adapted to Blockpit
@@ -86,10 +86,10 @@ func adaptTxTypeForTradesWith0Income(ctTx *common.CointrackingTx) {
 
 func New(
 	appCtx interfaces.AppContext,
-	blockpitXmlWriter interfaces.XmlWriter,
+	blockpitFileWriter interfaces.TransactionsFileWriter,
 ) interfaces.BlockpitBackend {
 	return &bp{
-		appCtx:            appCtx,
-		blockpitXmlWriter: blockpitXmlWriter,
+		appCtx:             appCtx,
+		blockpitFileWriter: blockpitFileWriter,
 	}
 }

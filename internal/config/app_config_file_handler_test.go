@@ -20,6 +20,9 @@ var _ = Describe("AppConfigFileHandler", func() {
 			configDir: configDir,
 			fs:        fs,
 		}
+
+		err = fs.MkdirAll(configDir, os.ModePerm)
+		Expect(err).ToNot(HaveOccurred())
 	})
 
 	AfterEach(func() {
