@@ -44,5 +44,5 @@ jobs:
           build-platform: ${{ matrix.build.platform }}
           package: true
           wails-version: 'latest'
-          go-version: '1.21'
-          node-version: '20.11.x'
+          go-version: '1.23'
+          node-version: '22.3.x'
