@@ -6,12 +6,12 @@ import (
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
-	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpittxtype"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 )
 
 var _ = Describe("TxTypeManager", func() {
-	typeMgr := &mapper{}
+	typeMgr := &TxTypeManager{}
 	var mapping []common.Ct2BpTxMapping
 	var fs afero.Fs
 	var err error

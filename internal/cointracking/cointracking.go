@@ -8,16 +8,16 @@ import (
 	"time"
 )
 
-type ct struct {
+type Backend struct {
 	appCtx    interfaces.AppContext
 	csvReader interfaces.CointrackingCsvReader
 }
 
-func (c *ct) GetExportFiles() ([]*common.ExportFileInfo, error) {
+func (c *Backend) GetExportFiles() ([]*common.ExportFileInfo, error) {
 	return c.appCtx.ExportFiles(), nil
 }
 
-func (c *ct) OpenExportFile(timezone string) (string, error) {
+func (c *Backend) OpenExportFile(timezone string) (string, error) {
 	filename, err := runtime.OpenFileDialog(c.appCtx.Context(), runtime.OpenDialogOptions{
 		DefaultDirectory: c.appCtx.LastSelectedFileDir(),
 		Title:            "Select CoinTracking export file",
@@ -47,7 +47,7 @@ func (c *ct) OpenExportFile(timezone string) (string, error) {
 	}
 
 	c.appCtx.SetLastSelectedFileDirFromFile(filename)
-	fileInfo, err := c.csvReader.ReadFile(filename, loc, c.appCtx.AllTxIds())
+	fileInfo, err := c.csvReader.ReadFile(filename, loc, c.appCtx.AllTxIDs())
 	if err != nil {
 		return "", fmt.Errorf("failed reading file %s: %s", filename, err.Error())
 	}
@@ -62,8 +62,8 @@ func (c *ct) OpenExportFile(timezone string) (string, error) {
 func New(
 	appCtx interfaces.AppContext,
 	csvReader interfaces.CointrackingCsvReader,
-) interfaces.CoinTrackingBackend {
-	return &ct{
+) *Backend {
+	return &Backend{
 		appCtx:    appCtx,
 		csvReader: csvReader,
 	}

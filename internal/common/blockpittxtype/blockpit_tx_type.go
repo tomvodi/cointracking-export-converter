@@ -1,4 +1,4 @@
-package blockpit_tx_type
+package blockpittxtype
 
 //go:generate go run github.com/dmarkham/enumer -json -yaml -transform=snake -type=BpTxType
 

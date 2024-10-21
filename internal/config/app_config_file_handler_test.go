@@ -10,15 +10,15 @@ import (
 
 var _ = Describe("AppConfigFileHandler", func() {
 	var configDir = "/test_config_dir"
-	var fH *fileHandler
+	var fH *FileHandler
 	var fs afero.Fs
 	var err error
 
 	BeforeEach(func() {
 		fs = afero.NewMemMapFs()
-		fH = &fileHandler{
+		fH = &FileHandler{
 			configDir: configDir,
-			fs:        fs,
+			afs:       fs,
 		}
 
 		err = fs.MkdirAll(configDir, os.ModePerm)

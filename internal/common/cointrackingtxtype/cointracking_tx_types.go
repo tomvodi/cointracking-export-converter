@@ -1,4 +1,4 @@
-package cointracking_tx_type
+package cointrackingtxtype
 
 //go:generate go run github.com/dmarkham/enumer -json -yaml -transform=snake -type=CtTxType
 

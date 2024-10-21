@@ -7,7 +7,7 @@ import (
 	"github.com/tomvodi/cointracking-export-converter/internal/blockpit"
 	"github.com/tomvodi/cointracking-export-converter/internal/cointracking"
 	"github.com/tomvodi/cointracking-export-converter/internal/config"
-	"github.com/tomvodi/cointracking-export-converter/internal/wails_runtime"
+	"github.com/tomvodi/cointracking-export-converter/internal/wailsruntime"
 	"github.com/tomvodi/cointracking-export-converter/internal/xml"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"log"
@@ -26,7 +26,7 @@ var appName = "cointracking-export-converter"
 
 func main() {
 	appCtx := app.NewAppContext()
-	wailsLog := wails_runtime.NewWailsLog()
+	wailsLog := wailsruntime.NewLog()
 	fs := afero.NewOsFs()
 
 	configDir, err := os.UserConfigDir()
@@ -51,11 +51,11 @@ func main() {
 
 	appConfig := config.NewAppConfig(appCtx, txManager, wailsLog)
 
-	xmlFactory := xml.NewXmlFileFactory()
+	xmlFactory := xml.NewFileFactory()
 	txConverter := blockpit.NewTxConvert(appConfig, txManager)
 
-	bpXmlWriter := blockpit.NewTxXmlFileWriter(xmlFactory, txConverter)
-	bp := blockpit.New(appCtx, bpXmlWriter)
+	bpXMLWriter := blockpit.NewTxXMLFileWriter(xmlFactory, txConverter)
+	bp := blockpit.New(appCtx, bpXMLWriter)
 	ct := cointracking.New(appCtx, csvReader)
 
 	// Create application with options
@@ -68,7 +68,7 @@ func main() {
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        appInstance.Startup,
-		Bind: []interface{}{
+		Bind: []any{
 			ct,
 			bp,
 			appConfig,

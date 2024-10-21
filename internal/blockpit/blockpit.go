@@ -3,17 +3,17 @@ package blockpit
 import (
 	"fmt"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-type bp struct {
+type Backend struct {
 	appCtx             interfaces.AppContext
 	blockpitFileWriter interfaces.TransactionsFileWriter
 }
 
-func (b *bp) ExportToBlockpitXlsx() error {
+func (b *Backend) ExportToBlockpitXlsx() error {
 	filename, err := runtime.SaveFileDialog(b.appCtx.Context(), runtime.SaveDialogOptions{
 		DefaultDirectory: b.appCtx.LastSelectedFileDir(),
 		DefaultFilename:  "blockpit-import.xlsx",
@@ -87,8 +87,8 @@ func adaptTxTypeForTradesWith0Income(ctTx *common.CointrackingTx) {
 func New(
 	appCtx interfaces.AppContext,
 	blockpitFileWriter interfaces.TransactionsFileWriter,
-) interfaces.BlockpitBackend {
-	return &bp{
+) *Backend {
+	return &Backend{
 		appCtx:             appCtx,
 		blockpitFileWriter: blockpitFileWriter,
 	}

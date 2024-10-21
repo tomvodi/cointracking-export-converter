@@ -23,9 +23,9 @@ func (_m *CointrackingCsvReader) EXPECT() *CointrackingCsvReader_Expecter {
 	return &CointrackingCsvReader_Expecter{mock: &_m.Mock}
 }
 
-// ReadFile provides a mock function with given fields: filepath, loc, existingTxIds
-func (_m *CointrackingCsvReader) ReadFile(filepath string, loc *time.Location, existingTxIds []string) (*common.ExportFileInfo, error) {
-	ret := _m.Called(filepath, loc, existingTxIds)
+// ReadFile provides a mock function with given fields: filepath, loc, existingTxIDs
+func (_m *CointrackingCsvReader) ReadFile(filepath string, loc *time.Location, existingTxIDs []string) (*common.ExportFileInfo, error) {
+	ret := _m.Called(filepath, loc, existingTxIDs)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ReadFile")
@@ -34,10 +34,10 @@ func (_m *CointrackingCsvReader) ReadFile(filepath string, loc *time.Location, e
 	var r0 *common.ExportFileInfo
 	var r1 error
 	if rf, ok := ret.Get(0).(func(string, *time.Location, []string) (*common.ExportFileInfo, error)); ok {
-		return rf(filepath, loc, existingTxIds)
+		return rf(filepath, loc, existingTxIDs)
 	}
 	if rf, ok := ret.Get(0).(func(string, *time.Location, []string) *common.ExportFileInfo); ok {
-		r0 = rf(filepath, loc, existingTxIds)
+		r0 = rf(filepath, loc, existingTxIDs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*common.ExportFileInfo)
@@ -45,7 +45,7 @@ func (_m *CointrackingCsvReader) ReadFile(filepath string, loc *time.Location, e
 	}
 
 	if rf, ok := ret.Get(1).(func(string, *time.Location, []string) error); ok {
-		r1 = rf(filepath, loc, existingTxIds)
+		r1 = rf(filepath, loc, existingTxIDs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -61,12 +61,12 @@ type CointrackingCsvReader_ReadFile_Call struct {
 // ReadFile is a helper method to define mock.On call
 //   - filepath string
 //   - loc *time.Location
-//   - existingTxIds []string
-func (_e *CointrackingCsvReader_Expecter) ReadFile(filepath interface{}, loc interface{}, existingTxIds interface{}) *CointrackingCsvReader_ReadFile_Call {
-	return &CointrackingCsvReader_ReadFile_Call{Call: _e.mock.On("ReadFile", filepath, loc, existingTxIds)}
+//   - existingTxIDs []string
+func (_e *CointrackingCsvReader_Expecter) ReadFile(filepath interface{}, loc interface{}, existingTxIDs interface{}) *CointrackingCsvReader_ReadFile_Call {
+	return &CointrackingCsvReader_ReadFile_Call{Call: _e.mock.On("ReadFile", filepath, loc, existingTxIDs)}
 }
 
-func (_c *CointrackingCsvReader_ReadFile_Call) Run(run func(filepath string, loc *time.Location, existingTxIds []string)) *CointrackingCsvReader_ReadFile_Call {
+func (_c *CointrackingCsvReader_ReadFile_Call) Run(run func(filepath string, loc *time.Location, existingTxIDs []string)) *CointrackingCsvReader_ReadFile_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(string), args[1].(*time.Location), args[2].([]string))
 	})

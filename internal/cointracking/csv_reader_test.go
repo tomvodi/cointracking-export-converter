@@ -1,23 +1,22 @@
 package cointracking
 
 import (
-	"fmt"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 	"path/filepath"
 	"time"
 )
 
 var _ = Describe("CsvReader", func() {
-	var csvRd *csvReader
+	var csvRd *CsvReader
 	var err error
 	var loc *time.Location
 	var fileInfo *common.ExportFileInfo
 
 	BeforeEach(func() {
-		csvRd = &csvReader{}
+		csvRd = &CsvReader{}
 		loc, err = time.LoadLocation("Europe/Amsterdam")
 		Expect(err).ToNot(HaveOccurred())
 	})
@@ -40,7 +39,7 @@ var _ = Describe("CsvReader", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			filename := filepath.Base(testfilePath)
-			Expect(fileInfo.FilePath).To(Equal(fmt.Sprintf(testfilePath)))
+			Expect(fileInfo.FilePath).To(Equal(testfilePath))
 			Expect(fileInfo.FileName).To(Equal(filename))
 			Expect(fileInfo.TxCount).To(Equal(1))
 			Expect(fileInfo.Transactions).To(Equal([]*common.CointrackingTx{
@@ -73,7 +72,7 @@ var _ = Describe("CsvReader", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			filename := filepath.Base(testfilePath)
-			Expect(fileInfo.FilePath).To(Equal(fmt.Sprintf(testfilePath)))
+			Expect(fileInfo.FilePath).To(Equal(testfilePath))
 			Expect(fileInfo.FileName).To(Equal(filename))
 			Expect(fileInfo.TxCount).To(Equal(1))
 			Expect(fileInfo.Transactions).To(Equal([]*common.CointrackingTx{

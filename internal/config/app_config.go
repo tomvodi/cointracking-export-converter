@@ -4,53 +4,53 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	bp_type "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
-	ct_type "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
-	"github.com/tomvodi/cointracking-export-converter/internal/common/swap_handling"
+	bptype "github.com/tomvodi/cointracking-export-converter/internal/common/blockpittxtype"
+	cttype "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
+	"github.com/tomvodi/cointracking-export-converter/internal/common/swaphandling"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 )
 
-type appConfig struct {
-	wailsLog      interfaces.WailsLog
+type AppConfig struct {
+	wailsLog      interfaces.WailsLogger
 	appCtx        interfaces.AppContext
 	txTypeManager interfaces.TxTypeManager
 }
 
-func (a *appConfig) SetTimezone(tz string) error {
+func (a *AppConfig) SetTimezone(tz string) error {
 	viper.Set("timezone", tz)
 	return a.writeConfig()
 }
 
-func (a *appConfig) Timezone() string {
+func (a *AppConfig) Timezone() string {
 	tz := viper.GetString("timezone")
 
 	return tz
 }
 
-func (a *appConfig) AllTimezones() []common.TimezoneData {
+func (a *AppConfig) AllTimezones() []common.TimezoneData {
 	return AllTimezones
 }
 
-func (a *appConfig) BlockpitTxTypes() ([]common.TxDisplayName, error) {
+func (a *AppConfig) BlockpitTxTypes() ([]common.TxDisplayName, error) {
 	return a.txTypeManager.BlockpitTxTypes()
 }
 
-func (a *appConfig) TxTypeMappings() ([]common.Ct2BpTxMapping, error) {
+func (a *AppConfig) TxTypeMappings() ([]common.Ct2BpTxMapping, error) {
 	return a.txTypeManager.GetMapping()
 }
 
-func (a *appConfig) SwapHandling() string {
-	viper.SetDefault("swap_handling", swap_handling.SwapNonTaxable)
-	handling, err := swap_handling.SwapHandlingString(viper.GetString("swap_handling"))
+func (a *AppConfig) SwapHandling() string {
+	viper.SetDefault("swap_handling", swaphandling.SwapNonTaxable)
+	handling, err := swaphandling.SwapHandlingString(viper.GetString("swap_handling"))
 	if err != nil {
-		return swap_handling.NoSwapHandling.String()
+		return swaphandling.NoSwapHandling.String()
 	}
 
 	return handling.String()
 }
 
-func (a *appConfig) SetSwapHandling(handling string) error {
-	swapHandling, err := swap_handling.SwapHandlingString(handling)
+func (a *AppConfig) SetSwapHandling(handling string) error {
+	swapHandling, err := swaphandling.SwapHandlingString(handling)
 	if err != nil {
 		return fmt.Errorf("swap handling %s is no valid handling", handling)
 	}
@@ -58,15 +58,15 @@ func (a *appConfig) SetSwapHandling(handling string) error {
 	return a.writeConfig()
 }
 
-func (a *appConfig) SetCointracking2BlockpitMapping(
+func (a *AppConfig) SetCointracking2BlockpitMapping(
 	ctTxType string,
 	bpTxType string,
 ) error {
-	ctType, err := ct_type.CtTxTypeString(ctTxType)
+	ctType, err := cttype.CtTxTypeString(ctTxType)
 	if err != nil {
 		return fmt.Errorf("cointracking tx type %s is no valid type", ctTxType)
 	}
-	bpType, err := bp_type.BpTxTypeString(bpTxType)
+	bpType, err := bptype.BpTxTypeString(bpTxType)
 	if err != nil {
 		return fmt.Errorf("blockpit tx type %s is no valid type", bpTxType)
 	}
@@ -76,16 +76,16 @@ func (a *appConfig) SetCointracking2BlockpitMapping(
 	return a.txTypeManager.SetMapping(ctType, bpType)
 }
 
-func (a *appConfig) writeConfig() error {
+func (a *AppConfig) writeConfig() error {
 	return viper.WriteConfig()
 }
 
 func NewAppConfig(
 	appCtx interfaces.AppContext,
 	txTypeManager interfaces.TxTypeManager,
-	wailsLog interfaces.WailsLog,
-) interfaces.AppConfig {
-	return &appConfig{
+	wailsLog interfaces.WailsLogger,
+) *AppConfig {
+	return &AppConfig{
 		wailsLog:      wailsLog,
 		appCtx:        appCtx,
 		txTypeManager: txTypeManager,

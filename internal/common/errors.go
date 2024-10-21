@@ -2,4 +2,4 @@ package common
 
 import "errors"
 
-var NoKnownTradeType = errors.New("no known trade type")
+var ErrNoKnownTradeType = errors.New("no known trade type")

@@ -1,8 +1,8 @@
 package common
 
 import (
-ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
-"fmt"
+	"fmt"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 )
 
 var trades = []string{"Trade", "Trade"}
@@ -119,5 +119,5 @@ func (tt *TxType) UnmarshalCSV(csv string) error {
 		}
 	}
 
-	return fmt.Errorf("%w: no trade type found for %s", NoKnownTradeType, csv)
+	return fmt.Errorf("%w: no trade type found for %s", ErrNoKnownTradeType, csv)
 }

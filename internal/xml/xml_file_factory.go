@@ -2,13 +2,16 @@ package xml
 
 import "github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 
-type xmlFFActory struct {
+type FileFactory struct {
 }
 
-func (x *xmlFFActory) NewXmlFile() interfaces.XmlFile {
-	return newXmlFile()
+// nolint: ireturn
+// linter exception is ok here, as the XMLFileFactory
+// interface returns an interface here
+func (x *FileFactory) NewXMLFile() interfaces.XMLFile {
+	return newXMLFile()
 }
 
-func NewXmlFileFactory() interfaces.XmlFileFactory {
-	return &xmlFFActory{}
+func NewFileFactory() *FileFactory {
+	return &FileFactory{}
 }

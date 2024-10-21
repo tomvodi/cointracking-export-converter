@@ -2,8 +2,8 @@ package interfaces
 
 import (
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	bp "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
-	ct "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	bp "github.com/tomvodi/cointracking-export-converter/internal/common/blockpittxtype"
+	ct "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 )
 
 type TxTypeManager interface {

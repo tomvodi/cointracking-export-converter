@@ -6,5 +6,9 @@ import (
 )
 
 type CointrackingCsvReader interface {
-	ReadFile(filepath string, loc *time.Location, existingTxIds []string) (*common.ExportFileInfo, error)
+	ReadFile(
+		filepath string,
+		loc *time.Location,
+		existingTxIDs []string,
+	) (*common.ExportFileInfo, error)
 }

@@ -1,20 +1,21 @@
-package blockpit
+package blockpit_test
 
 import (
 	"fmt"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/stretchr/testify/mock"
+	"github.com/tomvodi/cointracking-export-converter/internal/blockpit"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces/mocks"
 	"github.com/tomvodi/cointracking-export-converter/internal/test"
 	"time"
 )
 
-var _ = Describe("XmlWriter convertCtTxToBlockpitTx", func() {
-	var convert *txConvert
+var _ = Describe("XmlWriter FromCointrackingTx", func() {
+	var convert *blockpit.TxConverter
 	var err error
 	var txIn *common.CointrackingTx
 	var txsOut []*interfaces.BlockpitTx
@@ -25,10 +26,10 @@ var _ = Describe("XmlWriter convertCtTxToBlockpitTx", func() {
 	BeforeEach(func() {
 		appCfg = mocks.NewAppConfig(GinkgoT())
 		txTypeMgr = mocks.NewTxTypeManager(GinkgoT())
-		convert = &txConvert{
-			appCfg:    appCfg,
-			txTypeMgr: txTypeMgr,
-		}
+		convert = blockpit.NewTxConvert(
+			appCfg,
+			txTypeMgr,
+		)
 	})
 
 	JustBeforeEach(func() {

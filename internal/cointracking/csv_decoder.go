@@ -2,23 +2,21 @@ package cointracking
 
 import (
 	"bufio"
-	"github.com/gocarina/gocsv"
 	"io"
 	"strings"
 )
 
-type ctCsvDecoder struct {
+type CsvDecoder struct {
 	scanner         *bufio.Scanner
 	firstRowScanned bool
 }
 
-func (c *ctCsvDecoder) GetCSVRow() ([]string, error) {
+func (c *CsvDecoder) GetCSVRow() ([]string, error) {
 	if !c.scanner.Scan() {
 		if c.scanner.Err() != nil {
 			return nil, c.scanner.Err()
-		} else {
-			return nil, io.EOF
 		}
+		return nil, io.EOF
 	}
 
 	row := c.scanner.Text()
@@ -36,19 +34,19 @@ func (c *ctCsvDecoder) GetCSVRow() ([]string, error) {
 	return fields, nil
 }
 
-func (c *ctCsvDecoder) GetCSVRows() ([][]string, error) {
+func (c *CsvDecoder) GetCSVRows() ([][]string, error) {
 	var lines [][]string
 	for {
 		row, err := c.GetCSVRow()
-		if err == nil {
-			lines = append(lines, row)
+		if err != nil {
+			return lines, nil
 		}
-		return lines, nil
+		lines = append(lines, row)
 	}
 }
 
-func NewCsvDecoder(reader io.Reader) gocsv.SimpleDecoder {
-	return &ctCsvDecoder{
+func NewCsvDecoder(reader io.Reader) *CsvDecoder {
+	return &CsvDecoder{
 		scanner: bufio.NewScanner(reader),
 	}
 }

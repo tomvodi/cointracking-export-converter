@@ -5,16 +5,19 @@ import (
 	"github.com/gocarina/gocsv"
 	"github.com/pkg/errors"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"os"
 	"path/filepath"
 	"time"
 )
 
-type csvReader struct {
+type CsvReader struct {
 }
 
-func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location, existingTxIds []string) (*common.ExportFileInfo, error) {
+func (c *CsvReader) ReadFile(
+	absoluteFilePath string,
+	loc *time.Location,
+	existingTxIDs []string,
+) (*common.ExportFileInfo, error) {
 	exportFile, err := os.OpenFile(absoluteFilePath, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		return nil, err
@@ -25,7 +28,7 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location, existi
 
 	var txs []*common.CointrackingTx
 	var skippedTxCnt int
-	var txIds []string
+	var txIDs []string
 	err = gocsv.UnmarshalDecoderToCallback(decoder,
 		func(tx *common.CointrackingTx) {
 			// There are sometimes nonsense transactions that transfer no value
@@ -36,30 +39,30 @@ func (c *csvReader) ReadFile(absoluteFilePath string, loc *time.Location, existi
 			}
 
 			// add a transaction ID
-			err = common.SetIdForTransaction(tx)
+			err = common.SetIDForTransaction(tx)
 			if err != nil {
 				return
 			}
 
 			// Skip transactions that have already been added from this file
-			for _, id := range txIds {
+			for _, id := range txIDs {
 				if id == tx.ID {
 					return
 				}
 			}
 
 			// Skip transactions that have already been added from another file
-			for _, id := range existingTxIds {
+			for _, id := range existingTxIDs {
 				if id == tx.ID {
 					return
 				}
 			}
 
-			txIds = append(txIds, tx.ID)
+			txIDs = append(txIDs, tx.ID)
 			txs = append(txs, tx)
 		})
 	if err != nil {
-		if errors.Is(err, common.NoKnownTradeType) {
+		if errors.Is(err, common.ErrNoKnownTradeType) {
 			return nil, fmt.Errorf("could not get trade types. Maybe your file was exported with an unsupported language")
 		}
 		return nil, err
@@ -105,6 +108,6 @@ func distinctExchangesFromTransactions(txs []*common.CointrackingTx) []string {
 	return exchanges
 }
 
-func NewCsvReader() interfaces.CointrackingCsvReader {
-	return &csvReader{}
+func NewCsvReader() *CsvReader {
+	return &CsvReader{}
 }

@@ -1,0 +1,42 @@
+profile: cover.out
+
+# (optional; but recommended to set)
+# When specified reported file paths will not contain local prefix in the output
+local-prefix: "github.com/tomvodi/limepipes"
+
+# Holds coverage thresholds percentages, values should be in range [0-100]
+threshold:
+  # (optional; default 0)
+  # The minimum coverage that each file should have
+  file: 70
+
+  # (optional; default 0)
+  # The minimum coverage that each package should have
+  package: 80
+
+  # (optional; default 0)
+  # The minimum total coverage project should have
+  total: 80
+
+override:
+
+# Holds regexp rules which will exclude matched files or packages
+# from coverage statistics
+exclude:
+  # Exclude files or packages matching their paths
+  paths:
+    - .*mock_.*\.go       # exclude mock files
+    - .*_enumer\.go         # exclude generated files by enumer
+    - ^internal/config    # exclude config package
+    - ^internal/apigen    # exclude generated package
+    - ^cmd/limepipes/main\.go      # exclude main package
+    - ^internal/health    # simply just configuration for health check
+    - ^internal/pluginloader/process_handler\.go # too much effort to test
+    - ^cmd/limepipes-cli/cmd/arguments.go$ # only setup code
+    - ^cmd/limepipes-cli/cmd/import.go$ # only setup code
+    - ^cmd/limepipes-cli/cmd/parse.go$ # only setup code
+    - ^cmd/limepipes-cli/cmd/root.go$ # only setup code
+    - ^cmd/limepipes-cli/main.go$ # only setup code
+    - ^cmd/limepipes-cli/cmd/setup.go$ # only setup code
+    - ^internal/api/common.go$ # only setup code
+    - ^internal/initialize # only setup code

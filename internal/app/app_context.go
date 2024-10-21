@@ -3,46 +3,48 @@ package app
 import (
 	"context"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"os"
 	"path/filepath"
 )
 
-type appCtx struct {
+type Ctx struct {
 	ctx                 context.Context
 	lastSelectedFileDir string
 	exportFiles         []*common.ExportFileInfo
-	txIds               []string
+	txIDs               []string
 }
 
-func (a *appCtx) AllTxIds() []string {
-	return a.txIds
+func (a *Ctx) AllTxIDs() []string {
+	return a.txIDs
 }
 
-func (a *appCtx) ExportFiles() []*common.ExportFileInfo {
+func (a *Ctx) ExportFiles() []*common.ExportFileInfo {
 	return a.exportFiles
 }
 
-func (a *appCtx) AddExportFile(file *common.ExportFileInfo) {
+// AddExportFile adds a new export file to the context.
+// It also adds all transaction ids from the file to the list of known transaction ids.
+func (a *Ctx) AddExportFile(file *common.ExportFileInfo) {
 	for _, transaction := range file.Transactions {
-		// Skip transaction ids that have already been added
-		containsId := false
-		for _, id := range a.txIds {
-			if id == transaction.ID {
-				containsId = true
-				break
-			}
-		}
-
-		if !containsId {
-			a.txIds = append(a.txIds, transaction.ID)
+		if !a.containsTxID(transaction.ID) {
+			a.txIDs = append(a.txIDs, transaction.ID)
 		}
 	}
 
 	a.exportFiles = append(a.exportFiles, file)
 }
 
-func (a *appCtx) SetLastSelectedFileDirFromFile(file string) {
+func (a *Ctx) containsTxID(txID string) bool {
+	for _, id := range a.txIDs {
+		if id == txID {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (a *Ctx) SetLastSelectedFileDirFromFile(file string) {
 	fileInfo, err := os.Stat(file)
 	if err != nil {
 		return
@@ -53,20 +55,20 @@ func (a *appCtx) SetLastSelectedFileDirFromFile(file string) {
 	}
 }
 
-func (a *appCtx) LastSelectedFileDir() string {
+func (a *Ctx) LastSelectedFileDir() string {
 	return a.lastSelectedFileDir
 }
 
-func (a *appCtx) Context() context.Context {
+func (a *Ctx) Context() context.Context {
 	return a.ctx
 }
 
-func (a *appCtx) SetContext(ctx context.Context) {
+func (a *Ctx) SetContext(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func NewAppContext() interfaces.AppContext {
-	return &appCtx{
+func NewAppContext() *Ctx {
+	return &Ctx{
 		exportFiles: make([]*common.ExportFileInfo, 0),
 	}
 }

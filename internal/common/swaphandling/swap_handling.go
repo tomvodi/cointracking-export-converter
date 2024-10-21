@@ -1,4 +1,4 @@
-package swap_handling
+package swaphandling
 
 //go:generate go run github.com/dmarkham/enumer -json -yaml -transform=snake -type=SwapHandling
 

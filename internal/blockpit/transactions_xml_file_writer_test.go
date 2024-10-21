@@ -1,9 +1,10 @@
-package blockpit
+package blockpit_test
 
 import (
 	"fmt"
 	. "github.com/onsi/gomega"
 	"github.com/stretchr/testify/mock"
+	"github.com/tomvodi/cointracking-export-converter/internal/blockpit"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces/mocks"
 	"github.com/tomvodi/cointracking-export-converter/internal/test"
@@ -13,8 +14,8 @@ import (
 func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
 	g := NewGomegaWithT(t)
 	type fields struct {
-		xmlFileFactory *mocks.XmlFileFactory
-		xmlFile        *mocks.XmlFile
+		xmlFileFactory *mocks.XMLFileFactory
+		xmlFile        *mocks.XMLFile
 		txConverter    *mocks.BlockpitTxConverter
 		filePath       string
 		transactions   []*common.CointrackingTx
@@ -26,11 +27,11 @@ func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
 		prepare func(f *fields)
 	}{
 		{
-			name: "setting a sheet header fails",
+			name: "setting a sheet XMLHeaderLabels fails",
 			prepare: func(f *fields) {
-				f.xmlFileFactory.EXPECT().NewXmlFile().Return(f.xmlFile)
-				f.xmlFile.EXPECT().SetSheetHeader(1, header).
-					Return(fmt.Errorf("failed setting sheet header"))
+				f.xmlFileFactory.EXPECT().NewXMLFile().Return(f.xmlFile)
+				f.xmlFile.EXPECT().SetSheetHeader(1, blockpit.XMLHeaderLabels).
+					Return(fmt.Errorf("failed setting sheet XMLHeaderLabels"))
 				f.xmlFile.EXPECT().Close().Return(nil)
 
 				f.wantErr = true
@@ -39,8 +40,7 @@ func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
 		{
 			name: "failed converting cointracking tx to blockpit",
 			prepare: func(f *fields) {
-				f.xmlFileFactory.EXPECT().NewXmlFile().Return(f.xmlFile)
-				f.xmlFile.EXPECT().SetSheetHeader(1, header).Return(nil)
+				f.xmlFileFactory.EXPECT().NewXMLFile().Return(f.xmlFile)
 				f.xmlFile.EXPECT().Close().Return(nil)
 
 				testCtTx := test.RandomCtTx()
@@ -55,8 +55,8 @@ func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
 		{
 			name: "adding sheet row fails",
 			prepare: func(f *fields) {
-				f.xmlFileFactory.EXPECT().NewXmlFile().Return(f.xmlFile)
-				f.xmlFile.EXPECT().SetSheetHeader(1, header).Return(nil)
+				f.xmlFileFactory.EXPECT().NewXMLFile().Return(f.xmlFile)
+				f.xmlFile.EXPECT().SetSheetHeader(1, blockpit.XMLHeaderLabels).Return(nil)
 				f.xmlFile.EXPECT().Close().Return(nil)
 
 				testCtTx := test.RandomCtTx()
@@ -74,8 +74,8 @@ func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
 		{
 			name: "saving sheet fails",
 			prepare: func(f *fields) {
-				f.xmlFileFactory.EXPECT().NewXmlFile().Return(f.xmlFile)
-				f.xmlFile.EXPECT().SetSheetHeader(1, header).Return(nil)
+				f.xmlFileFactory.EXPECT().NewXMLFile().Return(f.xmlFile)
+				f.xmlFile.EXPECT().SetSheetHeader(1, blockpit.XMLHeaderLabels).Return(nil)
 				f.xmlFile.EXPECT().Close().Return(nil)
 
 				testCtTx := test.RandomCtTx()
@@ -97,8 +97,8 @@ func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
 		{
 			name: "saving export file succeeds",
 			prepare: func(f *fields) {
-				f.xmlFileFactory.EXPECT().NewXmlFile().Return(f.xmlFile)
-				f.xmlFile.EXPECT().SetSheetHeader(1, header).Return(nil)
+				f.xmlFileFactory.EXPECT().NewXMLFile().Return(f.xmlFile)
+				f.xmlFile.EXPECT().SetSheetHeader(1, blockpit.XMLHeaderLabels).Return(nil)
 				f.xmlFile.EXPECT().Close().Return(nil)
 
 				testCtTx := test.RandomCtTx()
@@ -121,8 +121,8 @@ func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			f := &fields{
-				xmlFileFactory: mocks.NewXmlFileFactory(t),
-				xmlFile:        mocks.NewXmlFile(t),
+				xmlFileFactory: mocks.NewXMLFileFactory(t),
+				xmlFile:        mocks.NewXMLFile(t),
 				txConverter:    mocks.NewBlockpitTxConverter(t),
 			}
 
@@ -130,10 +130,10 @@ func Test_xmlWriter_WriteTransactionsToXmlFile(t *testing.T) {
 				tt.prepare(f)
 			}
 
-			x := &txXmlFWriter{
-				xmlFFactory: f.xmlFileFactory,
-				txConverter: f.txConverter,
-			}
+			x := blockpit.NewTxXMLFileWriter(
+				f.xmlFileFactory,
+				f.txConverter,
+			)
 
 			err := x.WriteTransactionsToFile(f.filePath, f.transactions)
 
