@@ -25,7 +25,8 @@ var assets embed.FS
 var appName = "cointracking-export-converter"
 
 func main() {
-	appCtx := app.NewAppContext()
+	afs := afero.NewOsFs()
+	appCtx := app.NewAppContext(afs)
 	wailsLog := wailsruntime.NewLog()
 	fs := afero.NewOsFs()
 

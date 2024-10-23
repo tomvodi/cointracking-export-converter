@@ -2,12 +2,13 @@ package app
 
 import (
 	"context"
+	"github.com/spf13/afero"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	"os"
 	"path/filepath"
 )
 
 type Ctx struct {
+	afs                 afero.Fs
 	ctx                 context.Context
 	lastSelectedFileDir string
 	exportFiles         []*common.ExportFileInfo
@@ -45,7 +46,7 @@ func (a *Ctx) containsTxID(txID string) bool {
 }
 
 func (a *Ctx) SetLastSelectedFileDirFromFile(file string) {
-	fileInfo, err := os.Stat(file)
+	fileInfo, err := a.afs.Stat(file)
 	if err != nil {
 		return
 	}
@@ -67,8 +68,9 @@ func (a *Ctx) SetContext(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func NewAppContext() *Ctx {
+func NewAppContext(afs afero.Fs) *Ctx {
 	return &Ctx{
+		afs:         afs,
 		exportFiles: make([]*common.ExportFileInfo, 0),
 	}
 }
