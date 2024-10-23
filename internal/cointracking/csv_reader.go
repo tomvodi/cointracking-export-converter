@@ -7,6 +7,7 @@ import (
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	"os"
 	"path/filepath"
+	"slices"
 	"time"
 )
 
@@ -24,53 +25,9 @@ func (c *CsvReader) ReadFile(
 	}
 	defer exportFile.Close()
 
-	decoder := NewCsvDecoder(exportFile)
-
-	var txs []*common.CointrackingTx
-	var skippedTxCnt int
-	var txIDs []string
-	err = gocsv.UnmarshalDecoderToCallback(decoder,
-		func(tx *common.CointrackingTx) {
-			// There are sometimes nonsense transactions that transfer no value
-			// and will be rejected by blockpit
-			if tx.BuyValue == 0.0 && tx.SellValue == 0.0 && tx.FeeValue == 0.0 {
-				skippedTxCnt++
-				return
-			}
-
-			// add a transaction ID
-			err = common.SetIDForTransaction(tx)
-			if err != nil {
-				return
-			}
-
-			// Skip transactions that have already been added from this file
-			for _, id := range txIDs {
-				if id == tx.ID {
-					return
-				}
-			}
-
-			// Skip transactions that have already been added from another file
-			for _, id := range existingTxIDs {
-				if id == tx.ID {
-					return
-				}
-			}
-
-			txIDs = append(txIDs, tx.ID)
-			txs = append(txs, tx)
-		})
+	txs, skippedTxCnt, err := getTransactionsFromFile(exportFile, loc, existingTxIDs)
 	if err != nil {
-		if errors.Is(err, common.ErrNoKnownTradeType) {
-			return nil, fmt.Errorf("could not get trade types. Maybe your file was exported with an unsupported language")
-		}
 		return nil, err
-	}
-
-	// set timestamp to correct timezone
-	for i := 0; i < len(txs); i++ {
-		txs[i].DateTime.Time = txs[i].DateTime.Time.In(loc)
 	}
 
 	filename := filepath.Base(absoluteFilePath)
@@ -87,21 +44,113 @@ func (c *CsvReader) ReadFile(
 	return &fileInfo, nil
 }
 
+func getTransactionsFromFile(
+	exportFile *os.File,
+	loc *time.Location,
+	existingTxIDs []string,
+) ([]*common.CointrackingTx, int, error) {
+	decoder := NewCsvDecoder(exportFile)
+
+	var txs []*common.CointrackingTx
+	var skippedTxCnt int
+
+	err := gocsv.UnmarshalDecoder(decoder, &txs)
+	if err != nil {
+		if errors.Is(err, common.ErrNoKnownTradeType) {
+			return nil, 0, fmt.Errorf("could not get trade types. Maybe your file was exported with an unsupported language")
+		}
+		return nil, 0, err
+	}
+
+	allTxCnt := len(txs)
+	txs = filterOutEmptyTransactions(txs)
+	skippedTxCnt = allTxCnt - len(txs)
+
+	txs, err = setTransactionIDs(txs)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	txs = removeDuplicateTxs(txs)
+	txs = removeTxsWithIDs(txs, existingTxIDs)
+
+	// set timestamp to correct timezone
+	for i := 0; i < len(txs); i++ {
+		txs[i].DateTime.Time = txs[i].DateTime.Time.In(loc)
+	}
+
+	return txs, skippedTxCnt, nil
+}
+
+func filterOutEmptyTransactions(
+	txs []*common.CointrackingTx,
+) []*common.CointrackingTx {
+	var filteredTxs []*common.CointrackingTx
+
+	for _, tx := range txs {
+		if tx.BuyValue == 0.0 && tx.SellValue == 0.0 && tx.FeeValue == 0.0 {
+			continue
+		}
+		filteredTxs = append(filteredTxs, tx)
+	}
+
+	return filteredTxs
+}
+
+func setTransactionIDs(
+	txs []*common.CointrackingTx,
+) ([]*common.CointrackingTx, error) {
+	for _, tx := range txs {
+		err := common.SetIDForTransaction(tx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return txs, nil
+}
+
+func removeDuplicateTxs(
+	txs []*common.CointrackingTx,
+) []*common.CointrackingTx {
+	var uniqueIDs []string
+	var filteredTxs []*common.CointrackingTx
+
+	for _, tx := range txs {
+		if slices.Contains(uniqueIDs, tx.ID) {
+			continue
+		}
+		uniqueIDs = append(uniqueIDs, tx.ID)
+		filteredTxs = append(filteredTxs, tx)
+	}
+
+	return filteredTxs
+}
+
+func removeTxsWithIDs(
+	txs []*common.CointrackingTx,
+	txIDs []string,
+) []*common.CointrackingTx {
+	var filteredTxs []*common.CointrackingTx
+
+	for _, tx := range txs {
+		if slices.Contains(txIDs, tx.ID) {
+			continue
+		}
+
+		filteredTxs = append(filteredTxs, tx)
+	}
+
+	return filteredTxs
+}
+
 func distinctExchangesFromTransactions(txs []*common.CointrackingTx) []string {
-	exchanges := []string{}
+	var exchanges []string
 	for _, tx := range txs {
 		if tx.Exchange == "" {
 			continue
 		}
 
-		exchangeAlreadyAdded := false
-		for _, exchange := range exchanges {
-			if exchange == tx.Exchange {
-				exchangeAlreadyAdded = true
-				break
-			}
-		}
-		if !exchangeAlreadyAdded {
+		if !slices.Contains(exchanges, tx.Exchange) {
 			exchanges = append(exchanges, tx.Exchange)
 		}
 	}
