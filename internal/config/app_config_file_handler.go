@@ -18,17 +18,9 @@ type FileHandler struct {
 }
 
 func (f *FileHandler) Init() error {
-	err := f.afs.MkdirAll(f.configDir, os.ModePerm)
+	err := f.initConfigDir()
 	if err != nil {
-		return fmt.Errorf("failed creating config dir: %s", err.Error())
-	}
-
-	configPath := filepath.Join(f.configDir, configFileName+".yaml")
-	_, err = f.afs.Stat(configPath)
-	if err != nil && errors.Is(err, fs.ErrNotExist) {
-		if _, err := f.afs.Create(configPath); err != nil {
-			return fmt.Errorf("failed creating config file: %s", err.Error())
-		}
+		return err
 	}
 
 	viper.SetFs(f.afs)
@@ -42,6 +34,23 @@ func (f *FileHandler) Init() error {
 			return nil
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (f *FileHandler) initConfigDir() error {
+	err := f.afs.MkdirAll(f.configDir, os.ModePerm)
+	if err != nil {
+		return fmt.Errorf("failed creating config dir: %s", err.Error())
+	}
+
+	configPath := filepath.Join(f.configDir, configFileName+".yaml")
+	_, err = f.afs.Stat(configPath)
+	if err != nil && errors.Is(err, fs.ErrNotExist) {
+		if _, err := f.afs.Create(configPath); err != nil {
+			return fmt.Errorf("failed creating config file: %s", err.Error())
+		}
 	}
 
 	return nil

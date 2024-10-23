@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpittxtype"
@@ -76,24 +77,38 @@ func (m *TxTypeManager) initMappingFromConfig() error {
 func typedConfigFromGeneric(genericConfigMap map[string]any) (map[ctt.CtTxType]bpt.BpTxType, error) {
 	configMap := map[ctt.CtTxType]bpt.BpTxType{}
 	for key, value := range genericConfigMap {
-		ctType, err := ctt.CtTxTypeString(key)
-		if err != nil {
-			return nil, fmt.Errorf("%s is no cointracking transaction type", key)
-		}
-		if ctType == ctt.NoCtTxType {
+		ctType, bpType, err := blockpitTypeFromKeyValue(key, value)
+		if errors.Is(err, common.ErrNoConfigValue) {
 			continue
 		}
-		bptStr, ok := value.(string)
-		if !ok {
-			return nil, fmt.Errorf("blockpit tx type for cointracking type %s is not a string", key)
-		}
-		bpType, err := bpt.BpTxTypeString(bptStr)
+
 		if err != nil {
-			return nil, fmt.Errorf("%s is no blockpit transaction type", bptStr)
+			return nil, err
 		}
+
 		configMap[ctType] = bpType
 	}
 	return configMap, nil
+}
+
+func blockpitTypeFromKeyValue(key string, value any) (ctt.CtTxType, bpt.BpTxType, error) {
+	ctType, err := ctt.CtTxTypeString(key)
+	if err != nil {
+		return ctt.NoCtTxType, bpt.NoBpTxType, fmt.Errorf("%s is no cointracking transaction type", key)
+	}
+	if ctType == ctt.NoCtTxType {
+		return ctt.NoCtTxType, bpt.NoBpTxType, common.ErrNoConfigValue
+	}
+	bptStr, ok := value.(string)
+	if !ok {
+		return ctt.NoCtTxType, bpt.NoBpTxType, fmt.Errorf("blockpit tx type for cointracking type %s is not a string", key)
+	}
+	bpType, err := bpt.BpTxTypeString(bptStr)
+	if err != nil {
+		return ctt.NoCtTxType, bpt.NoBpTxType, fmt.Errorf("%s is no blockpit transaction type", bptStr)
+	}
+
+	return ctType, bpType, nil
 }
 
 func initBlockpitDisplaysLocalized(
@@ -163,43 +178,54 @@ func (m *TxTypeManager) BlockpitTxTypes() (txNames []common.TxDisplayName, err e
 }
 
 func (m *TxTypeManager) GetMapping() (mapping []common.Ct2BpTxMapping, err error) {
-	for _, txType := range ctt.CtTxTypeValues() {
-		if txType == ctt.NoCtTxType ||
-			txType == ctt.SwapNonTaxable {
+	for _, ctType := range ctt.CtTxTypeValues() {
+		if ctType == ctt.NoCtTxType ||
+			ctType == ctt.SwapNonTaxable {
 			continue
 		}
 
-		mapItem := common.Ct2BpTxMapping{
-			Cointracking: common.TxDisplayName{
-				Value: txType.String(),
-			},
+		mapItem, err := m.getMappingForCtType(ctType)
+		if err != nil {
+			return nil, err
 		}
 
-		translation, found := en.CtTxTypeNames[txType]
-		if !found {
-			return nil,
-				fmt.Errorf("no localization for CoinTracking tx type %s found", txType.String())
-		}
-		mapItem.Cointracking.Title = translation
-
-		var bpType bpt.BpTxType
-		if bpType, found = m.mapping[txType]; !found {
-			return nil,
-				fmt.Errorf("no blockpit tx type for CoinTracking tx type %s found", txType.String())
-		}
-		mapItem.Blockpit.Value = bpType.String()
-
-		translation, found = en.BpTxTypeNames[bpType]
-		if !found {
-			return nil,
-				fmt.Errorf("no localization for Blockpit tx type %s found", mapItem.Blockpit.Value)
-		}
-		mapItem.Blockpit.Title = translation
-
-		mapping = append(mapping, mapItem)
+		mapping = append(mapping, *mapItem)
 	}
 
 	return mapping, nil
+}
+
+func (m *TxTypeManager) getMappingForCtType(
+	ctType ctt.CtTxType,
+) (*common.Ct2BpTxMapping, error) {
+	mapItem := &common.Ct2BpTxMapping{
+		Cointracking: common.TxDisplayName{
+			Value: ctType.String(),
+		},
+	}
+
+	translation, found := en.CtTxTypeNames[ctType]
+	if !found {
+		return nil,
+			fmt.Errorf("no localization for CoinTracking tx type %s found", ctType.String())
+	}
+	mapItem.Cointracking.Title = translation
+
+	var bpType bpt.BpTxType
+	if bpType, found = m.mapping[ctType]; !found {
+		return nil,
+			fmt.Errorf("no blockpit tx type for CoinTracking tx type %s found", ctType.String())
+	}
+	mapItem.Blockpit.Value = bpType.String()
+
+	translation, found = en.BpTxTypeNames[bpType]
+	if !found {
+		return nil,
+			fmt.Errorf("no localization for Blockpit tx type %s found", mapItem.Blockpit.Value)
+	}
+	mapItem.Blockpit.Title = translation
+
+	return mapItem, nil
 }
 
 func (m *TxTypeManager) SetMapping(ctTxType ctt.CtTxType, bpTxType bpt.BpTxType) error {
