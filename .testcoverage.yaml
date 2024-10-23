@@ -26,17 +26,8 @@ exclude:
   # Exclude files or packages matching their paths
   paths:
     - .*mock_.*\.go       # exclude mock files
-    - .*_enumer\.go         # exclude generated files by enumer
+    - .*_enumer\.go       # exclude generated files by enumer
     - ^internal/config    # exclude config package
-    - ^internal/apigen    # exclude generated package
-    - ^cmd/limepipes/main\.go      # exclude main package
+    - ^main\.go           # exclude main package
     - ^internal/health    # simply just configuration for health check
-    - ^internal/pluginloader/process_handler\.go # too much effort to test
-    - ^cmd/limepipes-cli/cmd/arguments.go$ # only setup code
-    - ^cmd/limepipes-cli/cmd/import.go$ # only setup code
-    - ^cmd/limepipes-cli/cmd/parse.go$ # only setup code
-    - ^cmd/limepipes-cli/cmd/root.go$ # only setup code
-    - ^cmd/limepipes-cli/main.go$ # only setup code
-    - ^cmd/limepipes-cli/cmd/setup.go$ # only setup code
-    - ^internal/api/common.go$ # only setup code
-    - ^internal/initialize # only setup code
+    - ^internal/wailsruntime/wails_log\.go # only simple mapped code
