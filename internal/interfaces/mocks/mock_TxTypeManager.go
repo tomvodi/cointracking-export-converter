@@ -3,8 +3,8 @@
 package mocks
 
 import (
-	blockpit_tx_type "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
-	cointracking_tx_type "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	blockpittxtype "github.com/tomvodi/cointracking-export-converter/internal/common/blockpittxtype"
+	cointrackingtxtype "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 
 	common "github.com/tomvodi/cointracking-export-converter/internal/common"
 
@@ -25,7 +25,7 @@ func (_m *TxTypeManager) EXPECT() *TxTypeManager_Expecter {
 }
 
 // BlockpitTxType provides a mock function with given fields: ctTxType
-func (_m *TxTypeManager) BlockpitTxType(ctTxType cointracking_tx_type.CtTxType) (common.TxDisplayName, error) {
+func (_m *TxTypeManager) BlockpitTxType(ctTxType cointrackingtxtype.CtTxType) (common.TxDisplayName, error) {
 	ret := _m.Called(ctTxType)
 
 	if len(ret) == 0 {
@@ -34,16 +34,16 @@ func (_m *TxTypeManager) BlockpitTxType(ctTxType cointracking_tx_type.CtTxType) 
 
 	var r0 common.TxDisplayName
 	var r1 error
-	if rf, ok := ret.Get(0).(func(cointracking_tx_type.CtTxType) (common.TxDisplayName, error)); ok {
+	if rf, ok := ret.Get(0).(func(cointrackingtxtype.CtTxType) (common.TxDisplayName, error)); ok {
 		return rf(ctTxType)
 	}
-	if rf, ok := ret.Get(0).(func(cointracking_tx_type.CtTxType) common.TxDisplayName); ok {
+	if rf, ok := ret.Get(0).(func(cointrackingtxtype.CtTxType) common.TxDisplayName); ok {
 		r0 = rf(ctTxType)
 	} else {
 		r0 = ret.Get(0).(common.TxDisplayName)
 	}
 
-	if rf, ok := ret.Get(1).(func(cointracking_tx_type.CtTxType) error); ok {
+	if rf, ok := ret.Get(1).(func(cointrackingtxtype.CtTxType) error); ok {
 		r1 = rf(ctTxType)
 	} else {
 		r1 = ret.Error(1)
@@ -58,14 +58,14 @@ type TxTypeManager_BlockpitTxType_Call struct {
 }
 
 // BlockpitTxType is a helper method to define mock.On call
-//   - ctTxType cointracking_tx_type.CtTxType
+//   - ctTxType cointrackingtxtype.CtTxType
 func (_e *TxTypeManager_Expecter) BlockpitTxType(ctTxType interface{}) *TxTypeManager_BlockpitTxType_Call {
 	return &TxTypeManager_BlockpitTxType_Call{Call: _e.mock.On("BlockpitTxType", ctTxType)}
 }
 
-func (_c *TxTypeManager_BlockpitTxType_Call) Run(run func(ctTxType cointracking_tx_type.CtTxType)) *TxTypeManager_BlockpitTxType_Call {
+func (_c *TxTypeManager_BlockpitTxType_Call) Run(run func(ctTxType cointrackingtxtype.CtTxType)) *TxTypeManager_BlockpitTxType_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(cointracking_tx_type.CtTxType))
+		run(args[0].(cointrackingtxtype.CtTxType))
 	})
 	return _c
 }
@@ -75,7 +75,7 @@ func (_c *TxTypeManager_BlockpitTxType_Call) Return(_a0 common.TxDisplayName, _a
 	return _c
 }
 
-func (_c *TxTypeManager_BlockpitTxType_Call) RunAndReturn(run func(cointracking_tx_type.CtTxType) (common.TxDisplayName, error)) *TxTypeManager_BlockpitTxType_Call {
+func (_c *TxTypeManager_BlockpitTxType_Call) RunAndReturn(run func(cointrackingtxtype.CtTxType) (common.TxDisplayName, error)) *TxTypeManager_BlockpitTxType_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -195,7 +195,7 @@ func (_c *TxTypeManager_GetMapping_Call) RunAndReturn(run func() ([]common.Ct2Bp
 }
 
 // SetMapping provides a mock function with given fields: ctTxType, bpTxType
-func (_m *TxTypeManager) SetMapping(ctTxType cointracking_tx_type.CtTxType, bpTxType blockpit_tx_type.BpTxType) error {
+func (_m *TxTypeManager) SetMapping(ctTxType cointrackingtxtype.CtTxType, bpTxType blockpittxtype.BpTxType) error {
 	ret := _m.Called(ctTxType, bpTxType)
 
 	if len(ret) == 0 {
@@ -203,7 +203,7 @@ func (_m *TxTypeManager) SetMapping(ctTxType cointracking_tx_type.CtTxType, bpTx
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(cointracking_tx_type.CtTxType, blockpit_tx_type.BpTxType) error); ok {
+	if rf, ok := ret.Get(0).(func(cointrackingtxtype.CtTxType, blockpittxtype.BpTxType) error); ok {
 		r0 = rf(ctTxType, bpTxType)
 	} else {
 		r0 = ret.Error(0)
@@ -218,15 +218,15 @@ type TxTypeManager_SetMapping_Call struct {
 }
 
 // SetMapping is a helper method to define mock.On call
-//   - ctTxType cointracking_tx_type.CtTxType
-//   - bpTxType blockpit_tx_type.BpTxType
+//   - ctTxType cointrackingtxtype.CtTxType
+//   - bpTxType blockpittxtype.BpTxType
 func (_e *TxTypeManager_Expecter) SetMapping(ctTxType interface{}, bpTxType interface{}) *TxTypeManager_SetMapping_Call {
 	return &TxTypeManager_SetMapping_Call{Call: _e.mock.On("SetMapping", ctTxType, bpTxType)}
 }
 
-func (_c *TxTypeManager_SetMapping_Call) Run(run func(ctTxType cointracking_tx_type.CtTxType, bpTxType blockpit_tx_type.BpTxType)) *TxTypeManager_SetMapping_Call {
+func (_c *TxTypeManager_SetMapping_Call) Run(run func(ctTxType cointrackingtxtype.CtTxType, bpTxType blockpittxtype.BpTxType)) *TxTypeManager_SetMapping_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(cointracking_tx_type.CtTxType), args[1].(blockpit_tx_type.BpTxType))
+		run(args[0].(cointrackingtxtype.CtTxType), args[1].(blockpittxtype.BpTxType))
 	})
 	return _c
 }
@@ -236,7 +236,7 @@ func (_c *TxTypeManager_SetMapping_Call) Return(_a0 error) *TxTypeManager_SetMap
 	return _c
 }
 
-func (_c *TxTypeManager_SetMapping_Call) RunAndReturn(run func(cointracking_tx_type.CtTxType, blockpit_tx_type.BpTxType) error) *TxTypeManager_SetMapping_Call {
+func (_c *TxTypeManager_SetMapping_Call) RunAndReturn(run func(cointrackingtxtype.CtTxType, blockpittxtype.BpTxType) error) *TxTypeManager_SetMapping_Call {
 	_c.Call.Return(run)
 	return _c
 }

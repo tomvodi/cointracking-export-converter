@@ -6,7 +6,7 @@ import (
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 )
 
-var header = []string{
+var XMLHeaderLabels = []string{
 	"Date (UTC)",
 	"Integration Name",
 	"Label",
@@ -20,78 +20,97 @@ var header = []string{
 	"Trx. ID (optional)",
 }
 
-type txXmlFWriter struct {
-	xmlFFactory interfaces.XmlFileFactory
+type TxXMLFileWriter struct {
+	xmlFFactory interfaces.XMLFileFactory
 	txConverter interfaces.BlockpitTxConverter
 }
 
-func (t *txXmlFWriter) WriteTransactionsToFile(
+func (t *TxXMLFileWriter) WriteTransactionsToFile(
 	filePath string,
 	transactions []*common.CointrackingTx,
 ) error {
-	f := t.xmlFFactory.NewXmlFile()
-	defer func() {
-		if err := f.Close(); err != nil {
-			fmt.Println(err)
-		}
-	}()
+	f := t.xmlFFactory.NewXMLFile()
+	defer f.Close()
 
-	err := f.SetSheetHeader(1, header)
+	bpTxs, err := t.BpTxsFromCtTxs(transactions)
 	if err != nil {
 		return err
 	}
 
-	var bpTxs []*interfaces.BlockpitTx
-
-	for _, tx := range transactions {
-		bpTx, err := t.txConverter.FromCointrackingTx(tx)
-		if err != nil {
-			return err
-		}
-
-		bpTxs = append(bpTxs, bpTx...)
+	err = f.SetSheetHeader(1, XMLHeaderLabels)
+	if err != nil {
+		return err
 	}
 
 	rowNr := 2
 	for _, bpTx := range bpTxs {
-		ctTx := bpTx.CtTx
-		excelDate := ctTx.DateTime.Time.UTC().Format("02.01.2006 15:04:05")
-
-		excelRow := []interface{}{
-			excelDate,
-			ctTx.Exchange,
-			bpTx.TxType.Title,
-			ctTx.SellCurrency,
-			ctTx.SellValue,
-			ctTx.BuyCurrency,
-			ctTx.BuyValue,
-			ctTx.FeeCurrency,
-			ctTx.FeeValue,
-			ctTx.Comment,
-			ctTx.ID,
-		}
-
-		err = f.SetSheetRow(1, rowNr, excelRow)
+		err := setExcelSheetRowForTxs(f, rowNr, bpTx)
 		if err != nil {
-			return fmt.Errorf("failed settings row in excel sheet: %s", err.Error())
+			return err
 		}
 
 		rowNr++
 	}
 
 	if err = f.SaveAs(filePath); err != nil {
-		fmt.Println(err)
 		return err
 	}
 
 	return nil
 }
 
-func NewTxXmlFileWriter(
-	xmlFactory interfaces.XmlFileFactory,
+func (t *TxXMLFileWriter) BpTxsFromCtTxs(
+	transactions []*common.CointrackingTx,
+) ([]*interfaces.BlockpitTx, error) {
+	var bpTxs []*interfaces.BlockpitTx
+
+	for _, tx := range transactions {
+		bpTx, err := t.txConverter.FromCointrackingTx(tx)
+		if err != nil {
+			return nil, err
+		}
+
+		bpTxs = append(bpTxs, bpTx...)
+	}
+
+	return bpTxs, nil
+}
+
+func setExcelSheetRowForTxs(
+	f interfaces.XMLFile,
+	rowNr int,
+	bpTx *interfaces.BlockpitTx,
+) error {
+	ctTx := bpTx.CtTx
+	excelDate := ctTx.DateTime.Time.UTC().Format("02.01.2006 15:04:05")
+
+	excelRow := []any{
+		excelDate,
+		ctTx.Exchange,
+		bpTx.TxType.Title,
+		ctTx.SellCurrency,
+		ctTx.SellValue,
+		ctTx.BuyCurrency,
+		ctTx.BuyValue,
+		ctTx.FeeCurrency,
+		ctTx.FeeValue,
+		ctTx.Comment,
+		ctTx.ID,
+	}
+
+	err := f.SetSheetRow(1, rowNr, excelRow)
+	if err != nil {
+		return fmt.Errorf("failed settings row in excel sheet: %s", err.Error())
+	}
+
+	return nil
+}
+
+func NewTxXMLFileWriter(
+	xmlFactory interfaces.XMLFileFactory,
 	txConverter interfaces.BlockpitTxConverter,
-) interfaces.TransactionsFileWriter {
-	return &txXmlFWriter{
+) *TxXMLFileWriter {
+	return &TxXMLFileWriter{
 		xmlFFactory: xmlFactory,
 		txConverter: txConverter,
 	}

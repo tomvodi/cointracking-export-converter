@@ -3,7 +3,7 @@ package test
 import (
 	"github.com/jaswdr/faker/v2"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	"github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	"github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"time"
 )
@@ -14,8 +14,8 @@ func RandomCtTx() *common.CointrackingTx {
 	}
 	fake := faker.New()
 	fake.Struct().Fill(ctTx)
-	txTypeName := fake.RandomStringElement(cointracking_tx_type.CtTxTypeStrings())
-	txTypeVal, err := cointracking_tx_type.CtTxTypeString(txTypeName)
+	txTypeName := fake.RandomStringElement(cointrackingtxtype.CtTxTypeStrings())
+	txTypeVal, err := cointrackingtxtype.CtTxTypeString(txTypeName)
 	if err != nil {
 		panic(err)
 	}

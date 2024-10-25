@@ -1,5 +1,5 @@
 package interfaces
 
-type XmlFileFactory interface {
-	NewXmlFile() XmlFile
+type XMLFileFactory interface {
+	NewXMLFile() XMLFile
 }

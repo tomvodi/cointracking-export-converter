@@ -5,7 +5,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
-	"github.com/tomvodi/cointracking-export-converter/internal/interfaces"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -13,44 +12,56 @@ import (
 
 var configFileName = "config"
 
-type fileHandler struct {
+type FileHandler struct {
 	configDir string
-	fs        afero.Fs
+	afs       afero.Fs
 }
 
-func (f *fileHandler) Init() error {
-	err := f.fs.MkdirAll(f.configDir, os.ModePerm)
+func (f *FileHandler) Init() error {
+	err := f.initConfigDir()
 	if err != nil {
-		return fmt.Errorf("failed creating config dir: %s", err.Error())
+		return err
 	}
 
-	configPath := filepath.Join(f.configDir, configFileName+".yaml")
-	_, err = f.fs.Stat(configPath)
-	if err != nil && errors.Is(err, fs.ErrNotExist) {
-		if _, err := f.fs.Create(configPath); err != nil {
-			return fmt.Errorf("failed creating config file: %s", err.Error())
-		}
-	}
-
-	viper.SetFs(f.fs)
+	viper.SetFs(f.afs)
 	viper.AddConfigPath(f.configDir)
 	viper.SetConfigName(configFileName)
 	viper.SetConfigType("yaml")
 
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+		var configFileNotFoundError viper.ConfigFileNotFoundError
+		if errors.As(err, &configFileNotFoundError) {
 			return nil
-		} else {
-			return err
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (f *FileHandler) initConfigDir() error {
+	err := f.afs.MkdirAll(f.configDir, os.ModePerm)
+	if err != nil {
+		return fmt.Errorf("failed creating config dir: %s", err.Error())
+	}
+
+	configPath := filepath.Join(f.configDir, configFileName+".yaml")
+	_, err = f.afs.Stat(configPath)
+	if err != nil && errors.Is(err, fs.ErrNotExist) {
+		if _, err := f.afs.Create(configPath); err != nil {
+			return fmt.Errorf("failed creating config file: %s", err.Error())
 		}
 	}
 
 	return nil
 }
 
-func NewConfigFileHandler(fs afero.Fs, configDir string) interfaces.Initializer {
-	return &fileHandler{
+func NewConfigFileHandler(
+	afs afero.Fs,
+	configDir string,
+) *FileHandler {
+	return &FileHandler{
 		configDir: configDir,
-		fs:        fs,
+		afs:       afs,
 	}
 }

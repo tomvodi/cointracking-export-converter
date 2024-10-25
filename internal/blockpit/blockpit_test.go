@@ -4,7 +4,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 	"time"
 )
 
@@ -20,34 +20,101 @@ var _ = Describe("Blockpit", func() {
 		if wantErr {
 			Expect(err).To(HaveOccurred())
 			return
-		} else {
-			Expect(err).ToNot(HaveOccurred())
 		}
+		Expect(err).ToNot(HaveOccurred())
+
 		Expect(txOut).To(Equal(txExp))
 	},
 		Entry("CoinTracking tx has fee in out-currency",
-			txWithValues(1.0, "wBTC", 1.1, "BTC", 0.1, "BTC"),
-			txWithValues(1.0, "wBTC", 1.0, "BTC", 0.1, "BTC"),
+			txWithValues(TxValues{
+				BuyVal:   1.0,
+				BuyCurr:  "wBTC",
+				SellVal:  1.1,
+				SellCurr: "BTC",
+				FeeVal:   0.1,
+				FeeCurr:  "BTC",
+			}),
+			txWithValues(TxValues{
+				BuyVal:   1.0,
+				BuyCurr:  "wBTC",
+				SellVal:  1.0,
+				SellCurr: "BTC",
+				FeeVal:   0.1,
+				FeeCurr:  "BTC",
+			}),
 			false,
 		),
 		Entry("CoinTracking tx has fee in out-currency larger than sell value should not result in negative sell value",
-			txWithValues(0.1, "wBTC", 0.1, "BTC", 0.15, "BTC"),
+
+			txWithValues(TxValues{
+				BuyVal:   0.1,
+				BuyCurr:  "wBTC",
+				SellVal:  0.1,
+				SellCurr: "BTC",
+				FeeVal:   0.15,
+				FeeCurr:  "BTC",
+			}),
 			nil,
 			true,
 		),
+
 		Entry("CoinTracking tx has fee in in-currency",
-			txWithValues(0.9, "wBTC", 1.0, "BTC", 0.1, "wBTC"),
-			txWithValues(1.0, "wBTC", 1.0, "BTC", 0.1, "wBTC"),
+			txWithValues(TxValues{
+				BuyVal:   0.9,
+				BuyCurr:  "wBTC",
+				SellVal:  1.0,
+				SellCurr: "BTC",
+				FeeVal:   0.1,
+				FeeCurr:  "wBTC",
+			}),
+			txWithValues(TxValues{
+				BuyVal:   1.0,
+				BuyCurr:  "wBTC",
+				SellVal:  1.0,
+				SellCurr: "BTC",
+				FeeVal:   0.1,
+				FeeCurr:  "wBTC",
+			}),
 			false,
 		),
 		Entry("CoinTracking tx has fee in other currency",
-			txWithValues(1.0, "wBTC", 1.0, "BTC", 0.1, "ETH"),
-			txWithValues(1.0, "wBTC", 1.0, "BTC", 0.1, "ETH"),
+
+			txWithValues(TxValues{
+				BuyVal:   1.0,
+				BuyCurr:  "wBTC",
+				SellVal:  1.0,
+				SellCurr: "BTC",
+				FeeVal:   0.1,
+				FeeCurr:  "ETH",
+			}),
+			txWithValues(TxValues{
+				BuyVal:   1.0,
+				BuyCurr:  "wBTC",
+				SellVal:  1.0,
+				SellCurr: "BTC",
+				FeeVal:   0.1,
+				FeeCurr:  "ETH",
+			}),
 			false,
 		),
 		Entry("CoinTracking tx has no fee",
-			txWithValues(1.0, "wBTC", 1.0, "BTC", 0.0, "BTC"),
-			txWithValues(1.0, "wBTC", 1.0, "BTC", 0.0, "BTC"),
+
+			txWithValues(TxValues{
+				BuyVal:   1.0,
+				BuyCurr:  "wBTC",
+				SellVal:  1.0,
+				SellCurr: "BTC",
+				FeeVal:   0.0,
+				FeeCurr:  "BTC",
+			}),
+			txWithValues(TxValues{
+				BuyVal:   1.0,
+				BuyCurr:  "wBTC",
+				SellVal:  1.0,
+				SellCurr: "BTC",
+				FeeVal:   0.0,
+				FeeCurr:  "BTC",
+			}),
 			false,
 		),
 	)
@@ -57,7 +124,14 @@ var _ = Describe("Blockpit", func() {
 
 		Context("when trade has 0 sell value", func() {
 			BeforeEach(func() {
-				txIn = txWithValues(0.00001, "DFI", 0.0, "BTC", 0.0, "")
+				txIn = txWithValues(TxValues{
+					BuyVal:   0.00001,
+					BuyCurr:  "DFI",
+					SellVal:  0.0,
+					SellCurr: "BTC",
+					FeeVal:   0.0,
+					FeeCurr:  "",
+				})
 				Expect(txIn.Type.TxType).To(Equal(ctt.Trade))
 
 				adaptTxTypeForTradesWith0Income(txIn)
@@ -70,7 +144,14 @@ var _ = Describe("Blockpit", func() {
 
 		Context("when trade has 0 buy value", func() {
 			BeforeEach(func() {
-				txIn = txWithValues(0.0, "BTC", 0.000001, "DFI", 0.0, "")
+				txIn = txWithValues(TxValues{
+					BuyVal:   0.0,
+					BuyCurr:  "BTC",
+					SellVal:  0.000001,
+					SellCurr: "DFI",
+					FeeVal:   0.0,
+					FeeCurr:  "",
+				})
 				Expect(txIn.Type.TxType).To(Equal(ctt.Trade))
 
 				adaptTxTypeForTradesWith0Income(txIn)
@@ -83,18 +164,26 @@ var _ = Describe("Blockpit", func() {
 	})
 })
 
+type TxValues struct {
+	BuyVal   float64
+	BuyCurr  string
+	SellVal  float64
+	SellCurr string
+	FeeVal   float64
+	FeeCurr  string
+}
+
 func txWithValues(
-	buyVal float64, buyCurr string,
-	sellVal float64, sellCurr string,
-	feeVal float64, feeCurr string) *common.CointrackingTx {
+	v TxValues,
+) *common.CointrackingTx {
 	return &common.CointrackingTx{
 		Type:         &common.TxType{TxType: ctt.Trade},
-		BuyValue:     buyVal,
-		BuyCurrency:  buyCurr,
-		SellValue:    sellVal,
-		SellCurrency: sellCurr,
-		FeeValue:     feeVal,
-		FeeCurrency:  feeCurr,
+		BuyValue:     v.BuyVal,
+		BuyCurrency:  v.BuyCurr,
+		SellValue:    v.SellVal,
+		SellCurrency: v.SellCurr,
+		FeeValue:     v.FeeVal,
+		FeeCurrency:  v.FeeCurr,
 		Exchange:     "Test Exchange",
 		Group:        "Test Group",
 		Comment:      "Test Comment",

@@ -8,17 +8,17 @@ import (
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/mock"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
-	bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpit_tx_type"
-	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointracking_tx_type"
+	bpt "github.com/tomvodi/cointracking-export-converter/internal/common/blockpittxtype"
+	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
 	"github.com/tomvodi/cointracking-export-converter/internal/interfaces/mocks"
 )
 
 var _ = Describe("AppConfig", func() {
-	var appConf *appConfig
+	var appConf *AppConfig
 	var err error
 	var mockAppCtx *mocks.AppContext
 	var mocktxTypeMgr *mocks.TxTypeManager
-	var mockWailsLog *mocks.WailsLog
+	var mockWailsLog *mocks.WailsLogger
 
 	BeforeEach(func() {
 		fs := afero.NewMemMapFs()
@@ -31,8 +31,8 @@ var _ = Describe("AppConfig", func() {
 
 		mockAppCtx = mocks.NewAppContext(GinkgoT())
 		mocktxTypeMgr = mocks.NewTxTypeManager(GinkgoT())
-		mockWailsLog = mocks.NewWailsLog(GinkgoT())
-		appConf = &appConfig{
+		mockWailsLog = mocks.NewWailsLogger(GinkgoT())
+		appConf = &AppConfig{
 			appCtx:        mockAppCtx,
 			txTypeManager: mocktxTypeMgr,
 			wailsLog:      mockWailsLog,
