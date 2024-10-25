@@ -1,6 +1,6 @@
 import {WailsApi} from "@/wails/wails_api";
-import {GetExportFiles, OpenExportFile} from "@wails/go/cointracking/ct";
-import {ExportToBlockpitXlsx} from "@wails/go/blockpit/bp";
+import {GetExportFiles, OpenExportFile} from "@wails/go/cointracking/Backend";
+import {ExportToBlockpitXlsx} from "@wails/go/blockpit/Backend";
 import {common} from "@wails/go/models";
 import {
     AllTimezones,
@@ -11,7 +11,7 @@ import {
     SwapHandling,
     Timezone,
     TxTypeMappings,
-} from "@wails/go/config/appConfig";
+} from "@wails/go/config/AppConfig";
 
 export class Wails implements WailsApi {
 

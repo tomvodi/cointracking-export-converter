@@ -2,6 +2,9 @@ GOBIN ?= $$(go env GOPATH)/bin
 
 .PHONY: check-coverage lint
 
+dev:
+	wails dev
+
 mocks:
 	mockery
 
