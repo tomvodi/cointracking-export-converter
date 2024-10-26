@@ -56,8 +56,9 @@ func main() {
 	txConverter := blockpit.NewTxConvert(appConfig, txManager)
 
 	bpXMLWriter := blockpit.NewTxXMLFileWriter(xmlFactory, txConverter)
-	bp := blockpit.New(appCtx, bpXMLWriter)
-	ct := cointracking.New(appCtx, csvReader)
+	wrt := wailsruntime.NewWailsRuntime(appCtx)
+	bp := blockpit.New(appCtx, wrt, bpXMLWriter)
+	ct := cointracking.New(appCtx, wrt, csvReader)
 
 	// Create application with options
 	err = wails.Run(&options.App{

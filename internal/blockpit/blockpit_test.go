@@ -1,15 +1,131 @@
 package blockpit
 
 import (
+	"fmt"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/tomvodi/cointracking-export-converter/internal/common"
 	ctt "github.com/tomvodi/cointracking-export-converter/internal/common/cointrackingtxtype"
+	"github.com/tomvodi/cointracking-export-converter/internal/interfaces/mocks"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"time"
 )
 
 var _ = Describe("Blockpit", func() {
 	var err error
+	var backend *Backend
+	var wrt *mocks.WailsRuntime
+	var ctx *mocks.AppContext
+	var fileWriter *mocks.TransactionsFileWriter
+
+	Context("ExportToBlockpitXlsx", func() {
+		BeforeEach(func() {
+			wrt = mocks.NewWailsRuntime(GinkgoT())
+			ctx = mocks.NewAppContext(GinkgoT())
+			fileWriter = mocks.NewTransactionsFileWriter(GinkgoT())
+			backend = New(ctx, wrt, fileWriter)
+		})
+
+		JustBeforeEach(func() {
+			err = backend.ExportToBlockpitXlsx()
+		})
+
+		Context("failed saving file dialog", func() {
+			BeforeEach(func() {
+				ctx.EXPECT().LastSelectedFileDir().Return("/path/to/dir")
+				wrt.EXPECT().SaveFileDialog(runtime.SaveDialogOptions{
+					DefaultDirectory: "/path/to/dir",
+					DefaultFilename:  "blockpit-import.xlsx",
+					Title:            "Save Blockpit manual import file",
+					Filters: []runtime.FileFilter{
+						{
+							DisplayName: "Blockpit import files (.xlsx)",
+							Pattern:     "*.xlsx",
+						},
+					},
+				}).Return("", fmt.Errorf("error"))
+			})
+
+			It("should return error", func() {
+				Expect(err).To(HaveOccurred())
+			})
+		})
+
+		Context("empty file returned", func() {
+			BeforeEach(func() {
+				ctx.EXPECT().LastSelectedFileDir().Return("/path/to/dir")
+				wrt.EXPECT().SaveFileDialog(runtime.SaveDialogOptions{
+					DefaultDirectory: "/path/to/dir",
+					DefaultFilename:  "blockpit-import.xlsx",
+					Title:            "Save Blockpit manual import file",
+					Filters: []runtime.FileFilter{
+						{
+							DisplayName: "Blockpit import files (.xlsx)",
+							Pattern:     "*.xlsx",
+						},
+					},
+				}).Return("", nil)
+			})
+
+			It("should return nil", func() {
+				Expect(err).NotTo(HaveOccurred())
+			})
+		})
+
+		Context("writing transactions successfully", func() {
+			BeforeEach(func() {
+				ctx.EXPECT().LastSelectedFileDir().Return("/path/to/dir")
+				wrt.EXPECT().SaveFileDialog(runtime.SaveDialogOptions{
+					DefaultDirectory: "/path/to/dir",
+					DefaultFilename:  "blockpit-import.xlsx",
+					Title:            "Save Blockpit manual import file",
+					Filters: []runtime.FileFilter{
+						{
+							DisplayName: "Blockpit import files (.xlsx)",
+							Pattern:     "*.xlsx",
+						},
+					},
+				}).Return("/path/to/save/file", nil)
+				ctx.EXPECT().ExportFiles().Return([]*common.ExportFileInfo{
+					{
+						FileName: "file1",
+						Transactions: []*common.CointrackingTx{
+							{
+								Type: &common.TxType{TxType: ctt.Airdrop},
+								ID:   "tx1",
+							},
+						},
+					},
+					{
+						FileName: "file2",
+						Transactions: []*common.CointrackingTx{
+							{
+								Type: &common.TxType{TxType: ctt.Airdrop},
+								ID:   "tx2",
+							},
+						},
+					},
+				})
+				fileWriter.EXPECT().WriteTransactionsToFile(
+					"/path/to/save/file",
+					[]*common.CointrackingTx{
+						{
+							Type: &common.TxType{TxType: ctt.Airdrop},
+							ID:   "tx1",
+						},
+						{
+							Type: &common.TxType{TxType: ctt.Airdrop},
+							ID:   "tx2",
+						},
+					}).Return(nil)
+			})
+
+			It("should return nil", func() {
+				Expect(err).NotTo(HaveOccurred())
+			})
+		})
+	})
+
 	DescribeTable("getBlockpitTxFeeAdapted", func(
 		txIn *common.CointrackingTx,
 		txExp *common.CointrackingTx,

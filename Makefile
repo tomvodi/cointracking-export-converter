@@ -6,7 +6,8 @@ dev:
 	wails dev
 
 mocks:
-	mockery
+	mockery && \
+	sed -i 's v2/internal/frontend v2/pkg/runtime ' 'internal/interfaces/mocks/mock_WailsRuntime.go'
 
 test:
 	go test ./...
