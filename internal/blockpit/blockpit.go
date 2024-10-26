@@ -10,11 +10,12 @@ import (
 
 type Backend struct {
 	appCtx             interfaces.AppContext
+	wailsRuntime       interfaces.WailsRuntime
 	blockpitFileWriter interfaces.TransactionsFileWriter
 }
 
 func (b *Backend) ExportToBlockpitXlsx() error {
-	filename, err := runtime.SaveFileDialog(b.appCtx.Context(), runtime.SaveDialogOptions{
+	filename, err := b.wailsRuntime.SaveFileDialog(runtime.SaveDialogOptions{
 		DefaultDirectory: b.appCtx.LastSelectedFileDir(),
 		DefaultFilename:  "blockpit-import.xlsx",
 		Title:            "Save Blockpit manual import file",
@@ -86,10 +87,12 @@ func adaptTxTypeForTradesWith0Income(ctTx *common.CointrackingTx) {
 
 func New(
 	appCtx interfaces.AppContext,
+	wailsRuntime interfaces.WailsRuntime,
 	blockpitFileWriter interfaces.TransactionsFileWriter,
 ) *Backend {
 	return &Backend{
 		appCtx:             appCtx,
+		wailsRuntime:       wailsRuntime,
 		blockpitFileWriter: blockpitFileWriter,
 	}
 }

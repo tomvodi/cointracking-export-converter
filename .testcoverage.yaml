@@ -30,5 +30,7 @@ exclude:
     - ^internal/config    # exclude config package
     - ^main\.go           # exclude main package
     - ^internal/health    # simply just configuration for health check
-    - ^internal/wailsruntime/wails_log\.go # only simple mapped code
+    - ^internal/wailsruntime # only simple mapped code
     - ^internal/app/app\.go   # simple code that requires special context from wails runtime
+    - ^internal/xml       # code that wraps xml handling library
+    - ^internal/common    # common code that is not tested

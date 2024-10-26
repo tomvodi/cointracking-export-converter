@@ -9,8 +9,9 @@ import (
 )
 
 type Backend struct {
-	appCtx    interfaces.AppContext
-	csvReader interfaces.CointrackingCsvReader
+	wailsRuntime interfaces.WailsRuntime
+	appCtx       interfaces.AppContext
+	csvReader    interfaces.CointrackingCsvReader
 }
 
 func (c *Backend) GetExportFiles() ([]*common.ExportFileInfo, error) {
@@ -18,7 +19,7 @@ func (c *Backend) GetExportFiles() ([]*common.ExportFileInfo, error) {
 }
 
 func (c *Backend) OpenExportFile(timezone string) (string, error) {
-	filename, err := runtime.OpenFileDialog(c.appCtx.Context(), runtime.OpenDialogOptions{
+	filename, err := c.wailsRuntime.OpenFileDialog(runtime.OpenDialogOptions{
 		DefaultDirectory: c.appCtx.LastSelectedFileDir(),
 		Title:            "Select CoinTracking export file",
 		Filters: []runtime.FileFilter{
@@ -54,17 +55,19 @@ func (c *Backend) OpenExportFile(timezone string) (string, error) {
 
 	c.appCtx.AddExportFile(fileInfo)
 
-	runtime.EventsEmit(c.appCtx.Context(), "ExportFilesChanged", c.appCtx.ExportFiles())
+	c.wailsRuntime.EventsEmit("ExportFilesChanged", c.appCtx.ExportFiles())
 
 	return filename, nil
 }
 
 func New(
 	appCtx interfaces.AppContext,
+	wailsRuntime interfaces.WailsRuntime,
 	csvReader interfaces.CointrackingCsvReader,
 ) *Backend {
 	return &Backend{
-		appCtx:    appCtx,
-		csvReader: csvReader,
+		appCtx:       appCtx,
+		wailsRuntime: wailsRuntime,
+		csvReader:    csvReader,
 	}
 }
